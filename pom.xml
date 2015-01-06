@@ -6,7 +6,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>web</module>
-        <module>service</module>
         <module>model</module>
     </modules>
     <packaging>pom</packaging>
