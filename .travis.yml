@@ -4,7 +4,7 @@ jdk: openjdk7
 env:
   - DB=mysql
 before_script:
-  - mysql -e 'create database bich_test;' -uroot
+  - mysql -e 'create database bich_test;'
 script:
   mvn package -DdataSource.url=jdbc:mysql://127.0.0.1:3306/bich_test
               -DdataSource.username=travis
