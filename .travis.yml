@@ -2,10 +2,10 @@ language: java
 jdk: openjdk7
 
 env:
-  - DB=mysql
+  - DB=postgres
 before_script:
-  - mysql -e 'create database bich_test;'
+  - psql -c 'create database bich_test;' -U postgres
 script:
-  mvn package -DdataSource.url=jdbc:mysql://127.0.0.1:3306/bich_test
-              -DdataSource.username=travis
+  mvn package -DdataSource.url=jdbc:postgresql:bich_test
+              -DdataSource.username=postgres
               -DdataSource.password=""
