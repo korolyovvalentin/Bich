@@ -124,6 +124,11 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.2.5.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.0</version>
+        </dependency>
         <!-- Modules -->
         <dependency>
             <groupId>org.fuc</groupId>
