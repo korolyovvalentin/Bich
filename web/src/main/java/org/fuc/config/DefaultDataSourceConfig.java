@@ -24,6 +24,11 @@ class DefaultDataSourceConfig implements DataSourceConfig {
     @Bean
     @Override
     public DataSource dataSource() {
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
