@@ -1,3 +1,11 @@
 language: java
 jdk: openjdk7
-script: mvn package
+
+env:
+  - DB=mysql
+before_script:
+  - mysql -e 'create database bich_test;' -uroot
+script:
+  mvn package -DdataSource.url=jdbc:mysql://127.0.0.1:3306/bich_test
+              -DdataSource.username=travis
+              -DdataSource.password=""
