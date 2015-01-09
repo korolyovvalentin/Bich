@@ -1,9 +1,7 @@
 package org.fuc.config;
 
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
+import org.fuc.Application;
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +14,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-import org.fuc.Application;
+import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
@@ -54,8 +53,9 @@ class JpaConfig implements TransactionManagementConfigurer {
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Properties jpaProperties = new Properties();
-        jpaProperties.put(org.hibernate.cfg.Environment.DIALECT, dialect);
-        jpaProperties.put(org.hibernate.cfg.Environment.HBM2DDL_AUTO, hbm2ddlAuto);
+        jpaProperties.put(Environment.DIALECT, dialect);
+        jpaProperties.put(Environment.HBM2DDL_AUTO, hbm2ddlAuto);
+        jpaProperties.put(Environment.SHOW_SQL, true);
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
         return entityManagerFactoryBean;
