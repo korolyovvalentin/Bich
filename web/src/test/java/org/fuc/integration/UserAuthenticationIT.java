@@ -1,5 +1,6 @@
-package org.fuc.account;
+package org.fuc.integration;
 
+import org.fuc.config.WebSecurityConfigurationAware;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,9 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 
-import org.fuc.config.WebSecurityConfigurationAware;
-
-public class UserAuthenticationIntegrationTest extends WebSecurityConfigurationAware {
+public class UserAuthenticationIT extends WebSecurityConfigurationAware {
 
     private static String SEC_CONTEXT_ATTR = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
