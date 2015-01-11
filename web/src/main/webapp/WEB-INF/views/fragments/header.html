@@ -12,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Demo project</a>
+            <a class="navbar-brand" th:href="@{/}">Demo project</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -23,7 +23,7 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Cities</a></li>
+                        <li><a th:href="@{/cities}">Cities</a></li>
                     </ul>
                 </li>
             </ul>

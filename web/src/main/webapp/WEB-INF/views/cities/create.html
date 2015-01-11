@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create City</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+</head>
+<body>
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+    <h1 class="page-header">Create City</h1>
+
+    <form action="#" th:action="@{/cities/create}" th:object="${city}" method="post" role="form">
+        <!--<input type="hidden" th:field="${city.id}" />-->
+        <div class="form-group">
+            <label for="name">Name</label>
+
+            <div>
+                <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Enter name"/>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Is Empty</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn btn-default">Create</button>
+            </div>
+        </div>
+    </form>
+    <a th:href="@{/cities}">Back To List</a>
+</div>
+<div th:replace="fragments/footer :: footer">&nbsp;</div>
+</body>
+</html>

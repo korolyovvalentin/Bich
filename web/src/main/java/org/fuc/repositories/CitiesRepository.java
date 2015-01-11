@@ -28,4 +28,8 @@ public class CitiesRepository {
     public Collection<City> getCities() {
         return entityManager.createNamedQuery(City.ALL_CITIES, City.class).getResultList();
     }
+
+    public City findById(int id) {
+        return entityManager.createNamedQuery(City.FIND_BY_ID, City.class).getSingleResult();
+    }
 }
