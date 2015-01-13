@@ -15,9 +15,9 @@
     <h1 class="page-header">Cities</h1>
 
     <div th:if="${#lists.isEmpty(cities)}">
-        <h3>
+        <h4>
             There is still no cities in system. Please, add some
-        </h3>
+        </h4>
     </div>
     <a th:href="@{/cities/create}">Add new city</a>
 
@@ -25,8 +25,7 @@
         <table class="table">
             <tr th:each="city : ${cities}">
                 <td th:text="${city.name}">city</td>
-                <td th:text="${city.id}">some id</td>
-                <td><a href="#">Delete</a></td>
+                <td><a th:href="@{'cities/delete/' + ${city.id}}">Delete</a></td>
             </tr>
         </table>
     </div>

@@ -12,10 +12,13 @@
 <div th:replace="fragments/header :: header">&nbsp;</div>
 <div class="container">
     <h1 class="page-header">Create City</h1>
-
+    <th:block th:if="${#fields.hasErrors('${city.*}')}">
+        <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">
+            Alert
+        </div>
+    </th:block>
     <form action="#" th:action="@{/cities/create}" th:object="${city}" method="post" role="form">
-        <!--<input type="hidden" th:field="${city.id}" />-->
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
             <label for="name">Name</label>
 
             <div>
