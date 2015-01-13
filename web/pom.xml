@@ -235,6 +235,12 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+            <version>1.4.5</version>
+            <!-- or latest version -->
+        </dependency>
     </dependencies>
     <build>
         <plugins>
