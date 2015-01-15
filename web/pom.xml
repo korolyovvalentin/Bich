@@ -124,11 +124,6 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.2.5.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.0</version>
-        </dependency>
         <!-- Modules -->
         <dependency>
             <groupId>org.fuc</groupId>
@@ -239,7 +234,6 @@
             <groupId>ma.glasnost.orika</groupId>
             <artifactId>orika-core</artifactId>
             <version>1.4.5</version>
-            <!-- or latest version -->
         </dependency>
     </dependencies>
     <build>
@@ -266,7 +260,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
                 <configuration>
-                    <warName>web-1.0-SNAPSHOT</warName>
+                    <warName>ROOT</warName>
                 </configuration>
             </plugin>
             <plugin>

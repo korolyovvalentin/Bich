@@ -1,7 +1,9 @@
 package org.fuc.signup;
 
+import org.fuc.config.RoleProvider;
 import org.fuc.entities.Account;
-import org.hibernate.validator.constraints.*;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 
 public class SignupForm {
@@ -15,6 +17,16 @@ public class SignupForm {
 
     @NotBlank(message = SignupForm.NOT_BLANK_MESSAGE)
 	private String password;
+
+	private String role;
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 
     public String getEmail() {
 		return email;
@@ -33,6 +45,8 @@ public class SignupForm {
 	}
 
 	public Account createAccount() {
-        return new Account(getEmail(), getPassword(), "ROLE_USER");
+		return new Account(getEmail(), getPassword(), RoleProvider.getrRole(role));
 	}
+
+
 }
