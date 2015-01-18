@@ -19,7 +19,7 @@
 
         <dataSource.driverClassName>org.postgresql.Driver</dataSource.driverClassName>
         <hibernate.dialect>org.hibernate.dialect.PostgreSQL82Dialect</hibernate.dialect>
-        <hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
+        <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
     </properties>
 
     <dependencies>

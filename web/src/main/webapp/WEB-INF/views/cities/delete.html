@@ -13,7 +13,7 @@
 <div class="container">
     <h1 class="page-header">Delete City</h1>
 
-    <form action="#" th:action="@{/cities/delete}" th:object="${city}" method="post" role="form">
+    <form action="#" th:action="@{/administration/cities/delete}" th:object="${city}" method="post" role="form">
         <input type="hidden" th:field="*{id}"/>
 
         <div class="form-group alert alert-warning">
@@ -28,7 +28,7 @@
             </div>
         </div>
     </form>
-    <a th:href="@{/cities}">Back To List</a>
+    <a th:href="@{/administration/cities}">Back To List</a>
 </div>
 <div th:replace="fragments/footer :: footer">&nbsp;</div>
 </body>

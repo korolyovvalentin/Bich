@@ -19,7 +19,7 @@
             There is still no cities in system. Please, add some
         </h4>
     </div>
-    <a th:href="@{/cities/create}">Add new city</a>
+    <a th:href="@{cities/create}">Add new city</a>
 
     <div th:if="${not #lists.isEmpty(cities)}">
         <table class="table">
