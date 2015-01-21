@@ -19,8 +19,7 @@ public class AccountRepository {
 	
 	@Inject
 	private PasswordEncoder passwordEncoder;
-	
-	@Transactional
+
 	public Account save(Account account) {
 		account.setPassword(passwordEncoder.encode(account.getPassword()));
 		entityManager.persist(account);

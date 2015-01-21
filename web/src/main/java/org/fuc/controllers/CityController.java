@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Controller
-@RequestMapping("/cities")
+@RequestMapping("/administration/cities")
 @Secured("ROLE_ADMIN")
 class CityController {
     @Autowired
@@ -53,7 +53,7 @@ class CityController {
             return new ModelAndView("cities/create");
         }
         citiesRepository.save(mapper.map(city, City.class));
-        return new ModelAndView(new RedirectView("/cities", false));
+        return new ModelAndView(new RedirectView("/administration/cities", false));
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
@@ -67,6 +67,6 @@ class CityController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView delete(@ModelAttribute("city") CityVm city) {
         citiesRepository.delete(mapper.map(city, City.class));
-        return new ModelAndView(new RedirectView("/cities", false));
+        return new ModelAndView(new RedirectView("/administration/cities", false));
     }
 }

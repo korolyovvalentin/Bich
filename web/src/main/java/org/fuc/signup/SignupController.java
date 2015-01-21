@@ -1,8 +1,9 @@
 package org.fuc.signup;
 
-import org.fuc.account.UserService;
 import org.fuc.entities.Account;
 import org.fuc.repositories.AccountRepository;
+import org.fuc.services.AccountService;
+import org.fuc.services.UserService;
 import org.fuc.support.web.MessageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,9 @@ public class SignupController {
 
 	@Autowired
 	private AccountRepository accountRepository;
+
+	@Autowired
+	private AccountService accountService;
 	
 	@Autowired
 	private UserService userService;
@@ -37,7 +41,7 @@ public class SignupController {
 		if (errors.hasErrors()) {
 			return SIGNUP_VIEW_NAME;
 		}
-		Account account = accountRepository.save(signupForm.createAccount());
+		Account account = accountService.createAccount(signupForm.createAccount());
 		userService.signin(account);
         // see /WEB-INF/i18n/messages.properties and /WEB-INF/views/homeSignedIn.html
         MessageHelper.addSuccessAttribute(ra, "signup.success");
