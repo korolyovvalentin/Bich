@@ -1,8 +1,8 @@
 package org.fuc.unit;
 
-import org.fuc.account.UserService;
 import org.fuc.entities.Account;
 import org.fuc.repositories.AccountRepository;
+import org.fuc.services.UserService;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,8 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -31,14 +30,6 @@ public class UserServiceTest {
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
-	@Test
-	public void shouldInitializeWithTwoDemoUsers() {
-		// act
-		userService.initialize();
-		// assert
-		verify(accountRepositoryMock, times(2)).save(any(Account.class));
-	}
 
 	@Test
 	public void shouldThrowExceptionWhenUserNotFound() {

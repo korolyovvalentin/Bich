@@ -1,7 +1,7 @@
 package org.fuc.unit;
 
-import org.fuc.account.UserService;
 import org.fuc.repositories.AccountRepository;
+import org.fuc.services.UserService;
 import org.fuc.signup.SignupController;
 import org.junit.Before;
 import org.junit.Test;
