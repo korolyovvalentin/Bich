@@ -1,7 +1,11 @@
 package org.fuc.entities;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("serial")
@@ -22,6 +26,22 @@ public class Ride {
     private Account owner;
     private Set<Account> participants;
     private Integer maxParticipants;
+
+    public Ride() {
+    }
+
+    public Ride(City departure,
+                City arrival,
+                Date date,
+                Account owner,
+                Integer maxParticipants) {
+        this.departure = departure;
+        this.arrival = arrival;
+        this.date = date;
+        this.owner = owner;
+        this.participants = new HashSet<Account>();
+        this.maxParticipants = maxParticipants;
+    }
 
     @Id
     @SequenceGenerator(name = "ride_id_seq", sequenceName = "ride_id_seq", allocationSize = 1)
@@ -80,7 +100,8 @@ public class Ride {
         this.owner = owner;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.REFRESH)
     @JoinTable(name = "account_ride",
             joinColumns = {
                     @JoinColumn(name = "ride_id", nullable = false, updatable = false)
@@ -94,5 +115,9 @@ public class Ride {
 
     public void setParticipants(Set<Account> participants) {
         this.participants = participants;
+    }
+
+    public boolean hasVacantSeat() {
+        return participants.size() < maxParticipants;
     }
 }

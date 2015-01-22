@@ -17,7 +17,7 @@ public class RidesRepository {
 
     @Transactional
     public Ride save(Ride ride) {
-        entityManager.persist(ride);
+        entityManager.persist(entityManager.merge(ride));
         return ride;
     }
 

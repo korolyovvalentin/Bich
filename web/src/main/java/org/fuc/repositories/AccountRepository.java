@@ -25,6 +25,10 @@ public class AccountRepository {
 		entityManager.persist(account);
 		return account;
 	}
+
+	public void delete(Account account) {
+		entityManager.remove(entityManager.merge(account));
+	}
 	
 	public Account findByEmail(String email) {
 		try {

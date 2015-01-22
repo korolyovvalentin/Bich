@@ -15,4 +15,9 @@ public class AccountService {
     public Account createAccount(Account account) {
         return accountRepository.save(account);
     }
+
+    @Transactional
+    public void deleteAccount(Account account) {
+        accountRepository.delete(account);
+    }
 }

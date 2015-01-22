@@ -15,6 +15,13 @@ public class City implements java.io.Serializable {
     public static final String FIND_BY_ID = "City.findById";
     public static final String FIND_BY_NAME = "City.findByName";
 
+    public City() {
+    }
+
+    public City(String name) {
+        this.name = name;
+    }
+
     @Id
     @SequenceGenerator(name = "city_id_seq", sequenceName = "city_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_id_seq")
