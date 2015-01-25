@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+
 @Component
 public class RideService {
     @Autowired
@@ -32,5 +34,9 @@ public class RideService {
         Ride persistentRide = ridesRepository.findById(ride.getId());
         persistentRide.getParticipants().add(beatnik);
         ridesRepository.update(persistentRide);
+    }
+
+    public Collection<Ride> getDriverRides(Account driver){
+        return ridesRepository.getRidesForOwner(driver);
     }
 }

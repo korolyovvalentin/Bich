@@ -23,7 +23,7 @@ public class Ride {
     private City arrival;
     private Date date;
     private Account owner;
-    private Set<Account> participants;
+    private Set<Account> participants = new HashSet<Account>();
     private Integer maxParticipants;
 
     public Ride() {
@@ -38,7 +38,6 @@ public class Ride {
         this.arrival = arrival;
         this.date = date;
         this.owner = owner;
-        this.participants = new HashSet<Account>();
         this.maxParticipants = maxParticipants;
     }
 
