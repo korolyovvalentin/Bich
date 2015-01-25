@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
 </head>
 <body>
 <div class="text-center" th:fragment="footer"
      th:utext="#{company.name} + ${' &copy; ' + #dates.year(#dates.createToday())}">
-    </div>
+</div>
 </body>
 </html>
 
