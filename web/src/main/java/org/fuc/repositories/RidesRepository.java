@@ -17,13 +17,22 @@ public class RidesRepository {
 
     @Transactional
     public Ride save(Ride ride) {
-        entityManager.persist(entityManager.merge(ride));
+        entityManager.persist(ride);
         return ride;
+    }
+
+    public void update(Ride ride) {
+        entityManager.merge(ride);
     }
 
     @Transactional
     public void delete(Ride ride) {
-        entityManager.remove(entityManager.merge(ride));
+        entityManager
+                .createNativeQuery("delete from account_ride where ride_id = ?1")
+                .setParameter(1, ride.getId());
+        Ride refreshed = entityManager.merge(ride);
+        entityManager.refresh(refreshed);
+        entityManager.remove(refreshed);
     }
 
     public Collection<Ride> getRidesForOwner(Account account) {
@@ -34,9 +43,6 @@ public class RidesRepository {
     }
 
     public Ride findById(Long id) {
-        return entityManager
-                .createNamedQuery(Ride.FIND_BY_ID, Ride.class)
-                .setParameter("id", id)
-                .getSingleResult();
+        return entityManager.find(Ride.class, id);
     }
 }

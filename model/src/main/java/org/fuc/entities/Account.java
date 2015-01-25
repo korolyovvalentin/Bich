@@ -3,6 +3,8 @@ package org.fuc.entities;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("serial")
 @Entity
@@ -23,6 +25,12 @@ public class Account implements java.io.Serializable {
     @JsonIgnore
     private String password;
 
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "account_ride",
+            joinColumns = @JoinColumn(name = "participant_id"),
+            inverseJoinColumns = @JoinColumn(name = "ride_id"))
+    private Set<Ride> rides;
+
     private String role = "ROLE_USER";
 
     protected Account() {
@@ -33,6 +41,7 @@ public class Account implements java.io.Serializable {
         this.email = email;
         this.password = password;
         this.role = role;
+        rides = new HashSet<Ride>();
     }
 
     public Long getId() {
@@ -61,5 +70,13 @@ public class Account implements java.io.Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Ride> getRides() {
+        return rides;
+    }
+
+    public void setRides(Set<Ride> rides) {
+        this.rides = rides;
     }
 }

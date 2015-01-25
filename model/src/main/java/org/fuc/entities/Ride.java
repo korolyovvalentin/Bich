@@ -1,8 +1,5 @@
 package org.fuc.entities;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -15,9 +12,11 @@ import java.util.Set;
         @NamedQuery(name = Ride.FIND_BY_OWNER, query = "select r from Ride r where r.owner.id = :owner_id"),
         @NamedQuery(name = Ride.FIND_BY_ID, query = "select r from Ride r where r.id = :id")}
 )
+@NamedNativeQuery(name = Ride.DELETE_CASCADE, query = "delete from account_ride where ride_id = ?1")
 public class Ride {
     public static final String FIND_BY_OWNER = "Ride.findByOwner";
     public static final String FIND_BY_ID = "Ride.findById";
+    public static final String DELETE_CASCADE = "Ride.deleteCascade";
 
     private Long id;
     private City departure;
@@ -100,15 +99,10 @@ public class Ride {
         this.owner = owner;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Cascade(CascadeType.REFRESH)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "account_ride",
-            joinColumns = {
-                    @JoinColumn(name = "ride_id", nullable = false, updatable = false)
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "participant_id", nullable = false, updatable = false)
-            })
+            joinColumns = @JoinColumn(name = "ride_id"),
+            inverseJoinColumns = @JoinColumn(name = "participant_id"))
     public Set<Account> getParticipants() {
         return participants;
     }

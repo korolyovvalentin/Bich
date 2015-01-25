@@ -6,6 +6,7 @@ import org.fuc.entities.Ride;
 import org.fuc.repositories.RidesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class RideService {
@@ -20,15 +21,16 @@ public class RideService {
         return ride;
     }
 
-    public Ride addParticipant(Ride ride, Account beatnik) {
+    @Transactional
+    public void addParticipant(Ride ride, Account beatnik) {
         if (!ride.hasVacantSeat()) {
             throw new ArrayIndexOutOfBoundsException("No vacant seats");
         }
         if (!RoleProvider.ROLE_BEATNIK.equals(beatnik.getRole())) {
             throw new IllegalArgumentException("Participant must be beatnik");
         }
-        ride.getParticipants().add(beatnik);
-        ridesRepository.save(ride);
-        return ride;
+        Ride persistentRide = ridesRepository.findById(ride.getId());
+        persistentRide.getParticipants().add(beatnik);
+        ridesRepository.update(persistentRide);
     }
 }
