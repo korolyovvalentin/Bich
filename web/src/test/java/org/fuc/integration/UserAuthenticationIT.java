@@ -1,8 +1,13 @@
 package org.fuc.integration;
 
 import org.fuc.config.WebSecurityConfigurationAware;
+import org.fuc.entities.Account;
+import org.fuc.services.AccountService;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.test.web.servlet.MvcResult;
@@ -17,6 +22,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserAuthenticationIT extends WebSecurityConfigurationAware {
 
     private static String SEC_CONTEXT_ATTR = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
+    @Autowired
+    private AccountService accountService;
+    private Account testAccount = new Account("user", "demo", "ROLE_USER");
+
+    @Before
+    public void setUp() {
+        accountService.createAccount(testAccount);
+    }
+
+    @After
+    public void tearDown(){
+        accountService.deleteAccount(testAccount);
+    }
 
     @Test
     public void requiresAuthentication() throws Exception {
