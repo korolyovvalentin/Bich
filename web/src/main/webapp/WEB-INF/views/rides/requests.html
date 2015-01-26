@@ -37,8 +37,7 @@
                 <td th:text="${ride.arrival.name}">ride</td>
                 <td th:text="${ride.date}">ride</td>
                 <td th:text="${ride.maxParticipants}">ride</td>
-                <td th:if="${ride.requestsCount &gt; 0}"><a th:href="@{'/driver/rides/' + ${ride.id} + '/requests'}">Watch requests</a></td>
-                <td th:if="${ride.requestsCount &le; 0}">No Requests</td>
+                <td th:if="${ride.requestsCount &gt; 0}"></td>
             </tr>
         </table>
     </div>

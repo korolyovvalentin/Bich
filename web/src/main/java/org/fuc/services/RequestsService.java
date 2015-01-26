@@ -5,6 +5,8 @@ import org.fuc.repositories.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+
 @Component
 public class RequestsService {
     @Autowired
@@ -17,5 +19,9 @@ public class RequestsService {
         Request request = new Request(RequestStatus.NEW, ride, beatnik);
         requestRepository.save(request);
         return request;
+    }
+
+    public Collection<Request> findRequestsForRide(Long rideId){
+        return requestRepository.findRequests(rideId, RequestStatus.getStatus("new"));
     }
 }

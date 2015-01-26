@@ -3,10 +3,13 @@ package org.fuc.controllers;
 import ma.glasnost.orika.MapperFacade;
 import org.fuc.entities.Account;
 import org.fuc.entities.City;
+import org.fuc.entities.Request;
 import org.fuc.entities.Ride;
 import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.CitiesRepository;
+import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
+import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideCreateVm;
 import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -38,6 +38,8 @@ public class RideController {
     private AccountRepository accountRepository;
     @Autowired
     private RideService rideService;
+    @Autowired
+    private RequestsService requestsService;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -68,5 +70,17 @@ public class RideController {
         ride.setOwner(accountRepository.findByEmail(principal.getName()));
         rideService.createRide(ride);
         return new ModelAndView(new RedirectView("/driver/rides", false));
+    }
+
+    @RequestMapping(value = " /{rideId}/requests", method=RequestMethod.GET)
+    public ModelAndView requests(@PathVariable Long rideId){
+        Collection<Request> requests = requestsService.findRequestsForRide(rideId);
+        Collection<RequestVm> requestVms = new LinkedList<>();
+        for(Request request : requests){
+            requestVms.add(mapper.map(request, RequestVm.class));
+        }
+        ModelAndView model = new ModelAndView("rides/requests");
+        model.addObject("requests", requestVms);
+        return model;
     }
 }

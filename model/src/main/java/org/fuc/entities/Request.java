@@ -5,7 +5,12 @@ import javax.persistence.*;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "request")
+@NamedQueries({
+        @NamedQuery(name = Request.FIND_BY_RIDE, query = "select req from Request req where req.ride.id = :ride_id and req.status = :status")
+})
 public class Request {
+    public static final String FIND_BY_RIDE = "Request.findByRide";
+
     @Id
     @SequenceGenerator(name = "request_id_seq", sequenceName = "request_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "request_id_seq")
