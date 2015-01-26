@@ -6,11 +6,20 @@ import org.hibernate.validator.constraints.Range;
 import java.util.Date;
 
 public class RideVm {
+    private Long id;
     private City departure;
     private City arrival;
     private Date date;
     @Range(min = 0, message = "Must be positive number")
     private Integer maxParticipants;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public City getDeparture() {
         return departure;

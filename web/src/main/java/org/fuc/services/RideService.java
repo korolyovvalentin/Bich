@@ -1,6 +1,6 @@
 package org.fuc.services;
 
-import org.fuc.config.RoleProvider;
+import org.fuc.entities.RoleProvider;
 import org.fuc.entities.Account;
 import org.fuc.entities.Ride;
 import org.fuc.repositories.RidesRepository;
@@ -38,5 +38,9 @@ public class RideService {
 
     public Collection<Ride> getDriverRides(Account driver){
         return ridesRepository.getRidesForOwner(driver);
+    }
+
+    public Collection<Ride> getAvailableRides(Account account){
+        return ridesRepository.getAvailableRides(account);
     }
 }

@@ -1,6 +1,7 @@
 package org.fuc.repositories;
 
 import org.fuc.entities.Account;
+import org.fuc.entities.City;
 import org.fuc.entities.Ride;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
+import java.util.Date;
 
 @Repository
 @Transactional(readOnly = true)
@@ -41,6 +43,25 @@ public class RidesRepository {
                 .setParameter("owner_id", account.getId())
                 .getResultList();
     }
+
+    public Collection<Ride> getAvailableRides(Account account){
+        return entityManager
+                .createNamedQuery(Ride.AVAILABLE_RIDES, Ride.class)
+                .setParameter("beatnik_id", account.getId())
+                .setParameter("date", new Date())
+                .getResultList();
+    }
+
+    public Collection<Ride> getFilteredRides(Account account, Date date, City arrival, City departure){
+        return entityManager
+                .createNamedQuery(Ride.FILTER_AVAILABLE_RIDES, Ride.class)
+                .setParameter("beatnik_id", account.getId())
+                .setParameter("date", date)
+                .setParameter("arrival", arrival)
+                .setParameter("departure", departure)
+                .getResultList();
+    }
+
 
     public Ride findById(Long id) {
         return entityManager.find(Ride.class, id);

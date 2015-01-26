@@ -1,4 +1,4 @@
-package org.fuc.config;
+package org.fuc.entities;
 
 public class RoleProvider {
     public static final String ROLE_BEATNIK = "ROLE_BEATNIK";

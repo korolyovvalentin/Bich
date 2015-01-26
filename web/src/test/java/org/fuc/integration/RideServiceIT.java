@@ -1,6 +1,6 @@
 package org.fuc.integration;
 
-import org.fuc.config.RoleProvider;
+import org.fuc.entities.RoleProvider;
 import org.fuc.config.WebAppConfigurationAware;
 import org.fuc.entities.Account;
 import org.fuc.entities.City;

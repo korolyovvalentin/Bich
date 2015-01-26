@@ -10,13 +10,29 @@ import java.util.Set;
 @Table(name = "ride")
 @NamedQueries({
         @NamedQuery(name = Ride.FIND_BY_OWNER, query = "select r from Ride r where r.owner.id = :owner_id"),
-        @NamedQuery(name = Ride.FIND_BY_ID, query = "select r from Ride r where r.id = :id")}
-)
-@NamedNativeQuery(name = Ride.DELETE_CASCADE, query = "delete from account_ride where ride_id = ?1")
+        @NamedQuery(name = Ride.FIND_BY_ID, query = "select r from Ride r where r.id = :id"),
+        @NamedQuery(name = Ride.FILTER_AVAILABLE_RIDES,
+                query = "select r from Ride r " +
+                        "where not exists (select req " +
+                        "       from r.requests req " +
+                        "       where req.owner.id = :beatnik_id) " +
+                        "   and r.date < :date " +
+                        "   and r.arrival = :arrival " +
+                        "   and r.departure = :departure" +
+                        "   and (select count(p) from r.participants p) < r.maxParticipants"),
+        @NamedQuery(name = Ride.AVAILABLE_RIDES,
+                query = "select r from Ride r " +
+                        "where not exists (select req " +
+                        "       from r.requests req " +
+                        "       where req.owner.id = :beatnik_id) " +
+                        "   and r.date < :date " +
+                        "   and (select count(p) from r.participants p) < r.maxParticipants")
+})
 public class Ride {
     public static final String FIND_BY_OWNER = "Ride.findByOwner";
     public static final String FIND_BY_ID = "Ride.findById";
-    public static final String DELETE_CASCADE = "Ride.deleteCascade";
+    public static final String FILTER_AVAILABLE_RIDES = "Ride.filterAvailableRides";
+    public static final String AVAILABLE_RIDES = "Ride.allAvailableRides";
 
     private Long id;
     private City departure;
@@ -24,6 +40,7 @@ public class Ride {
     private Date date;
     private Account owner;
     private Set<Account> participants = new HashSet<Account>();
+    private Set<Request> requests = new HashSet<Request>();
     private Integer maxParticipants;
 
     public Ride() {
@@ -108,6 +125,15 @@ public class Ride {
 
     public void setParticipants(Set<Account> participants) {
         this.participants = participants;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    public Set<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<Request> requests) {
+        this.requests = requests;
     }
 
     public boolean hasVacantSeat() {
