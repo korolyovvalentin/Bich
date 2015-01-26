@@ -6,10 +6,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "request")
 @NamedQueries({
-        @NamedQuery(name = Request.FIND_BY_RIDE, query = "select req from Request req where req.ride.id = :ride_id and req.status = :status")
+        @NamedQuery(name = Request.FIND_BY_RIDE, query = "select req from Request req where req.ride.id = :ride_id and req.status = :status"),
+        @NamedQuery(name = Request.FIND_UPDATED,
+                query = "select req " +
+                        "from Request req " +
+                        "where req.owner.id = :beatnik_id " +
+                        "and (lower(req.status) = 'approved' " +
+                        "     or lower(req.status) = 'declined')")
 })
 public class Request {
     public static final String FIND_BY_RIDE = "Request.findByRide";
+    public static final String FIND_UPDATED = "Request.findUpdated";
 
     @Id
     @SequenceGenerator(name = "request_id_seq", sequenceName = "request_id_seq", allocationSize = 1)

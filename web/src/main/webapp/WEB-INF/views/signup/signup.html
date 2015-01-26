@@ -31,7 +31,7 @@
 
                     <option th:each="role : ${T(org.fuc.entities.Roles).values()}"
                             th:value="${role}"
-                            th:text="#{__${role.value}__}"
+                            th:text="${role.value}"
                             th:selected="${role == T(org.fuc.entities.Roles).Beatnik}">
                     </option>
                 </select>

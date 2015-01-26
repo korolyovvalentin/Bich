@@ -37,6 +37,13 @@ public class RequestRepository {
                 .getResultList();
     }
 
+    public Collection<Request> findUpdatedRequests(Long beatnikId){
+        return entityManager
+                .createNamedQuery(Request.FIND_UPDATED, Request.class)
+                .setParameter("beatnik_id", beatnikId)
+                .getResultList();
+    }
+
     public Request findById(Long id){
         return entityManager.find(Request.class, id);
     }

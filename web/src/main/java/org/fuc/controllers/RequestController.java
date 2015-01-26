@@ -2,12 +2,14 @@ package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
 import org.fuc.entities.Account;
+import org.fuc.entities.Request;
 import org.fuc.entities.Ride;
 import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.RidesRepository;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
 import org.fuc.support.web.MessageHelper;
+import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,5 +61,23 @@ public class RequestController {
         ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
         MessageHelper.addSuccessAttribute(model, "Request was successfully added");
         return model;
+    }
+
+    @RequestMapping(value = "/updated", method = RequestMethod.GET)
+    public ModelAndView processedRequests(Principal principal){
+        Account account = accountRepository.findByEmail(principal.getName());
+        Collection<Request> requests = requestsService.findUpdatedRequests(account.getId());
+        Collection<RequestVm> requestVms = new LinkedList<>();
+        for(Request request : requests){
+//            RequestVm vm = mapper.map(request, RequestVm.class);
+            requestVms.add(mapper.map(request, RequestVm.class));
+        }
+        return new ModelAndView("requests/updated", "requests", requestVms);
+    }
+
+    @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
+    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId){
+        requestsService.markAsOld(requestId);
+        return new ModelAndView(new RedirectView("/beatnik/requests/updated", false));
     }
 }

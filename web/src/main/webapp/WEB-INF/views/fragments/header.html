@@ -24,8 +24,15 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="#" th:href="@{/}">Home</a></li>
-                <li><a th:href="@{/driver/rides}">Rides</a></li>
-                <li><a th:href="@{/beatnik/requests}">Beatnik Rides</a></li>
+                <li sec:authorize="hasRole('ROLE_DRIVER')">
+                    <a th:href="@{/driver/rides}">Rides</a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_BEATNIK')">
+                    <a th:href="@{/beatnik/requests}">Beatnik Rides</a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_BEATNIK')">
+                    <a th:href="@{/beatnik/requests/updated}">Beatnik Requests</a>
+                </li>
                 <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                         Administration

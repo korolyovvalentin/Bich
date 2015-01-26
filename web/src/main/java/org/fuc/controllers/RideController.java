@@ -1,5 +1,6 @@
 package org.fuc.controllers;
 
+import com.sun.corba.se.spi.presentation.rmi.StubAdapter;
 import ma.glasnost.orika.MapperFacade;
 import org.fuc.entities.Account;
 import org.fuc.entities.City;
@@ -91,6 +92,8 @@ public class RideController {
     @RequestMapping(value = "/approveRequest", method = RequestMethod.POST)
     public ModelAndView approveRequest(@RequestParam("request_id") Long requestId){
         requestsService.approveRequest(requestId);
+        Request request = requestsService.findById(requestId);
+        rideService.addParticipant(request.getRide(), request.getOwner());
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }
 

@@ -25,6 +25,10 @@ public class RequestsService {
         return requestRepository.findRequests(rideId, RequestStatus.getStatus("new"));
     }
 
+    public Collection<Request> findUpdatedRequests(Long beatnikId){
+        return requestRepository.findUpdatedRequests(beatnikId);
+    }
+
     public Request approveRequest(Long requestId){
         return changeStatus(requestId, "approved");
     }
@@ -33,10 +37,18 @@ public class RequestsService {
         return changeStatus(requestId, "declined");
     }
 
+    public Request markAsOld(Long requestId){
+        return changeStatus(requestId, "old");
+    }
+
     private Request changeStatus(Long requestId, String newStatus){
         Request request = requestRepository.findById(requestId);
         request.setStatus(RequestStatus.getStatus(newStatus));
         requestRepository.update(request);
         return request;
+    }
+
+    public Request findById(Long requestId){
+        return requestRepository.findById(requestId);
     }
 }

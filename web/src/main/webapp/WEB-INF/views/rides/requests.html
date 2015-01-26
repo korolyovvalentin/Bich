@@ -14,21 +14,27 @@
 <div class="container">
     <h1 class="page-header">Rides</h1>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>
-                Beatnik
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="request : ${requests}">
-            <td th:text="${request.owner.email}"></td>
-            <td>
+    <div th:if="${#lists.isEmpty(requests)}">
+        <h4>
+            No requests for this ride
+        </h4>
+    </div>
+    <div th:if="not ${#lists.isEmpty(requests)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    Beatnik
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="request : ${requests}">
+                <td th:text="${request.owner.email}"></td>
+                <td>
                 <span style="float: left">
                 <form action="#" th:action="@{/driver/rides/approveRequest}" method="post" role="form">
                     <input type="hidden" name="request_id" th:value="${request.id}"/>
@@ -47,10 +53,11 @@
                     </div>
                 </form>
                 </span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <div th:replace="fragments/footer :: footer">&nbsp;</div>
 </body>

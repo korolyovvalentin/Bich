@@ -9,7 +9,10 @@ import java.util.Set;
 @Entity
 @Table(name = "ride")
 @NamedQueries({
-        @NamedQuery(name = Ride.FIND_BY_OWNER, query = "select r from Ride r where r.owner.id = :owner_id"),
+        @NamedQuery(name = Ride.FIND_BY_OWNER,
+                query = "select r from Ride r " +
+                        "where r.owner.id = :owner_id " +
+                        "and (select count(p) from r.participants p) < r.maxParticipants"),
         @NamedQuery(name = Ride.FIND_BY_ID, query = "select r from Ride r where r.id = :id"),
         @NamedQuery(name = Ride.FILTER_AVAILABLE_RIDES,
                 query = "select r from Ride r " +
