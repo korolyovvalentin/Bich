@@ -36,4 +36,8 @@ public class RequestRepository {
                 .setParameter("status", status)
                 .getResultList();
     }
+
+    public Request findById(Long id){
+        return entityManager.find(Request.class, id);
+    }
 }

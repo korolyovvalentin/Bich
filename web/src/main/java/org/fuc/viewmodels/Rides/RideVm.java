@@ -12,7 +12,7 @@ public class RideVm {
     private Date date;
     @Range(min = 0, message = "Must be positive number")
     private Integer maxParticipants;
-    private Integer requestsCount;
+    private int requestsCount;
 
     public Long getId() {
         return id;
@@ -54,11 +54,11 @@ public class RideVm {
         this.maxParticipants = maxParticipants;
     }
 
-    public Integer getRequestsCount() {
+    public int getRequestsCount() {
         return requestsCount;
     }
 
-    public void setRequestsCount(Integer requestsCount) {
+    public void setRequestsCount(int requestsCount) {
         this.requestsCount = requestsCount;
     }
 }

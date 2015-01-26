@@ -7,6 +7,7 @@ import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.RidesRepository;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
+import org.fuc.support.web.MessageHelper;
 import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,8 @@ public class RequestController {
         Ride ride = ridesRepository.findById(rideId);
         Account beatnik = accountRepository.findByEmail(principal.getName());
         requestsService.create(ride, beatnik);
-        return new ModelAndView(new RedirectView("/beatnik/requests", false));
+        ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
+        MessageHelper.addSuccessAttribute(model, "Request was successfully added");
+        return model;
     }
 }

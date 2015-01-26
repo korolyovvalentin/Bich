@@ -24,4 +24,19 @@ public class RequestsService {
     public Collection<Request> findRequestsForRide(Long rideId){
         return requestRepository.findRequests(rideId, RequestStatus.getStatus("new"));
     }
+
+    public Request approveRequest(Long requestId){
+        return changeStatus(requestId, "approved");
+    }
+
+    public Request declineRequest(Long requestId){
+        return changeStatus(requestId, "declined");
+    }
+
+    private Request changeStatus(Long requestId, String newStatus){
+        Request request = requestRepository.findById(requestId);
+        request.setStatus(RequestStatus.getStatus(newStatus));
+        requestRepository.update(request);
+        return request;
+    }
 }

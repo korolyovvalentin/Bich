@@ -14,34 +14,43 @@
 <div class="container">
     <h1 class="page-header">Rides</h1>
 
-    <div th:if="${#lists.isEmpty(rides)}">
-        <h4>
-            You have no rides created
-        </h4>
-    </div>
-    <a th:href="@{/driver/rides/create}">Create new ride</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Beatnik
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="request : ${requests}">
+            <td th:text="${request.owner.email}"></td>
+            <td>
+                <span style="float: left">
+                <form action="#" th:action="@{/driver/rides/approveRequest}" method="post" role="form">
+                    <input type="hidden" name="request_id" th:value="${request.id}"/>
 
-    <div th:if="${not #lists.isEmpty(rides)}">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Departure</th>
-                <th>Arrival</th>
-                <th>Date</th>
-                <th>MaxParticipants</th>
-                <th>Requests</th>
-            </tr>
-            </thead>
-            <tr th:each="ride : ${rides}">
-                <td th:text="${ride.departure.name}">ride</td>
-                <td th:text="${ride.arrival.name}">ride</td>
-                <td th:text="${ride.date}">ride</td>
-                <td th:text="${ride.maxParticipants}">ride</td>
-                <td th:if="${ride.requestsCount &gt; 0}"></td>
-            </tr>
-        </table>
-    </div>
+                    <div>
+                        <button type="submit" class="btn-link">Accept</button>
+                    </div>
+                </form>
+                </span>
+                <span style="float: none">
+                <form action="#" th:action="@{/driver/rides/declineRequest}" method="post" role="form">
+                    <input type="hidden" name="request_id" th:value="${request.id}"/>
 
+                    <div>
+                        <button type="submit" class="btn-link">Decline</button>
+                    </div>
+                </form>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 <div th:replace="fragments/footer :: footer">&nbsp;</div>
 </body>

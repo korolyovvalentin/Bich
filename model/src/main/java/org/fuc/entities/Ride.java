@@ -16,7 +16,7 @@ import java.util.Set;
                         "where not exists (select req " +
                         "       from r.requests req " +
                         "       where req.owner.id = :beatnik_id) " +
-                        "   and r.date < :date " +
+                        "   and r.date > :date " +
                         "   and r.arrival = :arrival " +
                         "   and r.departure = :departure" +
                         "   and (select count(p) from r.participants p) < r.maxParticipants"),
@@ -25,8 +25,8 @@ import java.util.Set;
                         "where not exists (select req " +
                         "       from r.requests req " +
                         "       where req.owner.id = :beatnik_id) " +
-                        "   and r.date < :date " +
-                        "   and (select count(p) from r.participants p) < r.maxParticipants")
+                        "   and r.date > :date " +
+                        "and (select count(p) from r.participants p) < r.maxParticipants")
 })
 public class Ride {
     public static final String FIND_BY_OWNER = "Ride.findByOwner";

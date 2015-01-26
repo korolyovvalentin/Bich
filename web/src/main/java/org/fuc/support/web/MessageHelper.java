@@ -3,6 +3,7 @@ package org.fuc.support.web;
 import static org.fuc.support.web.Message.MESSAGE_ATTRIBUTE;
 
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 public final class MessageHelper {
@@ -49,5 +50,21 @@ public final class MessageHelper {
 
     private static void addAttribute(Model model, String message, Message.Type type, Object... args) {
         model.addAttribute(MESSAGE_ATTRIBUTE, new Message(message, type, args));
+    }
+
+    public static void addSuccessAttribute(ModelAndView model, String message, Object... args) {
+        addAttribute(model, message, Message.Type.SUCCESS, args);
+    }
+
+    public static void addErrorAttribute(ModelAndView model, String message, Object... args) {
+        addAttribute(model, message, Message.Type.DANGER, args);
+    }
+
+    public static void addInfoAttribute(ModelAndView model, String message, Object... args) {
+        addAttribute(model, message, Message.Type.INFO, args);
+    }
+
+    private static void addAttribute(ModelAndView model, String message, Message.Type type, Object... args){
+        model.addObject(MESSAGE_ATTRIBUTE, new Message(message, type, args));
     }
 }
