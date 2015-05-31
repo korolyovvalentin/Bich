@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.Collection;
 import java.util.Date;
 
@@ -31,7 +32,9 @@ public class RidesRepository {
     public void delete(Ride ride) {
         entityManager
                 .createNativeQuery("delete from account_ride where ride_id = ?1")
-                .setParameter(1, ride.getId());
+                .setParameter(1, ride.getId())
+                .executeUpdate();
+
         Ride refreshed = entityManager.merge(ride);
         entityManager.refresh(refreshed);
         entityManager.remove(refreshed);

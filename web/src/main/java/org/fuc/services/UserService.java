@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
 //		accountRepository.save(new Account("user", "demo", "ROLE_USER"));
 //		accountRepository.save(new Account("admin", "admin", "ROLE_ADMIN"));
 	}
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Account account = accountRepository.findByEmail(username);
