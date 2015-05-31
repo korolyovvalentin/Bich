@@ -108,7 +108,7 @@ public class Ride {
         this.date = date;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "OWNER_ID", nullable = false)
     public Account getOwner() {
         return owner;
