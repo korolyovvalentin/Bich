@@ -30,6 +30,7 @@ public class RidesRepository {
 
     @Transactional
     public void delete(Ride ride) {
+        assert entityManager != null;
         entityManager
                 .createNativeQuery("delete from account_ride where ride_id = ?1")
                 .setParameter(1, ride.getId())
