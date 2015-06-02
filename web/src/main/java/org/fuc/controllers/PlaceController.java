@@ -85,4 +85,22 @@ public class PlaceController {
         }
         return new ModelAndView("place_requests/index", "requests", requestVms);
     }
+
+    @RequestMapping(value = "/approveRequest", method = RequestMethod.POST)
+    public ModelAndView approveRequest(@RequestParam("request_id") Long requestId){
+        PlaceRequest request = prRepository.findById(requestId);
+        request.setStatus(RequestStatus.APPROVED);
+        prRepository.update(request);
+
+        return new ModelAndView(new RedirectView("/business/places/" + requestId + "/requests", false));
+    }
+
+    @RequestMapping(value = "/declineRequest", method = RequestMethod.POST)
+    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId){
+        PlaceRequest request = prRepository.findById(requestId);
+        request.setStatus(RequestStatus.DECLINED);
+        prRepository.update(request);
+
+        return new ModelAndView(new RedirectView("/business/places/" + requestId + "/requests", false));
+    }
 }

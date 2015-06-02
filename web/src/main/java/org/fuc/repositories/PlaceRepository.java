@@ -37,11 +37,6 @@ public class PlaceRepository {
 
     @Transactional
     public void delete(Place place) {
-//        entityManager
-//                .createNativeQuery("delete from account_ride where ride_id = ?1")
-//                .setParameter(1, place.getId())
-//                .executeUpdate();
-
         Place refreshed = entityManager.merge(place);
         entityManager.refresh(refreshed);
         entityManager.remove(refreshed);

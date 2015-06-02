@@ -32,40 +32,41 @@
             &nbsp;</div>
     </th:block>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Place</th>
-            <th>From</th>
-            <th>To</th>
-            <th sec:authorize="hasRole('ROLE_BUSINESS')">Person</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tr th:each="request : ${requests}">
-            <td th:text="${request.place.name}">ride</td>
-            <td th:text="${request.fromDate}">ride</td>
-            <td th:text="${request.toDate}">ride</td>
-            <td sec:authorize="hasRole('ROLE_BUSINESS')" th:text="${request.owner.email}">ride</td>
-            <td sec:authorize="hasRole('ROLE_BUSINESS')">
-                <form action="#" th:action="@{/business/rides/approveRequest}" method="post" role="form">
-                    <input type="hidden" name="request_id" th:value="${request.id}"/>
-                    <button type="submit" class="btn-link">Accept</button>
-                </form>
-                <form action="#" th:action="@{/driver/rides/declineRequest}" method="post" role="form">
-                    <input type="hidden" name="request_id" th:value="${request.id}"/>
-                    <button type="submit" class="btn-link">Decline</button>
-                </form>
-            </td>
-            <td sec:authorize="hasRole('ROLE_BEATNIK')">
-                <form action="#" th:action="@{/beatnik/requests/markAsOld}" method="post" role="form">
-                    <input type="hidden" name="request_id" th:value="${request.id}"/>
-                    <button type="submit" class="btn-link">Mark as Old</button>
-                </form>
-            </td>
-        </tr>
-    </table>
-
+    <div th:if="${not#lists.isEmpty(requests)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Place</th>
+                <th>From</th>
+                <th>To</th>
+                <th sec:authorize="hasRole('ROLE_BUSINESS')">Person</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tr th:each="request : ${requests}">
+                <td th:text="${request.place.name}">ride</td>
+                <td th:text="${request.fromDate}">ride</td>
+                <td th:text="${request.toDate}">ride</td>
+                <td sec:authorize="hasRole('ROLE_BUSINESS')" th:text="${request.owner.email}">ride</td>
+                <td sec:authorize="hasRole('ROLE_BUSINESS')">
+                    <form action="#" th:action="@{/business/places/approveRequest}" method="post" role="form">
+                        <input type="hidden" name="request_id" th:value="${request.id}"/>
+                        <button type="submit" class="btn-link">Accept</button>
+                    </form>
+                    <form action="#" th:action="@{/business/places/declineRequest}" method="post" role="form">
+                        <input type="hidden" name="request_id" th:value="${request.id}"/>
+                        <button type="submit" class="btn-link">Decline</button>
+                    </form>
+                </td>
+                <td sec:authorize="hasRole('ROLE_BEATNIK')">
+                    <form action="#" th:action="@{/beatnik/requests/markAsOld}" method="post" role="form">
+                        <input type="hidden" name="request_id" th:value="${request.id}"/>
+                        <button type="submit" class="btn-link">Mark as Old</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div th:replace="fragments/footer :: footer">&nbsp;</div>
 </body>
