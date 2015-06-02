@@ -11,10 +11,6 @@ public class PlaceRequest {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "place_request_id_seq")
     private Long id;
 
-    private String status;
-
-    private String comment;
-
     private Integer rating;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -36,28 +32,12 @@ public class PlaceRequest {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Place getPlace() {
         return place;
     }
 
     public void setPlace(Place place) {
         this.place = place;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     public Integer getRating() {
