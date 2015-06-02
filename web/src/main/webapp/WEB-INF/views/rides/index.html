@@ -14,12 +14,23 @@
 <div class="container">
     <h1 class="page-header">Rides</h1>
 
-    <div th:if="${#lists.isEmpty(rides)}">
+    <div sec:authorize="hasRole('ROLE_DRIVER')" th:if="${#lists.isEmpty(rides)}">
         <h4>
             You have no rides created
         </h4>
     </div>
-    <a th:href="@{/driver/rides/create}">Create new ride</a>
+
+
+    <div sec:authorize="hasRole('ROLE_BEATNIK')" th:if="${#lists.isEmpty(rides)}">
+        <h4>
+            There is no available rides
+        </h4>
+    </div>
+
+
+    <div sec:authorize="hasRole('ROLE_DRIVER')">
+        <a th:href="@{/driver/rides/create}">Create new ride</a>
+    </div>
 
     <th:block th:if="${message != null}">
         <!-- /* The message code is returned from the @Controller */ -->
@@ -35,7 +46,8 @@
                 <th>Arrival</th>
                 <th>Date</th>
                 <th>MaxParticipants</th>
-                <th>Requests</th>
+                <th sec:authorize="hasRole('ROLE_BUSINESS')">Requests</th>
+                <th sec:authorize="hasRole('ROLE_BEATNIK')">Actions</th>
             </tr>
             </thead>
             <tr th:each="ride : ${rides}">
@@ -43,9 +55,23 @@
                 <td th:text="${ride.arrival.name}">ride</td>
                 <td th:text="${ride.date}">ride</td>
                 <td th:text="${ride.maxParticipants}">ride</td>
-                <td th:if="${ride.requestsCount} le 0"><a th:href="@{'/driver/rides/' + ${ride.id} + '/requests'}">Watch
-                    requests</a></td>
-                <td th:if="${ride.requestsCount} gt 0">No Requests</td>
+
+                <td sec:authorize="hasRole('ROLE_DRIVER')" th:if="${ride.requestsCount} le 0">
+                    <a th:href="@{'/driver/rides/' + ${ride.id} + '/requests'}">
+                        Watch new requests
+                    </a>
+                </td>
+                <td sec:authorize="hasRole('ROLE_DRIVER')" th:if="${ride.requestsCount} gt 0">No Requests</td>
+                <td sec:authorize="hasRole('ROLE_BEATNIK')">
+                    <form action="#" th:action="@{/beatnik/requests/create}" method="post" role="form">
+                        <input type="hidden" id="ride_id" name="ride_id" th:value="${ride.id}"/>
+                        <div class="form-group">
+                            <div>
+                                <button type="submit" class="btn-link">Create request</button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
             </tr>
         </table>
     </div>

@@ -19,7 +19,10 @@
             You still have no places
         </h4>
     </div>
-    <a th:href="@{/business/places/create}">Create new ride</a>
+
+    <div sec:authorize="hasRole('ROLE_BUSINESS')">
+        <a th:href="@{/business/places/create}">Create new place</a>
+    </div>
 
     <th:block th:if="${message != null}">
         <!-- /* The message code is returned from the @Controller */ -->
@@ -35,6 +38,7 @@
                 <th>Type</th>
                 <th>City</th>
                 <th>Description</th>
+                <th sec:authorize="hasRole('ROLE_BEATNIK')">Actions</th>
             </tr>
             </thead>
             <tr th:each="place : ${places}">
@@ -42,6 +46,9 @@
                 <td th:text="${place.type}">ride</td>
                 <td th:text="${place.city.name}">ride</td>
                 <td th:text="${place.description}">ride</td>
+                <td sec:authorize="hasRole('ROLE_BEATNIK')">
+                    <a>Create Request</a>
+                </td>
             </tr>
         </table>
     </div>

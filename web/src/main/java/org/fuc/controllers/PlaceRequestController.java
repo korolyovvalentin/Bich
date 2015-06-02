@@ -41,11 +41,7 @@ public class PlaceRequestController {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private RideService rideService;
-    @Autowired
     private RequestsService requestsService;
-    @Autowired
-    private PlaceRequestRepository prRepository;
     @Autowired
     private PlaceRepository placeRepository;
 
@@ -57,7 +53,7 @@ public class PlaceRequestController {
         for (Place place : places) {
             placeVms.add(mapper.map(place, PlaceVm.class));
         }
-        return new ModelAndView("place_requests/places", "places", placeVms);
+        return new ModelAndView("places/index", "places", placeVms);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

@@ -50,7 +50,7 @@ public class RequestController {
         for (Ride ride : rides) {
             rideVms.add(mapper.map(ride, RideVm.class));
         }
-        return new ModelAndView("requests/rides", "rides", rideVms);
+        return new ModelAndView("rides/index", "rides", rideVms);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
