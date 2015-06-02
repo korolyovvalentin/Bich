@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
@@ -32,6 +32,9 @@
                 </li>
                 <li sec:authorize="hasRole('ROLE_BEATNIK')">
                     <a th:href="@{/beatnik/requests/updated}">Beatnik Requests</a>
+                </li>
+                <li sec:authorize="hasRole('ROLE_BUSINESS')">
+                    <a th:href="@{/business/places}">Places</a>
                 </li>
                 <li sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

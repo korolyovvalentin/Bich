@@ -35,6 +35,8 @@ public class Place {
     @JoinColumn(name = "place_id")
     private Set<PlaceRequest> requests = new HashSet<>();
 
+    private String name;
+
     private String type;
 
     private String description;
@@ -48,6 +50,22 @@ public class Place {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Account getOwner() {

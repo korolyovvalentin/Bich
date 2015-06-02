@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Place</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/datepicker.css.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/datepicker.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="../../../resources/js/jquery-1.11.2.min.js"></script>
+    <script src="../../../resources/js/bootstrap-datepicker.js"
+            th:src="@{/resources/js/bootstrap-datepicker.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+    <h1 class="page-header">Create Place</h1>
+    <th:block th:if="${#fields.hasErrors('${place.*}')}">
+        <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">
+            Alert
+        </div>
+    </th:block>
+    <form action="#" th:action="@{/business/places/create}" th:object="${place}" method="post" role="form">
+        <div class="form-group">
+            <label>Name</label>
+
+            <div>
+                <input class="form-control" th:field="*{name}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Type</label>
+            <select class="form-control" name="type" id="type">
+
+                <option th:each="type : ${T(org.fuc.entities.PlaceType).values()}"
+                        th:value="${type}"
+                        th:text="${type.value}"
+                        th:selected="${type == T(org.fuc.entities.PlaceType).Shelter}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>City</label>
+
+            <div>
+                <select class="form-control" th:field="*{city.id}">
+                    <option th:each="city : *{availableCities}"
+                            th:value="${city.id}"
+                            th:text="${city.name}">Wireframe
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Description</label>
+
+            <div>
+                <textarea class="form-control" th:field="*{description}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn btn-default">Create</button>
+            </div>
+        </div>
+    </form>
+    <a th:href="@{/business/places}">Back To List</a>
+</div>
+<div th:replace="fragments/footer :: footer">&nbsp;</div>
+</body>
+</html>
