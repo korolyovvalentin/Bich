@@ -1,6 +1,7 @@
 package org.fuc.entities;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 @Entity
@@ -12,6 +13,14 @@ public class PlaceRequest {
     private Long id;
 
     private Integer rating;
+
+    private String status;
+
+    private String comment;
+
+    private Date fromDate;
+
+    private Date toDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PLACE_ID", nullable = false)
@@ -30,6 +39,38 @@ public class PlaceRequest {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
     }
 
     public Place getPlace() {

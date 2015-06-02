@@ -10,7 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import java.util.Collection;
@@ -42,6 +45,20 @@ public class PlaceRepository {
         Place refreshed = entityManager.merge(place);
         entityManager.refresh(refreshed);
         entityManager.remove(refreshed);
+    }
+
+    public Collection<Place> getPlaces(City city, String type) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Place> criteria = builder.createQuery(Place.class);
+        Root<Place> root = criteria.from(Place.class);
+        criteria.select(root);
+
+        if(city != null)
+            criteria.where(builder.equal(root.get("city_id"), city.getId()));
+        if(type != null)
+            criteria.where(builder.equal(root.get("type"), type));
+
+        return entityManager.createQuery(criteria).getResultList();
     }
 
     public Collection<Place> getOwnerPlaces(Account account) {

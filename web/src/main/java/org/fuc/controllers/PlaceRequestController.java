@@ -2,13 +2,17 @@ package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
 import org.fuc.entities.Account;
+import org.fuc.entities.Place;
 import org.fuc.entities.Request;
 import org.fuc.entities.Ride;
 import org.fuc.repositories.AccountRepository;
+import org.fuc.repositories.PlaceRepository;
+import org.fuc.repositories.PlaceRequestRepository;
 import org.fuc.repositories.RidesRepository;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
 import org.fuc.support.web.MessageHelper;
+import org.fuc.viewmodels.Places.PlaceVm;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +31,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Controller
-@RequestMapping("/beatnik/requests")
+@RequestMapping("/beatnik/place_requests")
 @Secured("ROLE_BEATNIK")
-public class RequestController {
+public class PlaceRequestController {
     @Autowired
     private MapperFacade mapper;
     @Autowired
@@ -40,17 +44,20 @@ public class RequestController {
     private RideService rideService;
     @Autowired
     private RequestsService requestsService;
+    @Autowired
+    private PlaceRequestRepository prRepository;
+    @Autowired
+    private PlaceRepository placeRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public ModelAndView availableRides(Principal principal){
-        Account account = accountRepository.findByEmail(principal.getName());
-        Collection<Ride> rides = rideService.getAvailableRides(account);
-        Collection<RideVm> rideVms = new LinkedList<>();
-        for (Ride ride : rides) {
-            rideVms.add(mapper.map(ride, RideVm.class));
+    public ModelAndView index(){
+        Collection<Place> places = placeRepository.getPlaces(null, null);
+        Collection<PlaceVm> placeVms = new LinkedList<>();
+        for (Place place : places) {
+            placeVms.add(mapper.map(place, PlaceVm.class));
         }
-        return new ModelAndView("requests/rides", "rides", rideVms);
+        return new ModelAndView("place_requests/places", "places", placeVms);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)

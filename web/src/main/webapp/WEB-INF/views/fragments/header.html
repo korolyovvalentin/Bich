@@ -33,6 +33,9 @@
                 <li sec:authorize="hasRole('ROLE_BEATNIK')">
                     <a th:href="@{/beatnik/requests/updated}">Beatnik Requests</a>
                 </li>
+                <li sec:authorize="hasRole('ROLE_BEATNIK')">
+                    <a th:href="@{/beatnik/place_requests}">Beatnik Places</a>
+                </li>
                 <li sec:authorize="hasRole('ROLE_BUSINESS')">
                     <a th:href="@{/business/places}">Places</a>
                 </li>
