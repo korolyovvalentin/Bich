@@ -79,4 +79,13 @@ public class PlaceRequestController {
         }
         return new ModelAndView("place_requests/index", "requests", requestVms);
     }
+
+    @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
+    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId){
+        PlaceRequest request = prRepository.findById(requestId);
+        request.setStatus(RequestStatus.OLD);
+        prRepository.update(request);
+
+        return new ModelAndView(new RedirectView("/beatnik/place_requests/requests", false));
+    }
 }
