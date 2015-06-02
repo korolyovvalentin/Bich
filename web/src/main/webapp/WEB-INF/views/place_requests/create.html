@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Request</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/datepicker.css.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/datepicker.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="../../../resources/js/jquery-1.11.2.min.js"></script>
+    <script src="../../../resources/js/bootstrap-datepicker.js"
+            th:src="@{/resources/js/bootstrap-datepicker.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+    <h1 class="page-header" th:text="'Create Request for ' + ${placeRequest.place.name}">
+        Something is wrong
+    </h1>
+    <th:block th:if="${#fields.hasErrors('${placeRequest.*}')}">
+        <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">
+            Alert
+        </div>
+    </th:block>
+    <form action="#" th:action="@{/beatnik/place_requests/create}" th:object="${placeRequest}" method="post" role="form">
+        <div class="form-group">
+            <label>From</label>
+
+            <div>
+                <input readonly="readonly" class="form-control datepicker" th:field="*{fromDate}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>To</label>
+
+            <div>
+                <input readonly="readonly" class="form-control datepicker" th:field="*{toDate}"/>
+            </div>
+        </div>
+        <input type="hidden" th:field="*{place.id}"/>
+
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn btn-default">Create</button>
+            </div>
+        </div>
+    </form>
+    <a th:href="@{/driver/rides}">Back To List</a>
+</div>
+<div th:replace="fragments/footer :: footer">&nbsp;</div>
+<script type="text/javascript" lang="javascript">
+    $(document).ready(function () {
+        $(".datepicker").datepicker();
+    });
+</script>
+</body>
+</html>

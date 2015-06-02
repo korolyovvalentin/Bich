@@ -1,31 +1,23 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
-import org.fuc.entities.Account;
 import org.fuc.entities.Place;
-import org.fuc.entities.Request;
-import org.fuc.entities.Ride;
+import org.fuc.entities.PlaceRequest;
 import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.PlaceRepository;
 import org.fuc.repositories.PlaceRequestRepository;
-import org.fuc.repositories.RidesRepository;
-import org.fuc.services.RequestsService;
-import org.fuc.services.RideService;
-import org.fuc.support.web.MessageHelper;
+import org.fuc.viewmodels.PlaceRequestVm;
 import org.fuc.viewmodels.Places.PlaceVm;
-import org.fuc.viewmodels.RequestVm;
-import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -37,13 +29,11 @@ public class PlaceRequestController {
     @Autowired
     private MapperFacade mapper;
     @Autowired
-    private RidesRepository ridesRepository;
-    @Autowired
     private AccountRepository accountRepository;
     @Autowired
-    private RequestsService requestsService;
-    @Autowired
     private PlaceRepository placeRepository;
+    @Autowired
+    private PlaceRequestRepository prRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -56,30 +46,23 @@ public class PlaceRequestController {
         return new ModelAndView("places/index", "places", placeVms);
     }
 
+    @RequestMapping(value = "/{placeId}/create", method=RequestMethod.GET)
+    public ModelAndView create(@PathVariable Long placeId){
+        Place place = placeRepository.findById(placeId);
+        PlaceRequestVm vm = new PlaceRequestVm();
+        vm.setPlace(place);
+        return new ModelAndView("place_requests/create", "placeRequest", vm);
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ModelAndView create(@RequestParam("ride_id") Long rideId, Principal principal){
-        Ride ride = ridesRepository.findById(rideId);
-        Account beatnik = accountRepository.findByEmail(principal.getName());
-        requestsService.create(ride, beatnik);
-        ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
-        MessageHelper.addSuccessAttribute(model, "Request was successfully added");
-        return model;
-    }
-
-    @RequestMapping(value = "/updated", method = RequestMethod.GET)
-    public ModelAndView processedRequests(Principal principal){
-        Account account = accountRepository.findByEmail(principal.getName());
-        Collection<Request> requests = requestsService.findUpdatedRequests(account.getId());
-        Collection<RequestVm> requestVms = new LinkedList<>();
-        for(Request request : requests){
-            requestVms.add(mapper.map(request, RequestVm.class));
+    public ModelAndView create(@Valid @ModelAttribute("placeRequest") PlaceRequestVm vm, Principal principal, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("place_requests/create");
         }
-        return new ModelAndView("requests/updated", "requests", requestVms);
-    }
 
-    @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
-    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId){
-        requestsService.markAsOld(requestId);
-        return new ModelAndView(new RedirectView("/beatnik/requests/updated", false));
+        PlaceRequest placeRequest = mapper.map(vm, PlaceRequest.class);
+        placeRequest.setOwner(accountRepository.findByEmail(principal.getName()));
+        prRepository.save(placeRequest);
+        return new ModelAndView(new RedirectView("/beatnik/place_requests", false));
     }
 }

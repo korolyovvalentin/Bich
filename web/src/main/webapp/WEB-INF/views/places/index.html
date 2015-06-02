@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Places</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -47,7 +47,7 @@
                 <td th:text="${place.city.name}">ride</td>
                 <td th:text="${place.description}">ride</td>
                 <td sec:authorize="hasRole('ROLE_BEATNIK')">
-                    <a>Create Request</a>
+                    <a th:href="@{'/beatnik/place_requests/' + ${place.id} + '/create'}">Create Request</a>
                 </td>
             </tr>
         </table>
