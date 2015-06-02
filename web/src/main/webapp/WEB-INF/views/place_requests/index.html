@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Place Requests</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+    <h1 class="page-header">Place Requests</h1>
+
+    <div sec:authorize="hasRole('ROLE_BUSINESS')" th:if="${#lists.isEmpty(requests)}">
+        <h4>
+            You have no requests
+        </h4>
+    </div>
+
+    <div sec:authorize="hasRole('ROLE_BEATNIK')" th:if="${#lists.isEmpty(requests)}">
+        <h4>
+            You have no updated requests
+        </h4>
+    </div>
+
+    <th:block th:if="${message != null}">
+        <!-- /* The message code is returned from the @Controller */ -->
+        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">
+            &nbsp;</div>
+    </th:block>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Place</th>
+            <th>From</th>
+            <th>To</th>
+            <th sec:authorize="hasRole('ROLE_BUSINESS')">Person</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tr th:each="request : ${requests}">
+            <td th:text="${request.place.name}">ride</td>
+            <td th:text="${request.fromDate}">ride</td>
+            <td th:text="${request.toDate}">ride</td>
+            <td sec:authorize="hasRole('ROLE_BUSINESS')" th:text="${request.owner.email}">ride</td>
+            <td sec:authorize="hasRole('ROLE_BUSINESS')">
+                <form action="#" th:action="@{/business/rides/approveRequest}" method="post" role="form">
+                    <input type="hidden" name="request_id" th:value="${request.id}"/>
+                    <button type="submit" class="btn-link">Accept</button>
+                </form>
+                <form action="#" th:action="@{/driver/rides/declineRequest}" method="post" role="form">
+                    <input type="hidden" name="request_id" th:value="${request.id}"/>
+                    <button type="submit" class="btn-link">Decline</button>
+                </form>
+            </td>
+            <td sec:authorize="hasRole('ROLE_BEATNIK')">
+                <form action="#" th:action="@{/beatnik/requests/markAsOld}" method="post" role="form">
+                    <input type="hidden" name="request_id" th:value="${request.id}"/>
+                    <button type="submit" class="btn-link">Mark as Old</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+</div>
+<div th:replace="fragments/footer :: footer">&nbsp;</div>
+</body>
+</html>

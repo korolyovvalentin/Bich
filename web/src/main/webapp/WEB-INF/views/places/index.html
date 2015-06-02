@@ -38,7 +38,7 @@
                 <th>Type</th>
                 <th>City</th>
                 <th>Description</th>
-                <th sec:authorize="hasRole('ROLE_BEATNIK')">Actions</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tr th:each="place : ${places}">
@@ -48,6 +48,9 @@
                 <td th:text="${place.description}">ride</td>
                 <td sec:authorize="hasRole('ROLE_BEATNIK')">
                     <a th:href="@{'/beatnik/place_requests/' + ${place.id} + '/create'}">Create Request</a>
+                </td>
+                <td sec:authorize="hasRole('ROLE_BUSINESS')">
+                    <a th:href="@{'/business/places/' + ${place.id} + '/requests'}">Watch New Requests</a>
                 </td>
             </tr>
         </table>

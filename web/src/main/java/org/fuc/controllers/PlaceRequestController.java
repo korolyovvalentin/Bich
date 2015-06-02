@@ -3,6 +3,7 @@ package org.fuc.controllers;
 import ma.glasnost.orika.MapperFacade;
 import org.fuc.entities.Place;
 import org.fuc.entities.PlaceRequest;
+import org.fuc.entities.RequestStatus;
 import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.PlaceRepository;
 import org.fuc.repositories.PlaceRequestRepository;
@@ -37,7 +38,7 @@ public class PlaceRequestController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public ModelAndView index(){
+    public ModelAndView index() {
         Collection<Place> places = placeRepository.getPlaces(null, null);
         Collection<PlaceVm> placeVms = new LinkedList<>();
         for (Place place : places) {
@@ -46,8 +47,8 @@ public class PlaceRequestController {
         return new ModelAndView("places/index", "places", placeVms);
     }
 
-    @RequestMapping(value = "/{placeId}/create", method=RequestMethod.GET)
-    public ModelAndView create(@PathVariable Long placeId){
+    @RequestMapping(value = "/{placeId}/create", method = RequestMethod.GET)
+    public ModelAndView create(@PathVariable Long placeId) {
         Place place = placeRepository.findById(placeId);
         PlaceRequestVm vm = new PlaceRequestVm();
         vm.setPlace(place);
@@ -62,7 +63,20 @@ public class PlaceRequestController {
 
         PlaceRequest placeRequest = mapper.map(vm, PlaceRequest.class);
         placeRequest.setOwner(accountRepository.findByEmail(principal.getName()));
+        placeRequest.setStatus(RequestStatus.NEW);
         prRepository.save(placeRequest);
         return new ModelAndView(new RedirectView("/beatnik/place_requests", false));
+    }
+
+    @RequestMapping(value = "/requests", method = RequestMethod.GET)
+    public ModelAndView requests(Principal principal) {
+        Collection<PlaceRequest> requests =
+                prRepository
+                        .findUpdatedRequests(accountRepository.findByEmail(principal.getName()));
+        Collection<PlaceRequestVm> requestVms = new LinkedList<>();
+        for (PlaceRequest request : requests) {
+            requestVms.add(mapper.map(request, PlaceRequestVm.class));
+        }
+        return new ModelAndView("place_requests/index", "requests", requestVms);
     }
 }

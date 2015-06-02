@@ -1,9 +1,6 @@
 package org.fuc.repositories;
 
-import org.fuc.entities.City;
-import org.fuc.entities.Place;
-import org.fuc.entities.PlaceRequest;
-import org.fuc.entities.Request;
+import org.fuc.entities.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,25 +40,35 @@ public class PlaceRequestRepository {
         criteria.select(root);
         criteria.where(builder.equal(root.get("type"), type));
 
-        if(city != null)
-            criteria.where(builder.equal(root.get("city_id"), city.getId()));
+        if (city != null)
+            criteria.where(builder.equal(root.get("city"), city));
 
         return entityManager.createQuery(criteria).getResultList();
     }
 
-    public Collection<PlaceRequest> findRequests(Long rideId, String status) {
-        return entityManager
-                .createNamedQuery(Request.FIND_BY_RIDE, PlaceRequest.class)
-                .setParameter("ride_id", rideId)
-                .setParameter("status", status)
-                .getResultList();
+    public Collection<PlaceRequest> findNewRequests(Place place) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<PlaceRequest> criteria = builder.createQuery(PlaceRequest.class);
+        Root<PlaceRequest> root = criteria.from(PlaceRequest.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("place"), place));
+        criteria.where(builder.equal(root.get("status"), RequestStatus.NEW));
+
+        return entityManager.createQuery(criteria).getResultList();
     }
 
-    public Collection<Request> findUpdatedRequests(Long beatnikId) {
-        return entityManager
-                .createNamedQuery(Request.FIND_UPDATED, Request.class)
-                .setParameter("beatnik_id", beatnikId)
-                .getResultList();
+    public Collection<PlaceRequest> findUpdatedRequests(Account owner) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<PlaceRequest> criteria = builder.createQuery(PlaceRequest.class);
+        Root<PlaceRequest> root = criteria.from(PlaceRequest.class);
+        criteria.select(root);
+        criteria.where(builder.equal(root.get("owner"), owner));
+        criteria.where(builder.or(
+                builder.equal(root.get("status"), RequestStatus.APPROVED),
+                builder.equal(root.get("status"), RequestStatus.DECLINED)
+        ));
+
+        return entityManager.createQuery(criteria).getResultList();
     }
 
     public PlaceRequest findById(Long id) {

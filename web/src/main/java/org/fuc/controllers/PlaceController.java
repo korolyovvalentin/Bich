@@ -1,13 +1,12 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
-import org.fuc.entities.Account;
-import org.fuc.entities.City;
-import org.fuc.entities.Place;
-import org.fuc.entities.RoleProvider;
+import org.fuc.entities.*;
 import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.CitiesRepository;
 import org.fuc.repositories.PlaceRepository;
+import org.fuc.repositories.PlaceRequestRepository;
+import org.fuc.viewmodels.PlaceRequestVm;
 import org.fuc.viewmodels.Places.PlaceCreateVm;
 import org.fuc.viewmodels.Places.PlaceVm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -39,6 +35,9 @@ public class PlaceController {
     private AccountRepository accountRepository;
     @Autowired
     private PlaceRepository placeRepository;
+    @Autowired
+    private PlaceRequestRepository prRepository;
+
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -73,5 +72,17 @@ public class PlaceController {
         }
         placeRepository.save(place);
         return new ModelAndView(new RedirectView("/business/places", false));
+    }
+
+    @RequestMapping(value = "/{placeId}/requests", method=RequestMethod.GET)
+    public ModelAndView create(@PathVariable Long placeId){
+        Place place = placeRepository.findById(placeId);
+        Collection<PlaceRequest> requests =
+                prRepository.findNewRequests(place);
+        Collection<PlaceRequestVm> requestVms = new LinkedList<>();
+        for (PlaceRequest request : requests) {
+            requestVms.add(mapper.map(request, PlaceRequestVm.class));
+        }
+        return new ModelAndView("place_requests/index", "requests", requestVms);
     }
 }

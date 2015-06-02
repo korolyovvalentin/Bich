@@ -54,7 +54,7 @@ public class PlaceRepository {
         criteria.select(root);
 
         if(city != null)
-            criteria.where(builder.equal(root.get("city_id"), city.getId()));
+            criteria.where(builder.equal(root.get("city"), city));
         if(type != null)
             criteria.where(builder.equal(root.get("type"), type));
 
