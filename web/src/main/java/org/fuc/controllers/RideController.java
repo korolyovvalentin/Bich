@@ -1,6 +1,5 @@
 package org.fuc.controllers;
 
-import com.sun.corba.se.spi.presentation.rmi.StubAdapter;
 import ma.glasnost.orika.MapperFacade;
 import org.fuc.entities.Account;
 import org.fuc.entities.City;
@@ -10,7 +9,6 @@ import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.CitiesRepository;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
-import org.fuc.support.web.MessageHelper;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideCreateVm;
 import org.fuc.viewmodels.Rides.RideVm;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,9 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/driver/rides")

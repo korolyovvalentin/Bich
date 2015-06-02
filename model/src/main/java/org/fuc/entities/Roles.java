@@ -2,7 +2,8 @@ package org.fuc.entities;
 
 public enum Roles {
     Beatnik("role.beatnik"),
-    Driver("role.driver");
+    Driver("role.driver"),
+    Business("role.business");
 
     private String value;
 
