@@ -131,6 +131,7 @@ public class Ride {
     }
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "ride_id")
     public Set<Request> getRequests() {
         return requests;
     }
