@@ -40,6 +40,34 @@ class CityController {
         return model;
     }
 
+    @RequestMapping(value = "/available", method = RequestMethod.POST, headers = "Accept=application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public
+    @ResponseBody
+    CityVm[] listCities(@RequestBody City[] cities) {
+        Collection<City> availableList = citiesRepository.getCities(cities);
+        CityVm[] cityVms = new CityVm[availableList.size()];
+        int i = 0;
+        for (City city : availableList) {
+            cityVms[i++] = mapper.map(city, CityVm.class);
+        }
+        return cityVms;
+    }
+
+    @RequestMapping(value = "/json", method = RequestMethod.GET, headers = "Accept=application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public
+    @ResponseBody
+    CityVm[] listCities(@RequestParam String name) {
+        Collection<City> cities = citiesRepository.getCities();
+        CityVm[] cityVms = new CityVm[cities.size()];
+        int i = 0;
+        for (City city : cities) {
+            cityVms[i++] = mapper.map(city, CityVm.class);
+        }
+        return cityVms;
+    }
+
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView create() {
         ModelAndView model = new ModelAndView("cities/create");
@@ -68,5 +96,17 @@ class CityController {
     public ModelAndView delete(@ModelAttribute("city") CityVm city) {
         citiesRepository.delete(mapper.map(city, City.class));
         return new ModelAndView(new RedirectView("/administration/cities", false));
+    }
+
+    private class CitiesJson {
+        private City[] cities;
+
+        public City[] getCities() {
+            return cities;
+        }
+
+        public void setCities(City[] cities) {
+            this.cities = cities;
+        }
     }
 }

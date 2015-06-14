@@ -43,7 +43,7 @@ public class RideController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public ModelAndView listCities(Principal principal) {
+    public ModelAndView listRides(Principal principal) {
         Account driver = accountRepository.findByEmail(principal.getName());
         Collection<Ride> rides = rideService.getDriverRides(driver);
         Collection<RideVm> rideVms = new LinkedList<>();
