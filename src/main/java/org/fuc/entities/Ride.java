@@ -44,6 +44,7 @@ public class Ride {
     private Account owner;
     private Set<Account> participants = new HashSet<Account>();
     private Set<Request> requests = new HashSet<Request>();
+    private Set<RidePoint> points = new HashSet<>();
     private Integer maxParticipants;
 
     public Ride() {
@@ -138,6 +139,16 @@ public class Ride {
 
     public void setRequests(Set<Request> requests) {
         this.requests = requests;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
+    @JoinColumn(name = "ride_id")
+    public Set<RidePoint> getPoints() {
+        return points;
+    }
+
+    public void setPoints(Set<RidePoint> points) {
+        this.points = points;
     }
 
     public boolean hasVacantSeat() {

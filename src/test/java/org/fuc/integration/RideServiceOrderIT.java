@@ -1,10 +1,7 @@
 package org.fuc.integration;
 
-import org.fuc.entities.RoleProvider;
+import org.fuc.entities.*;
 import org.fuc.config.WebAppConfigurationAware;
-import org.fuc.entities.Account;
-import org.fuc.entities.City;
-import org.fuc.entities.Ride;
 import org.fuc.repositories.CitiesRepository;
 import org.fuc.repositories.RidesRepository;
 import org.fuc.services.AccountService;
@@ -19,7 +16,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class RideServiceIT extends WebAppConfigurationAware {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class RideServiceOrderIT extends WebAppConfigurationAware {
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -45,25 +44,18 @@ public class RideServiceIT extends WebAppConfigurationAware {
     }
 
     @Test
-    public void shouldAddThreeParticipants() {
-        int maxCount = 3;
-        ride = createRide(maxCount);
-        for (int i = 1; i <= maxCount; i++) {
-            Account account = new Account("prt@prt.com" + i, "pwd", RoleProvider.ROLE_BEATNIK);
-            participants.add(account);
-            accountService.createAccount(account);
-            rideService.addParticipant(ride, account);
-            Ride testRide = ridesRepository.findById(ride.getId());
-            Assert.assertEquals("Participant was not persist", i, testRide.getParticipants().size());
-        }
-    }
+    public void shouldCreateRide() {
+        ride = rideService.createRide(new Ride(departure, arrival, new Date(), owner, 3), new City[] {departure, arrival});
 
-    private Ride createRide(Integer maxCount) {
-        Ride ride = new Ride(departure, arrival, new Date(), owner, maxCount);
-        ride = rideService.createRide(ride);
-        Collection<Ride> rides = ridesRepository.getRidesForOwner(owner);
-        Assert.assertEquals(rides.size(), 1);
-        return ride;
+        Ride freshRide = (Ride)ridesRepository.getRidesForOwner(owner).toArray()[0];
+        System.out.println("Fresh Id: " + freshRide.getId());
+        for (RidePoint rp : freshRide.getPoints()){
+            System.out.println("Ridepoint Id: " + rp.getId());
+            switch (rp.getCity().getName()){
+                case "Departure": assertThat(rp.getOrderField()).isEqualTo(0); break;
+                case "Arrival": assertThat(rp.getOrderField()).isEqualTo(1); break;
+            }
+        }
     }
 
     @After

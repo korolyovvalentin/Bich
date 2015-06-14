@@ -3,6 +3,7 @@ package org.fuc.repositories;
 import org.fuc.entities.Account;
 import org.fuc.entities.City;
 import org.fuc.entities.Ride;
+import org.fuc.entities.RidePoint;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +37,7 @@ public class RidesRepository {
                 .setParameter(1, ride.getId())
                 .executeUpdate();
 
-        Ride refreshed = entityManager.merge(ride);
-        entityManager.refresh(refreshed);
-        entityManager.remove(refreshed);
+        entityManager.remove(entityManager.contains(ride) ? ride : entityManager.merge(ride));
     }
 
     public Collection<Ride> getRidesForOwner(Account account) {

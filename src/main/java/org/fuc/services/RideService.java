@@ -1,8 +1,6 @@
 package org.fuc.services;
 
-import org.fuc.entities.RoleProvider;
-import org.fuc.entities.Account;
-import org.fuc.entities.Ride;
+import org.fuc.entities.*;
 import org.fuc.repositories.RidesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +12,16 @@ import java.util.Collection;
 public class RideService {
     @Autowired
     private RidesRepository ridesRepository;
+
+    public Ride createRide(Ride ride, City[] cities) {
+        int order = 0;
+        for (City city : cities) {
+            RidePoint ridePoint = new RidePoint(ride, order++, city);
+            ride.getPoints().add(ridePoint);
+        }
+        ridesRepository.save(ride);
+        return ride;
+    }
 
     public Ride createRide(Ride ride) {
         if (!ride.getOwner().getRole().equals(RoleProvider.ROLE_DRIVER)) {
@@ -36,11 +44,11 @@ public class RideService {
         ridesRepository.update(persistentRide);
     }
 
-    public Collection<Ride> getDriverRides(Account driver){
+    public Collection<Ride> getDriverRides(Account driver) {
         return ridesRepository.getRidesForOwner(driver);
     }
 
-    public Collection<Ride> getAvailableRides(Account account){
+    public Collection<Ride> getAvailableRides(Account account) {
         return ridesRepository.getAvailableRides(account);
     }
 }
