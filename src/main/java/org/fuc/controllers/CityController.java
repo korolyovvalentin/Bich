@@ -14,12 +14,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Collection;
 import java.util.LinkedList;
 
 @Controller
 @RequestMapping("/administration/cities")
-@Secured("ROLE_ADMIN")
 class CityController {
     @Autowired
     private MapperFacade mapper;
@@ -27,6 +27,7 @@ class CityController {
     @Autowired
     private CitiesRepository citiesRepository;
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView listCities() {
@@ -40,11 +41,12 @@ class CityController {
         return model;
     }
 
+    @Secured("ROLE_DRIVER")
     @RequestMapping(value = "/available", method = RequestMethod.POST, headers = "Accept=application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public
     @ResponseBody
-    CityVm[] listCities(@RequestBody City[] cities) {
+    CityVm[] listCities(@RequestBody City[] cities, Principal principal) {
         Collection<City> availableList = citiesRepository.getCities(cities);
         CityVm[] cityVms = new CityVm[availableList.size()];
         int i = 0;
@@ -54,20 +56,7 @@ class CityController {
         return cityVms;
     }
 
-    @RequestMapping(value = "/json", method = RequestMethod.GET, headers = "Accept=application/json")
-    @ResponseStatus(value = HttpStatus.OK)
-    public
-    @ResponseBody
-    CityVm[] listCities(@RequestParam String name) {
-        Collection<City> cities = citiesRepository.getCities();
-        CityVm[] cityVms = new CityVm[cities.size()];
-        int i = 0;
-        for (City city : cities) {
-            cityVms[i++] = mapper.map(city, CityVm.class);
-        }
-        return cityVms;
-    }
-
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView create() {
         ModelAndView model = new ModelAndView("cities/create");
@@ -75,6 +64,7 @@ class CityController {
         return model;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ModelAndView create(@Valid @ModelAttribute("city") CityVm city, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -84,6 +74,7 @@ class CityController {
         return new ModelAndView(new RedirectView("/administration/cities", false));
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable("id") Long id) {
         ModelAndView model = new ModelAndView("cities/delete");
@@ -92,6 +83,7 @@ class CityController {
         return model;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView delete(@ModelAttribute("city") CityVm city) {
         citiesRepository.delete(mapper.map(city, City.class));

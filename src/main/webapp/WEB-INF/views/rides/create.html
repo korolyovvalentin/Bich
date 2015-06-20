@@ -12,6 +12,7 @@
     <script src="../../../resources/js/jquery-1.11.2.min.js"></script>
     <script src="../../../resources/js/bootstrap-datepicker.js"
             th:src="@{/resources/js/bootstrap-datepicker.js}"></script>
+    <script src="../../../resources/js/rides.js"></script>
 </head>
 <body>
 <div th:replace="fragments/header :: header">&nbsp;</div>
@@ -22,31 +23,7 @@
             Alert
         </div>
     </th:block>
-    <form action="#" th:action="@{/driver/rides/create}" th:object="${ride}" method="post" role="form">
-        <div class="form-group">
-            <label>Departure City</label>
-
-            <div>
-                <select class="form-control" th:field="*{departure.id}">
-                    <option th:each="city : *{availableCities}"
-                            th:value="${city.id}"
-                            th:text="${city.name}">Wireframe
-                    </option>
-                </select>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Arrival City</label>
-
-            <div>
-                <select class="form-control" th:field="*{arrival.id}">
-                    <option th:each="city : *{availableCities}"
-                            th:value="${city.id}"
-                            th:text="${city.name}">Wireframe
-                    </option>
-                </select>
-            </div>
-        </div>
+    <form id="ride-form" th:action="@{/driver/rides/create}" th:object="${ride}" method="post" role="form">
         <div class="form-group">
             <select class="form-control">
                 <option th:each="city : *{availableCities}"
@@ -55,6 +32,11 @@
                 </option>
             </select>
         </div>
+
+        <a id="add-point-btn" href="#!" title="Add New Point">
+            <span class="glyphicon-plus" style="font-size: 2em;"></span>
+        </a>
+
         <div class="form-group">
             <label>Date</label>
 
@@ -82,34 +64,7 @@
     $(document).ready(function () {
         $(".datepicker").datepicker();
 
-        $('select.form-control').change(function () {
-            var text = $(this).children("option:selected").text();
-            var selected = [{id: $(this).val(), name: text}];
-
-            var token = $("[name='_csrf']").val();
-
-            $.ajax({
-                url: "/administration/cities/available",
-                type: 'POST',
-                dataType: 'json',
-                headers : {
-                    'X-CSRF-Token': token,
-                    'Accept' : 'application/json',
-                    'Content-Type' : 'application/json'
-                },
-                data: JSON.stringify(selected),
-                contentType: 'application/json',
-                mimeType: 'application/json',
-                success: function (data) {
-                    for (var i = 0; i != data.length; i++) {
-                        console.log(data[i].name + ' ' + data[i].id);
-                    }
-                },
-                error: function (data, status, er) {
-                    alert("error: " + data + " status: " + status + " er:" + er);
-                }
-            });
-        });
+        $("#add-point-btn").click(addPoint);
     });
 </script>
 </body>
