@@ -25,7 +25,7 @@
     </th:block>
     <form id="ride-form" th:action="@{/driver/rides/create}" th:object="${ride}" method="post" role="form">
         <div class="form-group">
-            <select class="form-control">
+            <select class="form-control" name="cities[0].id">
                 <option th:each="city : *{availableCities}"
                         th:value="${city.id}"
                         th:text="${city.name}">Wireframe

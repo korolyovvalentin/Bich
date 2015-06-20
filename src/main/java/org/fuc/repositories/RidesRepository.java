@@ -55,17 +55,6 @@ public class RidesRepository {
                 .getResultList();
     }
 
-    public Collection<Ride> getFilteredRides(Account account, Date date, City arrival, City departure){
-        return entityManager
-                .createNamedQuery(Ride.FILTER_AVAILABLE_RIDES, Ride.class)
-                .setParameter("beatnik_id", account.getId())
-                .setParameter("date", date)
-                .setParameter("arrival", arrival)
-                .setParameter("departure", departure)
-                .getResultList();
-    }
-
-
     public Ride findById(Long id) {
         return entityManager.find(Ride.class, id);
     }

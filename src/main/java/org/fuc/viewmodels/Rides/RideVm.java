@@ -1,14 +1,18 @@
 package org.fuc.viewmodels.Rides;
 
 import org.fuc.entities.City;
+import org.fuc.entities.RidePoint;
 import org.hibernate.validator.constraints.Range;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class RideVm {
     private Long id;
     private City departure;
     private City arrival;
+    private List<City> cities = new LinkedList<>();
     private Date date;
     @Range(min = 0, message = "Must be positive number")
     private Integer maxParticipants;
@@ -60,5 +64,13 @@ public class RideVm {
 
     public void setRequestsCount(int requestsCount) {
         this.requestsCount = requestsCount;
+    }
+
+    public List<City> getCities() {
+        return cities;
+    }
+
+    public void setCities(List<City> cities) {
+        this.cities = cities;
     }
 }

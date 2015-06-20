@@ -1,9 +1,7 @@
 package org.fuc.entities;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("serial")
 @Entity
@@ -20,8 +18,6 @@ import java.util.Set;
                         "       from r.requests req " +
                         "       where req.owner.id = :beatnik_id) " +
                         "   and r.date > :date " +
-                        "   and r.arrival = :arrival " +
-                        "   and r.departure = :departure" +
                         "   and (select count(p) from r.participants p) < r.maxParticipants"),
         @NamedQuery(name = Ride.AVAILABLE_RIDES,
                 query = "select r from Ride r " +
@@ -38,25 +34,19 @@ public class Ride {
     public static final String AVAILABLE_RIDES = "Ride.allAvailableRides";
 
     private Long id;
-    private City departure;
-    private City arrival;
     private Date date;
     private Account owner;
     private Set<Account> participants = new HashSet<Account>();
     private Set<Request> requests = new HashSet<Request>();
-    private Set<RidePoint> points = new HashSet<>();
+    private List<RidePoint> points = new LinkedList<>();
     private Integer maxParticipants;
 
     public Ride() {
     }
 
-    public Ride(City departure,
-                City arrival,
-                Date date,
+    public Ride(Date date,
                 Account owner,
                 Integer maxParticipants) {
-        this.departure = departure;
-        this.arrival = arrival;
         this.date = date;
         this.owner = owner;
         this.maxParticipants = maxParticipants;
@@ -79,26 +69,6 @@ public class Ride {
 
     public void setMaxParticipants(Integer maxParticipants) {
         this.maxParticipants = maxParticipants;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "DEPARTURE_ID", nullable = false)
-    public City getDeparture() {
-        return departure;
-    }
-
-    public void setDeparture(City departure) {
-        this.departure = departure;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ARRIVAL_ID", nullable = false)
-    public City getArrival() {
-        return arrival;
-    }
-
-    public void setArrival(City arrival) {
-        this.arrival = arrival;
     }
 
     public Date getDate() {
@@ -143,11 +113,12 @@ public class Ride {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
     @JoinColumn(name = "ride_id")
-    public Set<RidePoint> getPoints() {
+    @OrderBy("orderfield")
+    public List<RidePoint> getPoints() {
         return points;
     }
 
-    public void setPoints(Set<RidePoint> points) {
+    public void setPoints(List<RidePoint> points) {
         this.points = points;
     }
 

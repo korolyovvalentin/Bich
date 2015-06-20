@@ -4,6 +4,7 @@ import ma.glasnost.orika.MapperFacade;
 import org.fuc.entities.Account;
 import org.fuc.entities.Request;
 import org.fuc.entities.Ride;
+import org.fuc.entities.RidePoint;
 import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.RidesRepository;
 import org.fuc.services.RequestsService;
@@ -48,7 +49,12 @@ public class RequestController {
         Collection<Ride> rides = rideService.getAvailableRides(account);
         Collection<RideVm> rideVms = new LinkedList<>();
         for (Ride ride : rides) {
-            rideVms.add(mapper.map(ride, RideVm.class));
+            RideVm rideVm = mapper.map(ride, RideVm.class);
+
+            for (RidePoint rp : ride.getPoints()) {
+                rideVm.getCities().add(rp.getCity());
+            }
+            rideVms.add(rideVm);
         }
         return new ModelAndView("rides/index", "rides", rideVms);
     }

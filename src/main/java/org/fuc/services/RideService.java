@@ -7,11 +7,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 @Component
 public class RideService {
     @Autowired
     private RidesRepository ridesRepository;
+
+    public Ride createRide(Ride ride, List<City> cities){
+        City[] array = new City[cities.size()];
+        int index = 0;
+        for (City city : cities) {
+            array[index++] = city;
+        }
+        return createRide(ride, array);
+    }
 
     public Ride createRide(Ride ride, City[] cities) {
         int order = 0;

@@ -17,39 +17,41 @@ import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 public class UserService implements UserDetailsService {
-	
-	@Autowired
-	private AccountRepository accountRepository;
 
-	@PostConstruct
-	public void initialize() {
-//		accountRepository.save(new Account("user", "demo", "ROLE_USER"));
-//		accountRepository.save(new Account("admin", "admin", "ROLE_ADMIN"));
-	}
+    @Autowired
+    private AccountRepository accountRepository;
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Account account = accountRepository.findByEmail(username);
-		if(account == null) {
-			throw new UsernameNotFoundException("user not found");
-		}
-		return createUser(account);
-	}
-	
-	public void signin(Account account) {
-		SecurityContextHolder.getContext().setAuthentication(authenticate(account));
-	}
-	
-	private Authentication authenticate(Account account) {
-		return new UsernamePasswordAuthenticationToken(createUser(account), null, Collections.singleton(createAuthority(account)));		
-	}
-	
-	private User createUser(Account account) {
-		return new User(account.getEmail(), account.getPassword(), Collections.singleton(createAuthority(account)));
-	}
+    @PostConstruct
+    public void initialize() {
+        Account admin = accountRepository.findByEmail("admin");
+        if (admin == null) {
+            accountRepository.save(new Account("admin", "admin", "ROLE_ADMIN"));
+        }
+    }
 
-	private GrantedAuthority createAuthority(Account account) {
-		return new SimpleGrantedAuthority(account.getRole());
-	}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Account account = accountRepository.findByEmail(username);
+        if (account == null) {
+            throw new UsernameNotFoundException("user not found");
+        }
+        return createUser(account);
+    }
+
+    public void signin(Account account) {
+        SecurityContextHolder.getContext().setAuthentication(authenticate(account));
+    }
+
+    private Authentication authenticate(Account account) {
+        return new UsernamePasswordAuthenticationToken(createUser(account), null, Collections.singleton(createAuthority(account)));
+    }
+
+    private User createUser(Account account) {
+        return new User(account.getEmail(), account.getPassword(), Collections.singleton(createAuthority(account)));
+    }
+
+    private GrantedAuthority createAuthority(Account account) {
+        return new SimpleGrantedAuthority(account.getRole());
+    }
 
 }

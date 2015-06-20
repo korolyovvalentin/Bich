@@ -59,7 +59,7 @@ public class RideServiceIT extends WebAppConfigurationAware {
     }
 
     private Ride createRide(Integer maxCount) {
-        Ride ride = new Ride(departure, arrival, new Date(), owner, maxCount);
+        Ride ride = new Ride(new Date(), owner, maxCount);
         ride = rideService.createRide(ride);
         Collection<Ride> rides = ridesRepository.getRidesForOwner(owner);
         Assert.assertEquals(rides.size(), 1);

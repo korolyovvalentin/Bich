@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Rides</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -42,17 +42,27 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Departure</th>
-                <th>Arrival</th>
+                <th>Points</th>
                 <th>Date</th>
                 <th>MaxParticipants</th>
                 <th sec:authorize="hasRole('ROLE_BUSINESS')">Requests</th>
                 <th sec:authorize="hasRole('ROLE_BEATNIK')">Actions</th>
             </tr>
             </thead>
-            <tr th:each="ride : ${rides}">
-                <td th:text="${ride.departure.name}">ride</td>
-                <td th:text="${ride.arrival.name}">ride</td>
+            <tr th:each="ride, status : ${rides}">
+                <td>
+                    <a data-toggle="collapse"
+                       th:text="${ride.cities[0].name} + ' &mdash; ' + ${ride.cities[#lists.size(ride.cities) - 1].name}"
+                       th:href="|#collapse${status.index}|">
+                        Link with href
+                    </a>
+
+                    <div class="collapse" th:id="|collapse${status.index}|">
+                        <ul class="list-unstyled">
+                            <li th:each="city : ${ride.cities}" th:text="${city.name}"></li>
+                        </ul>
+                    </div>
+                </td>
                 <td th:text="${ride.date}">ride</td>
                 <td th:text="${ride.maxParticipants}">ride</td>
 
@@ -65,6 +75,7 @@
                 <td sec:authorize="hasRole('ROLE_BEATNIK')">
                     <form action="#" th:action="@{/beatnik/requests/create}" method="post" role="form">
                         <input type="hidden" id="ride_id" name="ride_id" th:value="${ride.id}"/>
+
                         <div class="form-group">
                             <div>
                                 <button type="submit" class="btn-link">Create request</button>

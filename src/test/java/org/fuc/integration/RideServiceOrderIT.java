@@ -7,7 +7,6 @@ import org.fuc.repositories.RidesRepository;
 import org.fuc.services.AccountService;
 import org.fuc.services.RideService;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ public class RideServiceOrderIT extends WebAppConfigurationAware {
 
     @Test
     public void shouldCreateRide() {
-        ride = rideService.createRide(new Ride(departure, arrival, new Date(), owner, 3), new City[] {departure, arrival});
+        ride = rideService.createRide(new Ride(new Date(), owner, 3), new City[] {departure, arrival});
 
         Ride freshRide = (Ride)ridesRepository.getRidesForOwner(owner).toArray()[0];
         System.out.println("Fresh Id: " + freshRide.getId());

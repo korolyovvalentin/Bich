@@ -1,10 +1,7 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
-import org.fuc.entities.Account;
-import org.fuc.entities.City;
-import org.fuc.entities.Request;
-import org.fuc.entities.Ride;
+import org.fuc.entities.*;
 import org.fuc.repositories.AccountRepository;
 import org.fuc.repositories.CitiesRepository;
 import org.fuc.services.RequestsService;
@@ -23,8 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 
 @Controller
 @RequestMapping("/driver/rides")
@@ -48,7 +44,12 @@ public class RideController {
         Collection<Ride> rides = rideService.getDriverRides(driver);
         Collection<RideVm> rideVms = new LinkedList<>();
         for (Ride ride : rides) {
-            rideVms.add(mapper.map(ride, RideVm.class));
+            RideVm rideVm = mapper.map(ride, RideVm.class);
+
+            for (RidePoint rp : ride.getPoints()) {
+                rideVm.getCities().add(rp.getCity());
+            }
+            rideVms.add(rideVm);
         }
         return new ModelAndView("rides/index", "rides", rideVms);
     }
@@ -68,15 +69,15 @@ public class RideController {
         }
         Ride ride = mapper.map(model, Ride.class);
         ride.setOwner(accountRepository.findByEmail(principal.getName()));
-        rideService.createRide(ride);
+        rideService.createRide(ride, model.getCities());
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }
 
-    @RequestMapping(value = " /{rideId}/requests", method=RequestMethod.GET)
-    public ModelAndView requests(@PathVariable Long rideId){
+    @RequestMapping(value = " /{rideId}/requests", method = RequestMethod.GET)
+    public ModelAndView requests(@PathVariable Long rideId) {
         Collection<Request> requests = requestsService.findRequestsForRide(rideId);
         Collection<RequestVm> requestVms = new LinkedList<>();
-        for(Request request : requests){
+        for (Request request : requests) {
             requestVms.add(mapper.map(request, RequestVm.class));
         }
         ModelAndView model = new ModelAndView("rides/requests");
@@ -85,7 +86,7 @@ public class RideController {
     }
 
     @RequestMapping(value = "/approveRequest", method = RequestMethod.POST)
-    public ModelAndView approveRequest(@RequestParam("request_id") Long requestId){
+    public ModelAndView approveRequest(@RequestParam("request_id") Long requestId) {
         requestsService.approveRequest(requestId);
         Request request = requestsService.findById(requestId);
         rideService.addParticipant(request.getRide(), request.getOwner());
@@ -93,7 +94,7 @@ public class RideController {
     }
 
     @RequestMapping(value = "/declineRequest", method = RequestMethod.POST)
-    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId){
+    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId) {
         requestsService.declineRequest(requestId);
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }

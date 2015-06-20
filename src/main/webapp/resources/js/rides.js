@@ -1,7 +1,9 @@
 function addPoint() {
-    var selectedCities = getAvailableCities();
+    var selectedCities = getSelectedCities();
+    var availableCities = getAvailableCities(selectedCities);
     var $newFormGroup = $('<div class="form-group"></div>');
     var $newSelect = $('<select class="form-control" style="float: left; width: calc(100% - 32px)"></select>');
+    $newSelect.attr('name', 'cities[' + selectedCities.length + '].id');
     $newFormGroup.append($newSelect);
 
     var $deleteBtn = $('<a href="#!" class="remove-button" title="Delete Point"></a>');
@@ -11,15 +13,14 @@ function addPoint() {
     });
     $newFormGroup.append($deleteBtn);
 
-    for (var i = 0, length = selectedCities.length; i < length; i++) {
-        $newSelect.append('<option value="' + selectedCities[i].id + '">' + selectedCities[i].name + '</option>')
+    for (var i = 0, length = availableCities.length; i < length; i++) {
+        $newSelect.append('<option value="' + availableCities[i].id + '">' + availableCities[i].name + '</option>')
     }
 
     $newFormGroup.insertBefore(this);
 }
 
-var getAvailableCities = function () {
-    var selected = getSelectedCities();
+var getAvailableCities = function (selected) {
     var available = [];
     var token = $("[name='_csrf']").val();
 
@@ -48,7 +49,7 @@ var getAvailableCities = function () {
     });
 
     return available;
-}
+};
 
 var getSelectedCities = function () {
     var selected = [];
