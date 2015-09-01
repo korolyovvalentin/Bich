@@ -1,10 +1,18 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.commands.city.CityCriteria;
+import org.fuc.core.Command;
+import org.fuc.core.Criteria;
+import org.fuc.core.QuerySingle;
 import org.fuc.entities.City;
+import org.fuc.core.Query;
+import org.fuc.queries.city.CityIdCriteria;
+import org.fuc.queries.city.SelectedCitiesCriteria;
 import org.fuc.repositories.CitiesRepository;
 import org.fuc.viewmodels.CityVm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
@@ -20,19 +29,31 @@ import java.util.LinkedList;
 
 @Controller
 @RequestMapping("/administration/cities")
-class CityController {
+public class CityController {
     @Autowired
     private MapperFacade mapper;
-
     @Autowired
-    private CitiesRepository citiesRepository;
+    @Qualifier("allCitiesQuery")
+    private Query<City> citiesProvider;
+    @Autowired
+    @Qualifier("citiesExceptSelectedQuery")
+    private Query<City> citiesExceptSelectedProvider;
+    @Autowired
+    @Qualifier("cityByIdQuery")
+    private QuerySingle<City> singleCityProvider;
+    @Autowired
+    @Qualifier("createCityCommand")
+    private Command createCity;
+    @Autowired
+    @Qualifier("deleteCityCommand")
+    private Command deleteCity;
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView listCities() {
         ModelAndView model = new ModelAndView("cities/index");
-        Collection<City> cities = citiesRepository.getCities();
+        Collection<City> cities = citiesProvider.query(Criteria.empty());
         Collection<CityVm> cityVms = new LinkedList<>();
         for (City city : cities) {
             cityVms.add(mapper.map(city, CityVm.class));
@@ -46,8 +67,8 @@ class CityController {
     @ResponseStatus(value = HttpStatus.OK)
     public
     @ResponseBody
-    CityVm[] listCities(@RequestBody City[] cities, Principal principal) {
-        Collection<City> availableList = citiesRepository.getCities(cities);
+    CityVm[] listCities(@RequestBody City[] cities) {
+        Collection<City> availableList = citiesExceptSelectedProvider.query(new SelectedCitiesCriteria(cities));
         CityVm[] cityVms = new CityVm[availableList.size()];
         int i = 0;
         for (City city : availableList) {
@@ -70,7 +91,7 @@ class CityController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("cities/create");
         }
-        citiesRepository.save(mapper.map(city, City.class));
+        createCity.execute(new CityCriteria(mapper.map(city, City.class)));
         return new ModelAndView(new RedirectView("/administration/cities", false));
     }
 
@@ -78,7 +99,7 @@ class CityController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable("id") Long id) {
         ModelAndView model = new ModelAndView("cities/delete");
-        City city = citiesRepository.findById(id);
+        City city = singleCityProvider.query(new CityIdCriteria(id));
         model.addObject("city", city);
         return model;
     }
@@ -86,19 +107,7 @@ class CityController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView delete(@ModelAttribute("city") CityVm city) {
-        citiesRepository.delete(mapper.map(city, City.class));
+        deleteCity.execute(new CityCriteria(mapper.map(city, City.class)));
         return new ModelAndView(new RedirectView("/administration/cities", false));
-    }
-
-    private class CitiesJson {
-        private City[] cities;
-
-        public City[] getCities() {
-            return cities;
-        }
-
-        public void setCities(City[] cities) {
-            this.cities = cities;
-        }
     }
 }
