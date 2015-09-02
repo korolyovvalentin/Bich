@@ -87,7 +87,6 @@ public class PlaceRequestController {
 
         PlaceRequest placeRequest = mapper.map(vm, PlaceRequest.class);
         placeRequest.setOwner(findAccountByEmail.query(new EmailCriteria(principal.getName())));
-        placeRequest.setStatus(RequestStatus.NEW);
         createPlaceRequest.execute(placeRequest);
         return new ModelAndView(new RedirectView("/beatnik/place_requests", false));
     }

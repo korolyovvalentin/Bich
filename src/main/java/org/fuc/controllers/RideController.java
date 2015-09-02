@@ -5,12 +5,8 @@ import org.fuc.core.Command;
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
-import org.fuc.core.criterias.AccountCriteria;
-import org.fuc.core.criterias.EmailCriteria;
-import org.fuc.core.criterias.RideParticipantCriteria;
-import org.fuc.core.criterias.RidePointsCriteria;
+import org.fuc.core.criterias.*;
 import org.fuc.entities.*;
-import org.fuc.services.RequestsService;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideCreateVm;
 import org.fuc.viewmodels.Rides.RideVm;
@@ -55,7 +51,14 @@ public class RideController {
     private Command<RideParticipantCriteria> addParticipantToRide;
 
     @Autowired
-    private RequestsService requestsService;
+    @Qualifier("requestByIdQuery")
+    private QuerySingle<Request> requestById;
+    @Autowired
+    @Qualifier("requestsNewQuery")
+    private Query<Request> requestsNew;
+    @Autowired
+    @Qualifier("updateRequestCommand")
+    private Command<Request> updateRequest;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -96,7 +99,10 @@ public class RideController {
 
     @RequestMapping(value = " /{rideId}/requests", method = RequestMethod.GET)
     public ModelAndView requests(@PathVariable Long rideId) {
-        Collection<Request> requests = requestsService.findRequestsForRide(rideId);
+        Ride ride = new Ride();
+        ride.setId(rideId);
+
+        Collection<Request> requests = requestsNew.query(new RideCriteria(ride));
         Collection<RequestVm> requestVms = new LinkedList<>();
         for (Request request : requests) {
             requestVms.add(mapper.map(request, RequestVm.class));
@@ -108,15 +114,20 @@ public class RideController {
 
     @RequestMapping(value = "/approveRequest", method = RequestMethod.POST)
     public ModelAndView approveRequest(@RequestParam("request_id") Long requestId) {
-        requestsService.approveRequest(requestId);
-        Request request = requestsService.findById(requestId);
+        Request request = requestById.query(new IdCriteria(requestId));
+        request.setStatus(RequestStatus.APPROVED);
+        updateRequest.execute(request);
+
         addParticipantToRide.execute(new RideParticipantCriteria(request.getOwner(), request.getRide()));
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }
 
     @RequestMapping(value = "/declineRequest", method = RequestMethod.POST)
     public ModelAndView declineRequest(@RequestParam("request_id") Long requestId) {
-        requestsService.declineRequest(requestId);
+        Request request = requestById.query(new IdCriteria(requestId));
+        request.setStatus(RequestStatus.DECLINED);
+        updateRequest.execute(request);
+
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }
 }

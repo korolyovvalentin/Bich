@@ -62,7 +62,6 @@ public class PlaceController {
     @Qualifier("updatePlaceRequestCommand")
     private Command<PlaceRequest> updatePlaceRequest;
 
-
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView index(Principal principal) {

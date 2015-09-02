@@ -1,16 +1,13 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.Command;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
 import org.fuc.core.criterias.AccountCriteria;
-import org.fuc.core.criterias.IdCriteria;
-import org.fuc.entities.Account;
-import org.fuc.entities.Request;
-import org.fuc.entities.Ride;
-import org.fuc.entities.RidePoint;
 import org.fuc.core.criterias.EmailCriteria;
-import org.fuc.services.RequestsService;
+import org.fuc.core.criterias.IdCriteria;
+import org.fuc.entities.*;
 import org.fuc.support.web.MessageHelper;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideVm;
@@ -50,7 +47,17 @@ public class RequestController {
     private Query<Ride> ridesByBeatnikQuery;
 
     @Autowired
-    private RequestsService requestsService;
+    @Qualifier("requestByIdQuery")
+    private QuerySingle<Request> requestById;
+    @Autowired
+    @Qualifier("requestsUpdatedQuery")
+    private Query<Request> requestsUpdated;
+    @Autowired
+    @Qualifier("createRequestCommand")
+    private Command<Request> createRequest;
+    @Autowired
+    @Qualifier("updateRequestCommand")
+    private Command<Request> updateRequest;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -73,7 +80,8 @@ public class RequestController {
     public ModelAndView create(@RequestParam("ride_id") Long rideId, Principal principal) {
         Ride ride = rideByIdQuery.query(new IdCriteria(rideId));
         Account beatnik = findAccountByEmail.query(new EmailCriteria(principal.getName()));
-        requestsService.create(ride, beatnik);
+        createRequest.execute(new Request("", ride, beatnik));
+
         ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
         MessageHelper.addSuccessAttribute(model, "Request was successfully added");
         return model;
@@ -82,7 +90,8 @@ public class RequestController {
     @RequestMapping(value = "/updated", method = RequestMethod.GET)
     public ModelAndView processedRequests(Principal principal) {
         Account account = findAccountByEmail.query(new EmailCriteria(principal.getName()));
-        Collection<Request> requests = requestsService.findUpdatedRequests(account.getId());
+        Collection<Request> requests = requestsUpdated.query(new AccountCriteria(account));
+
         Collection<RequestVm> requestVms = new LinkedList<>();
         for (Request request : requests) {
             requestVms.add(mapper.map(request, RequestVm.class));
@@ -91,8 +100,10 @@ public class RequestController {
     }
 
     @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
-    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId) {
-        requestsService.markAsOld(requestId);
+    public ModelAndView markRequestAsOld(@RequestParam("request_id") Long requestId) {
+        Request request = requestById.query(new IdCriteria(requestId));
+        request.setStatus(RequestStatus.OLD);
+        updateRequest.execute(request);
         return new ModelAndView(new RedirectView("/beatnik/requests/updated", false));
     }
 }
