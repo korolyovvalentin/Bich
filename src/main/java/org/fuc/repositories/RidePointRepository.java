@@ -1,7 +1,5 @@
 package org.fuc.repositories;
 
-import org.fuc.entities.Account;
-import org.fuc.entities.City;
 import org.fuc.entities.Ride;
 import org.fuc.entities.RidePoint;
 import org.springframework.stereotype.Repository;
@@ -9,9 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.Collection;
-import java.util.Date;
 
 @Repository
 @Transactional(readOnly = true)
