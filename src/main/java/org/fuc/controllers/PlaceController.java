@@ -8,8 +8,8 @@ import org.fuc.core.QuerySingle;
 import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.criterias.EmailCriteria;
 import org.fuc.core.criterias.IdCriteria;
+import org.fuc.core.criterias.PlaceCriteria;
 import org.fuc.entities.*;
-import org.fuc.repositories.PlaceRequestRepository;
 import org.fuc.viewmodels.PlaceRequestVm;
 import org.fuc.viewmodels.Places.PlaceCreateVm;
 import org.fuc.viewmodels.Places.PlaceVm;
@@ -53,7 +53,14 @@ public class PlaceController {
     private Query<Place> placesByOwnerQuery;
 
     @Autowired
-    private PlaceRequestRepository prRepository;
+    @Qualifier("placeRequestByIdQuery")
+    private QuerySingle<PlaceRequest> placeRequestById;
+    @Autowired
+    @Qualifier("placeRequestsNewQuery")
+    private Query<PlaceRequest> placeRequestsNew;
+    @Autowired
+    @Qualifier("updatePlaceRequestCommand")
+    private Command<PlaceRequest> updatePlaceRequest;
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -95,7 +102,7 @@ public class PlaceController {
     public ModelAndView create(@PathVariable Long placeId) {
         Place place = placeByIdQuery.query(new IdCriteria(placeId));
         Collection<PlaceRequest> requests =
-                prRepository.findNewRequests(place);
+                placeRequestsNew.query(new PlaceCriteria(place));
         Collection<PlaceRequestVm> requestVms = new LinkedList<>();
         for (PlaceRequest request : requests) {
             requestVms.add(mapper.map(request, PlaceRequestVm.class));
@@ -105,18 +112,18 @@ public class PlaceController {
 
     @RequestMapping(value = "/approveRequest", method = RequestMethod.POST)
     public ModelAndView approveRequest(@RequestParam("request_id") Long requestId) {
-        PlaceRequest request = prRepository.findById(requestId);
+        PlaceRequest request = placeRequestById.query(new IdCriteria(requestId));
         request.setStatus(RequestStatus.APPROVED);
-        prRepository.update(request);
+        updatePlaceRequest.execute(request);
 
         return new ModelAndView(new RedirectView("/business/places/" + requestId + "/requests", false));
     }
 
     @RequestMapping(value = "/declineRequest", method = RequestMethod.POST)
     public ModelAndView declineRequest(@RequestParam("request_id") Long requestId) {
-        PlaceRequest request = prRepository.findById(requestId);
+        PlaceRequest request = placeRequestById.query(new IdCriteria(requestId));
         request.setStatus(RequestStatus.DECLINED);
-        prRepository.update(request);
+        updatePlaceRequest.execute(request);
 
         return new ModelAndView(new RedirectView("/business/places/" + requestId + "/requests", false));
     }

@@ -1,8 +1,10 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.Command;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
+import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.criterias.EmailCriteria;
 import org.fuc.core.criterias.IdCriteria;
 import org.fuc.core.criterias.PlaceTypeCriteria;
@@ -10,7 +12,6 @@ import org.fuc.entities.Account;
 import org.fuc.entities.Place;
 import org.fuc.entities.PlaceRequest;
 import org.fuc.entities.RequestStatus;
-import org.fuc.repositories.PlaceRequestRepository;
 import org.fuc.viewmodels.PlaceRequestVm;
 import org.fuc.viewmodels.Places.PlaceVm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,17 @@ public class PlaceRequestController {
     private Query<Place> placesByTypeQuery;
 
     @Autowired
-    private PlaceRequestRepository prRepository;
+    @Qualifier("placeRequestByIdQuery")
+    private QuerySingle<PlaceRequest> placeRequestById;
+    @Autowired
+    @Qualifier("placeRequestsUpdatedQuery")
+    private Query<PlaceRequest> placeRequestsUpdated;
+    @Autowired
+    @Qualifier("createPlaceRequestCommand")
+    private Command<PlaceRequest> createPlaceRequest;
+    @Autowired
+    @Qualifier("updatePlaceRequestCommand")
+    private Command<PlaceRequest> updatePlaceRequest;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -77,15 +88,15 @@ public class PlaceRequestController {
         PlaceRequest placeRequest = mapper.map(vm, PlaceRequest.class);
         placeRequest.setOwner(findAccountByEmail.query(new EmailCriteria(principal.getName())));
         placeRequest.setStatus(RequestStatus.NEW);
-        prRepository.save(placeRequest);
+        createPlaceRequest.execute(placeRequest);
         return new ModelAndView(new RedirectView("/beatnik/place_requests", false));
     }
 
     @RequestMapping(value = "/requests", method = RequestMethod.GET)
     public ModelAndView requests(Principal principal) {
-        Collection<PlaceRequest> requests =
-                prRepository
-                        .findUpdatedRequests(findAccountByEmail.query(new EmailCriteria(principal.getName())));
+        Account account = findAccountByEmail.query(new EmailCriteria(principal.getName()));
+        Collection<PlaceRequest> requests = placeRequestsUpdated.query(new AccountCriteria(account));
+
         Collection<PlaceRequestVm> requestVms = new LinkedList<>();
         for (PlaceRequest request : requests) {
             requestVms.add(mapper.map(request, PlaceRequestVm.class));
@@ -95,9 +106,9 @@ public class PlaceRequestController {
 
     @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
     public ModelAndView declineRequest(@RequestParam("request_id") Long requestId) {
-        PlaceRequest request = prRepository.findById(requestId);
+        PlaceRequest request = placeRequestById.query(new IdCriteria(requestId));
         request.setStatus(RequestStatus.OLD);
-        prRepository.update(request);
+        updatePlaceRequest.execute(request);
 
         return new ModelAndView(new RedirectView("/beatnik/place_requests/requests", false));
     }
