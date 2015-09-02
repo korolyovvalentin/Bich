@@ -1,12 +1,14 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.Command;
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
-import org.fuc.entities.*;
+import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.criterias.EmailCriteria;
-import org.fuc.repositories.PlaceRepository;
+import org.fuc.core.criterias.IdCriteria;
+import org.fuc.entities.*;
 import org.fuc.repositories.PlaceRequestRepository;
 import org.fuc.viewmodels.PlaceRequestVm;
 import org.fuc.viewmodels.Places.PlaceCreateVm;
@@ -32,14 +34,24 @@ import java.util.LinkedList;
 public class PlaceController {
     @Autowired
     private MapperFacade mapper;
+
     @Autowired
     @Qualifier("allCitiesQuery")
-    private Query<City> citiesProvider;
+    private Query<City> allCitiesQuery;
     @Autowired
     @Qualifier("accountByEmailQuery")
     private QuerySingle<Account> findAccountByEmail;
+
     @Autowired
-    private PlaceRepository placeRepository;
+    @Qualifier("createPlaceCommand")
+    private Command<Place> createPlace;
+    @Autowired
+    @Qualifier("placeByIdQuery")
+    private QuerySingle<Place> placeByIdQuery;
+    @Autowired
+    @Qualifier("placesByOwnerQuery")
+    private Query<Place> placesByOwnerQuery;
+
     @Autowired
     private PlaceRequestRepository prRepository;
 
@@ -48,7 +60,7 @@ public class PlaceController {
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView index(Principal principal) {
         Account businessman = findAccountByEmail.query(new EmailCriteria(principal.getName()));
-        Collection<Place> places = placeRepository.getOwnerPlaces(businessman);
+        Collection<Place> places = placesByOwnerQuery.query(new AccountCriteria(businessman));
         Collection<PlaceVm> rideVms = new LinkedList<>();
         for (Place place : places) {
             rideVms.add(mapper.map(place, PlaceVm.class));
@@ -58,7 +70,7 @@ public class PlaceController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView create() {
-        Collection<City> cities = citiesProvider.query(Criteria.empty());
+        Collection<City> cities = allCitiesQuery.query(Criteria.empty());
         PlaceCreateVm model = new PlaceCreateVm();
         model.setAvailableCities(cities);
         return new ModelAndView("places/create", "place", model);
@@ -75,13 +87,13 @@ public class PlaceController {
         if (!place.getOwner().getRole().equals(RoleProvider.ROLE_BUSINESS)) {
             throw new IllegalArgumentException("Place's owner must be businessman");
         }
-        placeRepository.save(place);
+        createPlace.execute(place);
         return new ModelAndView(new RedirectView("/business/places", false));
     }
 
     @RequestMapping(value = "/{placeId}/requests", method = RequestMethod.GET)
     public ModelAndView create(@PathVariable Long placeId) {
-        Place place = placeRepository.findById(placeId);
+        Place place = placeByIdQuery.query(new IdCriteria(placeId));
         Collection<PlaceRequest> requests =
                 prRepository.findNewRequests(place);
         Collection<PlaceRequestVm> requestVms = new LinkedList<>();

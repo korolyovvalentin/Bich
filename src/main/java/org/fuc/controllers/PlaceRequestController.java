@@ -1,13 +1,15 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
+import org.fuc.core.criterias.EmailCriteria;
+import org.fuc.core.criterias.IdCriteria;
+import org.fuc.core.criterias.PlaceTypeCriteria;
 import org.fuc.entities.Account;
 import org.fuc.entities.Place;
 import org.fuc.entities.PlaceRequest;
 import org.fuc.entities.RequestStatus;
-import org.fuc.core.criterias.EmailCriteria;
-import org.fuc.repositories.PlaceRepository;
 import org.fuc.repositories.PlaceRequestRepository;
 import org.fuc.viewmodels.PlaceRequestVm;
 import org.fuc.viewmodels.Places.PlaceVm;
@@ -35,15 +37,21 @@ public class PlaceRequestController {
     @Autowired
     @Qualifier("accountByEmailQuery")
     private QuerySingle<Account> findAccountByEmail;
+
     @Autowired
-    private PlaceRepository placeRepository;
+    @Qualifier("placeByIdQuery")
+    private QuerySingle<Place> placeByIdQuery;
+    @Autowired
+    @Qualifier("placesByTypeQuery")
+    private Query<Place> placesByTypeQuery;
+
     @Autowired
     private PlaceRequestRepository prRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView index() {
-        Collection<Place> places = placeRepository.getPlaces(null, null);
+        Collection<Place> places = placesByTypeQuery.query(new PlaceTypeCriteria(null, null));
         Collection<PlaceVm> placeVms = new LinkedList<>();
         for (Place place : places) {
             placeVms.add(mapper.map(place, PlaceVm.class));
@@ -53,7 +61,8 @@ public class PlaceRequestController {
 
     @RequestMapping(value = "/{placeId}/create", method = RequestMethod.GET)
     public ModelAndView create(@PathVariable Long placeId) {
-        Place place = placeRepository.findById(placeId);
+        Place place = placeByIdQuery.query(new IdCriteria(placeId));
+        ;
         PlaceRequestVm vm = new PlaceRequestVm();
         vm.setPlace(place);
         return new ModelAndView("place_requests/create", "placeRequest", vm);
@@ -85,7 +94,7 @@ public class PlaceRequestController {
     }
 
     @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
-    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId){
+    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId) {
         PlaceRequest request = prRepository.findById(requestId);
         request.setStatus(RequestStatus.OLD);
         prRepository.update(request);
