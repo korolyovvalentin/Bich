@@ -2,6 +2,7 @@ package org.fuc.queries.city;
 
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
+import org.fuc.core.criterias.CitiesCriteria;
 import org.fuc.entities.City;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,7 @@ public class CitiesExceptSelectedQuery implements Query<City> {
 
     @Override
     public Collection<City> query(Criteria criteria) {
-        SelectedCitiesCriteria selectedCitiesCriteria = (SelectedCitiesCriteria) criteria;
+        CitiesCriteria selectedCitiesCriteria = (CitiesCriteria) criteria;
         City[] cities = selectedCitiesCriteria.getCities();
 
         Long[] ids = new Long[cities.length];

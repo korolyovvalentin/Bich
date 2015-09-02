@@ -7,8 +7,8 @@ import org.fuc.core.Criteria;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
 import org.fuc.entities.City;
-import org.fuc.queries.city.CityIdCriteria;
-import org.fuc.queries.city.SelectedCitiesCriteria;
+import org.fuc.core.criterias.IdCriteria;
+import org.fuc.core.criterias.CitiesCriteria;
 import org.fuc.viewmodels.CityVm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -65,7 +65,7 @@ public class CityController {
     public
     @ResponseBody
     CityVm[] listCities(@RequestBody City[] cities) {
-        Collection<City> availableList = citiesExceptSelectedProvider.query(new SelectedCitiesCriteria(cities));
+        Collection<City> availableList = citiesExceptSelectedProvider.query(new CitiesCriteria(cities));
         CityVm[] cityVms = new CityVm[availableList.size()];
         int i = 0;
         for (City city : availableList) {
@@ -96,7 +96,7 @@ public class CityController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable("id") Long id) {
         ModelAndView model = new ModelAndView("cities/delete");
-        City city = singleCityProvider.query(new CityIdCriteria(id));
+        City city = singleCityProvider.query(new IdCriteria(id));
         model.addObject("city", city);
         return model;
     }

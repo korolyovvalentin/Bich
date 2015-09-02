@@ -2,7 +2,7 @@ package org.fuc.account;
 
 import org.fuc.core.QuerySingle;
 import org.fuc.entities.Account;
-import org.fuc.queries.account.EmailCriteria;
+import org.fuc.core.criterias.EmailCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;

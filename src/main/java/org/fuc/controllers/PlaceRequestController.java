@@ -6,7 +6,7 @@ import org.fuc.entities.Account;
 import org.fuc.entities.Place;
 import org.fuc.entities.PlaceRequest;
 import org.fuc.entities.RequestStatus;
-import org.fuc.queries.account.EmailCriteria;
+import org.fuc.core.criterias.EmailCriteria;
 import org.fuc.repositories.PlaceRepository;
 import org.fuc.repositories.PlaceRequestRepository;
 import org.fuc.viewmodels.PlaceRequestVm;

@@ -2,6 +2,7 @@ package org.fuc.queries.city;
 
 import org.fuc.core.Criteria;
 import org.fuc.core.QuerySingle;
+import org.fuc.core.criterias.IdCriteria;
 import org.fuc.entities.City;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,7 @@ public class CityByIdQuery implements QuerySingle<City> {
 
     @Override
     public City query(Criteria criteria) {
-        CityIdCriteria idCriteria = (CityIdCriteria) criteria;
+        IdCriteria idCriteria = (IdCriteria) criteria;
 
         return entityManager
                 .createNamedQuery(City.FIND_BY_ID, City.class)

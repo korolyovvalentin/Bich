@@ -1,12 +1,12 @@
-package org.fuc.queries.city;
+package org.fuc.core.criterias;
 
 import org.fuc.core.Criteria;
 import org.fuc.entities.City;
 
-public class SelectedCitiesCriteria extends Criteria{
+public class CitiesCriteria extends Criteria{
     private City[] cities;
 
-    public SelectedCitiesCriteria(City[] cities) {
+    public CitiesCriteria(City[] cities) {
         this.cities = cities;
     }
 

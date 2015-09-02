@@ -5,7 +5,7 @@ import org.fuc.core.Criteria;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
 import org.fuc.entities.*;
-import org.fuc.queries.account.EmailCriteria;
+import org.fuc.core.criterias.EmailCriteria;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
 import org.fuc.viewmodels.RequestVm;

@@ -2,6 +2,7 @@ package org.fuc.commands.account;
 
 import org.fuc.core.Command;
 import org.fuc.core.Criteria;
+import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.entities.Account;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;

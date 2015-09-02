@@ -1,6 +1,6 @@
 package org.fuc.integration;
 
-import org.fuc.commands.account.AccountCriteria;
+import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.commands.city.CityCriteria;
 import org.fuc.config.WebAppConfigurationAware;
 import org.fuc.core.Command;

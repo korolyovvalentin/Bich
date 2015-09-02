@@ -1,4 +1,4 @@
-package org.fuc.commands.account;
+package org.fuc.core.criterias;
 
 import org.fuc.core.Criteria;
 import org.fuc.entities.Account;

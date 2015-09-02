@@ -1,6 +1,6 @@
 package org.fuc.signup;
 
-import org.fuc.commands.account.AccountCriteria;
+import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.Command;
 import org.fuc.entities.Account;
 import org.fuc.services.UserService;

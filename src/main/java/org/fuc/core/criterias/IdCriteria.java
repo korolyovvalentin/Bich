@@ -1,11 +1,11 @@
-package org.fuc.queries.city;
+package org.fuc.core.criterias;
 
 import org.fuc.core.Criteria;
 
-public class CityIdCriteria extends Criteria {
+public class IdCriteria extends Criteria {
     private Long id;
 
-    public CityIdCriteria(Long id) {
+    public IdCriteria(Long id) {
         this.id = id;
     }
 

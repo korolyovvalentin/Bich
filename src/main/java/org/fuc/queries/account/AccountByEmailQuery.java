@@ -2,6 +2,7 @@ package org.fuc.queries.account;
 
 import org.fuc.core.Criteria;
 import org.fuc.core.QuerySingle;
+import org.fuc.core.criterias.EmailCriteria;
 import org.fuc.entities.Account;
 import org.springframework.stereotype.Repository;
 

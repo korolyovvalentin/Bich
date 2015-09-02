@@ -1,4 +1,4 @@
-package org.fuc.queries.account;
+package org.fuc.core.criterias;
 
 import org.fuc.core.Criteria;
 

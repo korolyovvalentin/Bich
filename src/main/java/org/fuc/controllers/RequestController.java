@@ -6,7 +6,7 @@ import org.fuc.entities.Account;
 import org.fuc.entities.Request;
 import org.fuc.entities.Ride;
 import org.fuc.entities.RidePoint;
-import org.fuc.queries.account.EmailCriteria;
+import org.fuc.core.criterias.EmailCriteria;
 import org.fuc.repositories.RidesRepository;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
