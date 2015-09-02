@@ -1,14 +1,14 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
-import org.fuc.commands.city.CityCriteria;
 import org.fuc.core.Command;
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
-import org.fuc.entities.City;
-import org.fuc.core.criterias.IdCriteria;
 import org.fuc.core.criterias.CitiesCriteria;
+import org.fuc.core.criterias.CityCriteria;
+import org.fuc.core.criterias.IdCriteria;
+import org.fuc.entities.City;
 import org.fuc.viewmodels.CityVm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,10 +40,10 @@ public class CityController {
     private QuerySingle<City> singleCityProvider;
     @Autowired
     @Qualifier("createCityCommand")
-    private Command createCity;
+    private Command<City> createCity;
     @Autowired
     @Qualifier("deleteCityCommand")
-    private Command deleteCity;
+    private Command<City> deleteCity;
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(method = RequestMethod.GET)
@@ -88,7 +88,7 @@ public class CityController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("cities/create");
         }
-        createCity.execute(new CityCriteria(mapper.map(city, City.class)));
+        createCity.execute(mapper.map(city, City.class));
         return new ModelAndView(new RedirectView("/administration/cities", false));
     }
 
@@ -104,7 +104,7 @@ public class CityController {
     @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView delete(@ModelAttribute("city") CityVm city) {
-        deleteCity.execute(new CityCriteria(mapper.map(city, City.class)));
+        deleteCity.execute(mapper.map(city, City.class));
         return new ModelAndView(new RedirectView("/administration/cities", false));
     }
 }

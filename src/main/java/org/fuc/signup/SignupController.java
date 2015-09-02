@@ -23,7 +23,7 @@ public class SignupController {
 
     @Autowired
     @Qualifier("createAccountCommand")
-    private Command createAccount;
+    private Command<Account> createAccount;
 
     @Autowired
     private UserService userService;
@@ -40,7 +40,7 @@ public class SignupController {
             return SIGNUP_VIEW_NAME;
         }
         Account account = signupForm.createAccount();
-        createAccount.execute(new AccountCriteria(account));
+        createAccount.execute(account);
         userService.signin(account);
         // see /WEB-INF/i18n/messages.properties and /WEB-INF/views/homeSignedIn.html
         MessageHelper.addSuccessAttribute(ra, "signup.success");

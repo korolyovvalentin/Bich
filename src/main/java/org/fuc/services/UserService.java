@@ -26,13 +26,13 @@ public class UserService implements UserDetailsService {
     private QuerySingle<Account> findAccountByEmail;
     @Autowired
     @Qualifier("createAccountCommand")
-    private Command createAccount;
+    private Command<Account> createAccount;
 
     @PostConstruct
     public void initialize() {
         Account admin = findAccountByEmail.query(new EmailCriteria("admin"));
         if (admin == null) {
-            createAccount.execute(new AccountCriteria(new Account("admin", "admin", "ROLE_ADMIN")));
+            createAccount.execute(new Account("admin", "admin", "ROLE_ADMIN"));
         }
     }
 

@@ -26,20 +26,20 @@ public class UserAuthenticationIT extends WebSecurityConfigurationAware {
     private static String SEC_CONTEXT_ATTR = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
     @Autowired
     @Qualifier("createAccountCommand")
-    private Command createAccount;
+    private Command<Account> createAccount;
     @Autowired
     @Qualifier("deleteAccountCommand")
-    private Command deleteAccount;
+    private Command<Account> deleteAccount;
     private Account testAccount = new Account("user", "demo", "ROLE_USER");
 
     @Before
     public void setUp() {
-        createAccount.execute(new AccountCriteria(testAccount));
+        createAccount.execute(testAccount);
     }
 
     @After
     public void tearDown() {
-        deleteAccount.execute(new AccountCriteria(testAccount));
+        deleteAccount.execute(testAccount);
     }
 
     @Test

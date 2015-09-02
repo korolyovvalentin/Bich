@@ -1,5 +1,5 @@
 package org.fuc.core;
 
-public interface Command {
-    void execute(Criteria criteria);
+public interface Command<T> {
+    void execute(T context);
 }

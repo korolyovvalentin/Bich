@@ -1,8 +1,6 @@
 package org.fuc.commands.account;
 
 import org.fuc.core.Command;
-import org.fuc.core.Criteria;
-import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.entities.Account;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -14,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 @Transactional
 @Repository("createAccountCommand")
-public class CreateAccountCommand implements Command {
+public class CreateAccountCommand implements Command<Account> {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -22,10 +20,7 @@ public class CreateAccountCommand implements Command {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void execute(Criteria criteria) {
-        AccountCriteria accountCriteria = (AccountCriteria) criteria;
-        Account account = accountCriteria.getAccount();
-
+    public void execute(Account account) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         entityManager.persist(account);
     }

@@ -1,7 +1,5 @@
 package org.fuc.integration;
 
-import org.fuc.core.criterias.AccountCriteria;
-import org.fuc.commands.city.CityCriteria;
 import org.fuc.config.WebAppConfigurationAware;
 import org.fuc.core.Command;
 import org.fuc.entities.Account;
@@ -24,34 +22,34 @@ import java.util.LinkedList;
 public class RideServiceIT extends WebAppConfigurationAware {
     @Autowired
     @Qualifier("createAccountCommand")
-    private Command createAccount;
+    private Command<Account> createAccount;
     @Autowired
     @Qualifier("deleteAccountCommand")
-    private Command deleteAccount;
+    private Command<Account> deleteAccount;
     @Autowired
     private RidesRepository ridesRepository;
     @Autowired
     private RideService rideService;
     @Autowired
     @Qualifier("createCityCommand")
-    private Command createCity;
+    private Command<City> createCity;
     @Autowired
     @Qualifier("deleteCityCommand")
-    private Command deleteCity;
+    private Command<City> deleteCity;
 
     private City departure, arrival;
     private Ride ride;
     private Account owner;
-    private Collection<Account> participants = new LinkedList<Account>();
+    private Collection<Account> participants = new LinkedList<>();
 
     @Before
     public void setUp() {
         owner = new Account("owner@owner.com", "pwd", RoleProvider.ROLE_DRIVER);
-        createAccount.execute(new AccountCriteria(owner));
+        createAccount.execute(owner);
         departure = new City("Departure");
-        createCity.execute(new CityCriteria(departure));
+        createCity.execute(departure);
         arrival = new City("Arrival");
-        createCity.execute(new CityCriteria(arrival));
+        createCity.execute(arrival);
     }
 
     @Test
@@ -61,7 +59,7 @@ public class RideServiceIT extends WebAppConfigurationAware {
         for (int i = 1; i <= maxCount; i++) {
             Account account = new Account("prt@prt.com" + i, "pwd", RoleProvider.ROLE_BEATNIK);
             participants.add(account);
-            createAccount.execute(new AccountCriteria(account));
+            createAccount.execute(account);
             rideService.addParticipant(ride, account);
             Ride testRide = ridesRepository.findById(ride.getId());
             Assert.assertEquals("Participant was not persist", i, testRide.getParticipants().size());
@@ -79,11 +77,11 @@ public class RideServiceIT extends WebAppConfigurationAware {
     @After
     public void tearDown() {
         ridesRepository.delete(ride);
-        deleteCity.execute(new CityCriteria(departure));
-        deleteCity.execute(new CityCriteria(arrival));
-        deleteAccount.execute(new AccountCriteria(owner));
+        deleteCity.execute(departure);
+        deleteCity.execute(arrival);
+        deleteAccount.execute(owner);
         for (Account account : participants) {
-            deleteAccount.execute(new AccountCriteria(account));
+            deleteAccount.execute(account);
         }
     }
 }

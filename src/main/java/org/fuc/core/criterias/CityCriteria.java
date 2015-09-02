@@ -1,4 +1,4 @@
-package org.fuc.commands.city;
+package org.fuc.core.criterias;
 
 import org.fuc.core.Criteria;
 import org.fuc.entities.City;
