@@ -3,10 +3,12 @@ package org.fuc.unit;
 import org.fuc.entities.City;
 import org.fuc.entities.Ride;
 import org.fuc.entities.RidePoint;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
+//@RunWith(JUnit4.class)
 public class SearchPathServiceTest {
     private City city1 = new City("one");
     private City city2 = new City("two");
@@ -22,5 +24,8 @@ public class SearchPathServiceTest {
         ride1.getPoints().add(new RidePoint(ride1, 1, city2));
     }
 
-
+//    @Test
+    public void emptyTest() {
+        Assert.assertTrue(true);
+    }
 }

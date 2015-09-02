@@ -1,8 +1,12 @@
 package org.fuc.services;
 
+import org.fuc.commands.account.AccountCriteria;
+import org.fuc.core.Command;
+import org.fuc.core.QuerySingle;
 import org.fuc.entities.Account;
-import org.fuc.repositories.AccountRepository;
+import org.fuc.queries.account.EmailCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,21 +21,24 @@ import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 public class UserService implements UserDetailsService {
-
     @Autowired
-    private AccountRepository accountRepository;
+    @Qualifier("accountByEmailQuery")
+    private QuerySingle<Account> findAccountByEmail;
+    @Autowired
+    @Qualifier("createAccountCommand")
+    private Command createAccount;
 
     @PostConstruct
     public void initialize() {
-        Account admin = accountRepository.findByEmail("admin");
+        Account admin = findAccountByEmail.query(new EmailCriteria("admin"));
         if (admin == null) {
-            accountRepository.save(new Account("admin", "admin", "ROLE_ADMIN"));
+            createAccount.execute(new AccountCriteria(new Account("admin", "admin", "ROLE_ADMIN")));
         }
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(username);
+        Account account = findAccountByEmail.query(new EmailCriteria(username));
         if (account == null) {
             throw new UsernameNotFoundException("user not found");
         }

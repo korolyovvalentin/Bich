@@ -3,12 +3,12 @@ package org.fuc.queries.city;
 import org.fuc.core.Criteria;
 import org.fuc.core.QuerySingle;
 import org.fuc.entities.City;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@Component("cityByIdQuery")
+@Repository("cityByIdQuery")
 public class CityByIdQuery implements QuerySingle<City> {
 
     @PersistenceContext

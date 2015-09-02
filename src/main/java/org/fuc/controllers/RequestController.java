@@ -1,11 +1,12 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.QuerySingle;
 import org.fuc.entities.Account;
 import org.fuc.entities.Request;
 import org.fuc.entities.Ride;
 import org.fuc.entities.RidePoint;
-import org.fuc.repositories.AccountRepository;
+import org.fuc.queries.account.EmailCriteria;
 import org.fuc.repositories.RidesRepository;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
@@ -13,6 +14,7 @@ import org.fuc.support.web.MessageHelper;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -36,7 +38,8 @@ public class RequestController {
     @Autowired
     private RidesRepository ridesRepository;
     @Autowired
-    private AccountRepository accountRepository;
+    @Qualifier("accountByEmailQuery")
+    private QuerySingle<Account> findAccountByEmail;
     @Autowired
     private RideService rideService;
     @Autowired
@@ -45,7 +48,7 @@ public class RequestController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView availableRides(Principal principal){
-        Account account = accountRepository.findByEmail(principal.getName());
+        Account account = findAccountByEmail.query(new EmailCriteria(principal.getName()));
         Collection<Ride> rides = rideService.getAvailableRides(account);
         Collection<RideVm> rideVms = new LinkedList<>();
         for (Ride ride : rides) {
@@ -62,7 +65,7 @@ public class RequestController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ModelAndView create(@RequestParam("ride_id") Long rideId, Principal principal){
         Ride ride = ridesRepository.findById(rideId);
-        Account beatnik = accountRepository.findByEmail(principal.getName());
+        Account beatnik = findAccountByEmail.query(new EmailCriteria(principal.getName()));
         requestsService.create(ride, beatnik);
         ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
         MessageHelper.addSuccessAttribute(model, "Request was successfully added");
@@ -71,7 +74,7 @@ public class RequestController {
 
     @RequestMapping(value = "/updated", method = RequestMethod.GET)
     public ModelAndView processedRequests(Principal principal){
-        Account account = accountRepository.findByEmail(principal.getName());
+        Account account = findAccountByEmail.query(new EmailCriteria(principal.getName()));
         Collection<Request> requests = requestsService.findUpdatedRequests(account.getId());
         Collection<RequestVm> requestVms = new LinkedList<>();
         for(Request request : requests){

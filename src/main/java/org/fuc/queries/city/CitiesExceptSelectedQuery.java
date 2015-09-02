@@ -3,14 +3,14 @@ package org.fuc.queries.city;
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
 import org.fuc.entities.City;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Component("citiesExceptSelectedQuery")
+@Repository("citiesExceptSelectedQuery")
 public class CitiesExceptSelectedQuery implements Query<City> {
 
     @PersistenceContext

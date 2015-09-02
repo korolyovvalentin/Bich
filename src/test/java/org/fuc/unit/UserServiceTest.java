@@ -1,7 +1,8 @@
 package org.fuc.unit;
 
+import org.fuc.core.Criteria;
+import org.fuc.core.QuerySingle;
 import org.fuc.entities.Account;
-import org.fuc.repositories.AccountRepository;
 import org.fuc.services.UserService;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -25,8 +27,8 @@ public class UserServiceTest {
 	@InjectMocks
 	private UserService userService = new UserService();
 
-	@Mock
-	private AccountRepository accountRepositoryMock;
+	@Mock(name = "accountByEmailQuery")
+	private QuerySingle<Account> findByEmailQuery;
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -37,7 +39,8 @@ public class UserServiceTest {
 		thrown.expect(UsernameNotFoundException.class);
 		thrown.expectMessage("user not found");
 
-		when(accountRepositoryMock.findByEmail("user@example.com")).thenReturn(null);
+		Criteria criteria = anyObject();
+		when(findByEmailQuery.query(criteria)).thenReturn(null);
 		// act
 		userService.loadUserByUsername("user@example.com");
 	}
@@ -46,7 +49,9 @@ public class UserServiceTest {
 	public void shouldReturnUserDetails() {
 		// arrange
 		Account demoUser = new Account("user@example.com", "demo", "ROLE_USER");
-		when(accountRepositoryMock.findByEmail("user@example.com")).thenReturn(demoUser);
+
+		Criteria criteria = anyObject();
+		when(findByEmailQuery.query(criteria)).thenReturn(demoUser);
 
 		// act
 		UserDetails userDetails = userService.loadUserByUsername("user@example.com");

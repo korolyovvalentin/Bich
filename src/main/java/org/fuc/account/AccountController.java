@@ -1,8 +1,10 @@
 package org.fuc.account;
 
+import org.fuc.core.QuerySingle;
 import org.fuc.entities.Account;
-import org.fuc.repositories.AccountRepository;
+import org.fuc.queries.account.EmailCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -17,19 +19,15 @@ import java.security.Principal;
 @Controller
 @Secured("ROLE_USER")
 class AccountController {
-
-    private AccountRepository accountRepository;
-
     @Autowired
-    public AccountController(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    @Qualifier("accountByEmailQuery")
+    private QuerySingle<Account> findAccountByEmail;
 
     @RequestMapping(value = "account/current", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public Account accounts(Principal principal) {
         Assert.notNull(principal);
-        return accountRepository.findByEmail(principal.getName());
+        return findAccountByEmail.query(new EmailCriteria(principal.getName()));
     }
 }

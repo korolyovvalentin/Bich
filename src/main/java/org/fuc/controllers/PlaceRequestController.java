@@ -1,15 +1,18 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.QuerySingle;
+import org.fuc.entities.Account;
 import org.fuc.entities.Place;
 import org.fuc.entities.PlaceRequest;
 import org.fuc.entities.RequestStatus;
-import org.fuc.repositories.AccountRepository;
+import org.fuc.queries.account.EmailCriteria;
 import org.fuc.repositories.PlaceRepository;
 import org.fuc.repositories.PlaceRequestRepository;
 import org.fuc.viewmodels.PlaceRequestVm;
 import org.fuc.viewmodels.Places.PlaceVm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -30,7 +33,8 @@ public class PlaceRequestController {
     @Autowired
     private MapperFacade mapper;
     @Autowired
-    private AccountRepository accountRepository;
+    @Qualifier("accountByEmailQuery")
+    private QuerySingle<Account> findAccountByEmail;
     @Autowired
     private PlaceRepository placeRepository;
     @Autowired
@@ -62,7 +66,7 @@ public class PlaceRequestController {
         }
 
         PlaceRequest placeRequest = mapper.map(vm, PlaceRequest.class);
-        placeRequest.setOwner(accountRepository.findByEmail(principal.getName()));
+        placeRequest.setOwner(findAccountByEmail.query(new EmailCriteria(principal.getName())));
         placeRequest.setStatus(RequestStatus.NEW);
         prRepository.save(placeRequest);
         return new ModelAndView(new RedirectView("/beatnik/place_requests", false));
@@ -72,7 +76,7 @@ public class PlaceRequestController {
     public ModelAndView requests(Principal principal) {
         Collection<PlaceRequest> requests =
                 prRepository
-                        .findUpdatedRequests(accountRepository.findByEmail(principal.getName()));
+                        .findUpdatedRequests(findAccountByEmail.query(new EmailCriteria(principal.getName())));
         Collection<PlaceRequestVm> requestVms = new LinkedList<>();
         for (PlaceRequest request : requests) {
             requestVms.add(mapper.map(request, PlaceRequestVm.class));

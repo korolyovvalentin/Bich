@@ -1,13 +1,15 @@
 package org.fuc.integration;
 
+import org.fuc.commands.account.AccountCriteria;
 import org.fuc.config.WebSecurityConfigurationAware;
+import org.fuc.core.Command;
 import org.fuc.entities.Account;
-import org.fuc.services.AccountService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,17 +25,21 @@ public class UserAuthenticationIT extends WebSecurityConfigurationAware {
 
     private static String SEC_CONTEXT_ATTR = HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
     @Autowired
-    private AccountService accountService;
+    @Qualifier("createAccountCommand")
+    private Command createAccount;
+    @Autowired
+    @Qualifier("deleteAccountCommand")
+    private Command deleteAccount;
     private Account testAccount = new Account("user", "demo", "ROLE_USER");
 
     @Before
     public void setUp() {
-        accountService.createAccount(testAccount);
+        createAccount.execute(new AccountCriteria(testAccount));
     }
 
     @After
-    public void tearDown(){
-        accountService.deleteAccount(testAccount);
+    public void tearDown() {
+        deleteAccount.execute(new AccountCriteria(testAccount));
     }
 
     @Test

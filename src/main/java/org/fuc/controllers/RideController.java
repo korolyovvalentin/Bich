@@ -1,15 +1,18 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.Criteria;
+import org.fuc.core.Query;
+import org.fuc.core.QuerySingle;
 import org.fuc.entities.*;
-import org.fuc.repositories.AccountRepository;
-import org.fuc.repositories.CitiesRepository;
+import org.fuc.queries.account.EmailCriteria;
 import org.fuc.services.RequestsService;
 import org.fuc.services.RideService;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideCreateVm;
 import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -20,7 +23,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
 
 @Controller
 @RequestMapping("/driver/rides")
@@ -29,9 +33,11 @@ public class RideController {
     @Autowired
     private MapperFacade mapper;
     @Autowired
-    private CitiesRepository citiesRepository;
+    @Qualifier("allCitiesQuery")
+    private Query<City> citiesProvider;
     @Autowired
-    private AccountRepository accountRepository;
+    @Qualifier("accountByEmailQuery")
+    private QuerySingle<Account> findAccountByEmail;
     @Autowired
     private RideService rideService;
     @Autowired
@@ -40,7 +46,7 @@ public class RideController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView listRides(Principal principal) {
-        Account driver = accountRepository.findByEmail(principal.getName());
+        Account driver = findAccountByEmail.query(new EmailCriteria(principal.getName()));
         Collection<Ride> rides = rideService.getDriverRides(driver);
         Collection<RideVm> rideVms = new LinkedList<>();
         for (Ride ride : rides) {
@@ -56,7 +62,7 @@ public class RideController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView create() {
-        Collection<City> cities = citiesRepository.getCities();
+        Collection<City> cities = citiesProvider.query(Criteria.empty());
         RideCreateVm model = new RideCreateVm();
         model.setAvailableCities(cities);
         return new ModelAndView("rides/create", "ride", model);
@@ -68,7 +74,7 @@ public class RideController {
             return new ModelAndView("rides/create");
         }
         Ride ride = mapper.map(model, Ride.class);
-        ride.setOwner(accountRepository.findByEmail(principal.getName()));
+        ride.setOwner(findAccountByEmail.query(new EmailCriteria(principal.getName())));
         rideService.createRide(ride, model.getCities());
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }

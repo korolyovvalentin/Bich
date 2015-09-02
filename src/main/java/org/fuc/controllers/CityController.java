@@ -4,12 +4,11 @@ import ma.glasnost.orika.MapperFacade;
 import org.fuc.commands.city.CityCriteria;
 import org.fuc.core.Command;
 import org.fuc.core.Criteria;
+import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
 import org.fuc.entities.City;
-import org.fuc.core.Query;
 import org.fuc.queries.city.CityIdCriteria;
 import org.fuc.queries.city.SelectedCitiesCriteria;
-import org.fuc.repositories.CitiesRepository;
 import org.fuc.viewmodels.CityVm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.inject.Inject;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Collection;
 import java.util.LinkedList;
 

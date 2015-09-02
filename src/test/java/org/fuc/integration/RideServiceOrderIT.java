@@ -1,15 +1,17 @@
 package org.fuc.integration;
 
-import org.fuc.entities.*;
+import org.fuc.commands.account.AccountCriteria;
+import org.fuc.commands.city.CityCriteria;
 import org.fuc.config.WebAppConfigurationAware;
-import org.fuc.repositories.CitiesRepository;
+import org.fuc.core.Command;
+import org.fuc.entities.*;
 import org.fuc.repositories.RidesRepository;
-import org.fuc.services.AccountService;
 import org.fuc.services.RideService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.Collection;
 import java.util.Date;
@@ -19,13 +21,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RideServiceOrderIT extends WebAppConfigurationAware {
     @Autowired
-    private AccountService accountService;
+    @Qualifier("createAccountCommand")
+    private Command createAccount;
+    @Autowired
+    @Qualifier("deleteAccountCommand")
+    private Command deleteAccount;
     @Autowired
     private RidesRepository ridesRepository;
     @Autowired
-    private CitiesRepository citiesRepository;
-    @Autowired
     private RideService rideService;
+    @Autowired
+    @Qualifier("createCityCommand")
+    private Command createCity;
+    @Autowired
+    @Qualifier("deleteCityCommand")
+    private Command deleteCity;
 
     private City departure, arrival;
     private Ride ride;
@@ -35,11 +45,11 @@ public class RideServiceOrderIT extends WebAppConfigurationAware {
     @Before
     public void setUp() {
         owner = new Account("owner@owner.com", "pwd", RoleProvider.ROLE_DRIVER);
-        accountService.createAccount(owner);
+        createAccount.execute(new AccountCriteria(owner));
         departure = new City("Departure");
-        citiesRepository.save(departure);
+        createCity.execute(new CityCriteria(departure));
         arrival = new City("Arrival");
-        citiesRepository.save(arrival);
+        createCity.execute(new CityCriteria(arrival));
     }
 
     @Test
@@ -60,11 +70,11 @@ public class RideServiceOrderIT extends WebAppConfigurationAware {
     @After
     public void tearDown() {
         ridesRepository.delete(ride);
-        citiesRepository.delete(departure);
-        citiesRepository.delete(arrival);
-        accountService.deleteAccount(owner);
+        deleteCity.execute(new CityCriteria(departure));
+        deleteCity.execute(new CityCriteria(arrival));
+        deleteAccount.execute(new AccountCriteria(owner));
         for (Account account : participants) {
-            accountService.deleteAccount(account);
+            deleteAccount.execute(new AccountCriteria(account));
         }
     }
 }

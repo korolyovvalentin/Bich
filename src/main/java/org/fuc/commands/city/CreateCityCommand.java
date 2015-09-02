@@ -2,14 +2,14 @@ package org.fuc.commands.city;
 
 import org.fuc.core.Command;
 import org.fuc.core.Criteria;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Transactional
-@Component("createCityCommand")
+@Repository("createCityCommand")
 public class CreateCityCommand implements Command {
 
     @PersistenceContext

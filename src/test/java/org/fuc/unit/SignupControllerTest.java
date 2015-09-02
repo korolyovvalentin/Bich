@@ -1,6 +1,5 @@
 package org.fuc.unit;
 
-import org.fuc.repositories.AccountRepository;
 import org.fuc.services.UserService;
 import org.fuc.signup.SignupController;
 import org.junit.Before;
@@ -16,10 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 public class SignupControllerTest {
-
-    @Mock
-    private AccountRepository accountRepository;
-
     @Mock
     private UserService userService;
 

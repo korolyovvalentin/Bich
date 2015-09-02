@@ -1,7 +1,8 @@
-package org.fuc.commands.city;
+package org.fuc.commands.account;
 
 import org.fuc.core.Command;
 import org.fuc.core.Criteria;
+import org.fuc.entities.Account;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,15 +10,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Transactional
-@Repository("deleteCityCommand")
-public class DeleteCityCommand implements Command {
-
+@Repository("deleteAccountCommand")
+public class DeleteAccountCommand implements Command {
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public void execute(Criteria criteria) {
-        CityCriteria cityCriteria = (CityCriteria) criteria;
-        entityManager.remove(entityManager.merge(cityCriteria.getCity()));
+        AccountCriteria accountCriteria = (AccountCriteria) criteria;
+        Account account = accountCriteria.getAccount();
+        entityManager.remove(entityManager.merge(account));
     }
 }
