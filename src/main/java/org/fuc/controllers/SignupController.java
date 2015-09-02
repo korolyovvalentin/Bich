@@ -1,9 +1,9 @@
-package org.fuc.signup;
+package org.fuc.controllers;
 
-import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.Command;
 import org.fuc.entities.Account;
 import org.fuc.services.UserService;
+import org.fuc.viewmodels.SignupForm;
 import org.fuc.support.web.MessageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

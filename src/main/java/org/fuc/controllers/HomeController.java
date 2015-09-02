@@ -1,4 +1,4 @@
-package org.fuc.home;
+package org.fuc.controllers;
 
 import java.security.Principal;
 

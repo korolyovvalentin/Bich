@@ -1,4 +1,4 @@
-package org.fuc.signup;
+package org.fuc.viewmodels;
 
 import org.fuc.entities.RoleProvider;
 import org.fuc.entities.Account;

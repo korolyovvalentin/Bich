@@ -1,7 +1,7 @@
 package org.fuc.unit;
 
 import org.fuc.services.UserService;
-import org.fuc.signup.SignupController;
+import org.fuc.controllers.SignupController;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

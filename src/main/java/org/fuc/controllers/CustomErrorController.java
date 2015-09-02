@@ -1,4 +1,4 @@
-package org.fuc.error;
+package org.fuc.controllers;
 
 import java.text.MessageFormat;
 

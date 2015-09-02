@@ -1,4 +1,4 @@
-package org.fuc.account;
+package org.fuc.controllers;
 
 import org.fuc.core.QuerySingle;
 import org.fuc.entities.Account;
