@@ -2,9 +2,10 @@ package org.fuc.integration;
 
 import org.fuc.config.WebAppConfigurationAware;
 import org.fuc.core.Command;
+import org.fuc.core.Query;
+import org.fuc.core.criterias.AccountCriteria;
+import org.fuc.core.criterias.RidePointsCriteria;
 import org.fuc.entities.*;
-import org.fuc.repositories.RidesRepository;
-import org.fuc.services.RideService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,10 +25,17 @@ public class RideServiceOrderIT extends WebAppConfigurationAware {
     @Autowired
     @Qualifier("deleteAccountCommand")
     private Command<Account> deleteAccount;
+
     @Autowired
-    private RidesRepository ridesRepository;
+    @Qualifier("ridesByDriverQuery")
+    private Query<Ride> ridesByOwnerQuery;
     @Autowired
-    private RideService rideService;
+    @Qualifier("deleteRideCommand")
+    private Command<Ride> deleteRide;
+    @Autowired
+    @Qualifier("createRideCommand")
+    private Command<RidePointsCriteria> createRide;
+
     @Autowired
     @Qualifier("createCityCommand")
     private Command<City> createCity;
@@ -48,26 +56,31 @@ public class RideServiceOrderIT extends WebAppConfigurationAware {
         createCity.execute(departure);
         arrival = new City("Arrival");
         createCity.execute(arrival);
+        ride = new Ride(new Date(), owner, 3);
     }
 
     @Test
     public void shouldCreateRide() {
-        ride = rideService.createRide(new Ride(new Date(), owner, 3), new City[] {departure, arrival});
+        createRide.execute(new RidePointsCriteria(ride, new City[]{departure, arrival}));
 
-        Ride freshRide = (Ride)ridesRepository.getRidesForOwner(owner).toArray()[0];
+        Ride freshRide = (Ride) ridesByOwnerQuery.query(new AccountCriteria(owner)).toArray()[0];
         System.out.println("Fresh Id: " + freshRide.getId());
-        for (RidePoint rp : freshRide.getPoints()){
+        for (RidePoint rp : freshRide.getPoints()) {
             System.out.println("Ridepoint Id: " + rp.getId());
-            switch (rp.getCity().getName()){
-                case "Departure": assertThat(rp.getOrderField()).isEqualTo(0); break;
-                case "Arrival": assertThat(rp.getOrderField()).isEqualTo(1); break;
+            switch (rp.getCity().getName()) {
+                case "Departure":
+                    assertThat(rp.getOrderField()).isEqualTo(0);
+                    break;
+                case "Arrival":
+                    assertThat(rp.getOrderField()).isEqualTo(1);
+                    break;
             }
         }
     }
 
     @After
     public void tearDown() {
-        ridesRepository.delete(ride);
+        deleteRide.execute(ride);
         deleteCity.execute(departure);
         deleteCity.execute(arrival);
         deleteAccount.execute(owner);

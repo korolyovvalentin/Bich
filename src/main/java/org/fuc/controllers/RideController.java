@@ -1,13 +1,16 @@
 package org.fuc.controllers;
 
 import ma.glasnost.orika.MapperFacade;
+import org.fuc.core.Command;
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
-import org.fuc.entities.*;
+import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.criterias.EmailCriteria;
+import org.fuc.core.criterias.RideParticipantCriteria;
+import org.fuc.core.criterias.RidePointsCriteria;
+import org.fuc.entities.*;
 import org.fuc.services.RequestsService;
-import org.fuc.services.RideService;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideCreateVm;
 import org.fuc.viewmodels.Rides.RideVm;
@@ -32,14 +35,25 @@ import java.util.LinkedList;
 public class RideController {
     @Autowired
     private MapperFacade mapper;
+
     @Autowired
     @Qualifier("allCitiesQuery")
     private Query<City> citiesProvider;
+
     @Autowired
     @Qualifier("accountByEmailQuery")
     private QuerySingle<Account> findAccountByEmail;
+
     @Autowired
-    private RideService rideService;
+    @Qualifier("ridesByDriverQuery")
+    private Query<Ride> ridesByOwnerQuery;
+    @Autowired
+    @Qualifier("createRideCommand")
+    private Command<RidePointsCriteria> createRide;
+    @Autowired
+    @Qualifier("addRideParticipantCommand")
+    private Command<RideParticipantCriteria> addParticipantToRide;
+
     @Autowired
     private RequestsService requestsService;
 
@@ -47,7 +61,7 @@ public class RideController {
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView listRides(Principal principal) {
         Account driver = findAccountByEmail.query(new EmailCriteria(principal.getName()));
-        Collection<Ride> rides = rideService.getDriverRides(driver);
+        Collection<Ride> rides = ridesByOwnerQuery.query(new AccountCriteria(driver));
         Collection<RideVm> rideVms = new LinkedList<>();
         for (Ride ride : rides) {
             RideVm rideVm = mapper.map(ride, RideVm.class);
@@ -75,7 +89,8 @@ public class RideController {
         }
         Ride ride = mapper.map(model, Ride.class);
         ride.setOwner(findAccountByEmail.query(new EmailCriteria(principal.getName())));
-        rideService.createRide(ride, model.getCities());
+        City[] cities = model.getCities().toArray(new City[model.getCities().size()]);
+        createRide.execute(new RidePointsCriteria(ride, cities));
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }
 
@@ -95,7 +110,7 @@ public class RideController {
     public ModelAndView approveRequest(@RequestParam("request_id") Long requestId) {
         requestsService.approveRequest(requestId);
         Request request = requestsService.findById(requestId);
-        rideService.addParticipant(request.getRide(), request.getOwner());
+        addParticipantToRide.execute(new RideParticipantCriteria(request.getOwner(), request.getRide()));
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }
 
