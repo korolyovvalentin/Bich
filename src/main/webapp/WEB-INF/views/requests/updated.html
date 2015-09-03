@@ -24,6 +24,7 @@
         <table class="table">
             <thead>
             <tr>
+                <th>Points</th>
                 <!--<th>Departure</th>-->
                 <!--<th>Arrival</th>-->
                 <th>Date</th>
@@ -32,7 +33,20 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="request : ${requests}">
+            <tr th:each="request, status : ${requests}">
+                <th>
+                    <a data-toggle="collapse"
+                       th:text="${request.ride.points[0].city.name} + ' &mdash; ' + ${request.ride.points[#lists.size(request.ride.points) - 1].city.name}"
+                       th:href="|#collapse${status.index}|">
+                        Link with href
+                    </a>
+
+                    <div class="collapse" th:id="|collapse${status.index}|">
+                        <ul class="list-unstyled">
+                            <li th:each="point : ${request.ride.points}" th:text="${point.city.name}"></li>
+                        </ul>
+                    </div>
+                </th>
                 <!--<td th:text="${request.ride.departure.name}"></td>-->
                 <!--<td th:text="${request.ride.arrival.name}"></td>-->
                 <td th:text="${request.ride.date}"></td>
