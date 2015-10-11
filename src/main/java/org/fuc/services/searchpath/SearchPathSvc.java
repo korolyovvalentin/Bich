@@ -6,11 +6,11 @@ import org.fuc.entities.RidePoint;
 
 import java.util.*;
 
-public class SearchPathService {
+public class SearchPathSvc {
     private Collection<Ride> rides;
     private Collection<City> cities;
 
-    public SearchPathService(Collection<Ride> rides) {
+    public SearchPathSvc(Collection<Ride> rides) {
         this.rides = rides;
 
         cities = new HashSet<>();
@@ -32,10 +32,10 @@ public class SearchPathService {
     }
 
     private Collection<Path> tryFindPath(Ride ride,
-                             City current,
-                             City goal,
-                             Set<Ride> availableRides,
-                             Path accumulator){
+                                         City current,
+                                         City goal,
+                                         Set<Ride> availableRides,
+                                         Path accumulator){
         if(containsCity(ride, goal)){
             PathSegment segment = new PathSegment(ride, current, goal);
             return Collections.singleton(accumulator.clone().addSegment(segment));
@@ -50,19 +50,23 @@ public class SearchPathService {
 
             Set<Ride> available = Collections.emptySet();
             available.addAll(availableRides);
-            paths.addAll(tryFindPath(r, intersection, goal, available))
+
+            PathSegment segment = new PathSegment(ride, current, intersection);
+            paths.addAll(tryFindPath(r, intersection, goal, available, accumulator.clone().addSegment(segment)))
         }
         return paths;
     }
 
-    private void get(Ride ride,
-                           Collection<Ride> availableRides,
-                           City start,
-                           City finish,
-                           List<Path> memo) {
-        if(containsCity(ride, finish)){
+    private Collection<Ride> getNeighbours(Ride ride, Collection<Ride> availableRides){
+        Collection<Ride> result = new LinkedList<>();
 
+        for(Ride r : availableRides){
+            if(haveIntersection(ride, r)){
+                result.add(r);
+            }
         }
+
+        return result;
     }
 
     private boolean haveIntersection(Ride first, Ride second) {
@@ -81,16 +85,6 @@ public class SearchPathService {
             }
         }
         return null;
-    }
-
-    private Collection<City> getCities(Ride ride) {
-        List<City> result = new LinkedList<>();
-
-        for (RidePoint ridePoint : ride.getPoints()) {
-            result.add(ridePoint.getCity());
-        }
-
-        return result;
     }
 
     private boolean containsCity(Ride ride, City city) {
