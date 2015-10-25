@@ -8,7 +8,7 @@ import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.criterias.EmailCriteria;
 import org.fuc.core.criterias.IdCriteria;
 import org.fuc.entities.*;
-import org.fuc.support.web.MessageHelper;
+import org.fuc.infrastructure.MessageHelper;
 import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.Rides.RideVm;
 import org.springframework.beans.factory.annotation.Autowired;

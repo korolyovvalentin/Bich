@@ -1,7 +1,8 @@
-package org.fuc.support.web;
+package org.fuc.infrastructure;
 
-import static org.fuc.support.web.Message.MESSAGE_ATTRIBUTE;
+import static org.fuc.infrastructure.Message.MESSAGE_ATTRIBUTE;
 
+import org.fuc.infrastructure.Message;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;

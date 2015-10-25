@@ -1,4 +1,4 @@
-package org.fuc.error;
+package org.fuc.infrastructure;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
