@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Rides</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
+          th:href="@{/resources/css/bootstrap.min.css}"/>
+    <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}"/>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+    <h1 class="page-header">Rides</h1>
+
+    <th:block th:if="${message != null}">
+        <!-- /* The message code is returned from the @Controller */ -->
+        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">
+            &nbsp;</div>
+    </th:block>
+
+    <form id="filter-form"
+          method="get"
+          role="form"
+          class="form-inline"
+          th:action="@{/beatnik/paths}"
+          th:object="${model.filter}">
+        <div class="form-group">
+            <label for="filter-start">Start</label>
+
+            <select id="filter-start"
+                    name="start"
+                    class="form-control"
+                    th:field="*{start}">
+                <option th:each="city : ${model.cities}"
+                        th:value="${city.name}"
+                        th:text="${city.name}">Wireframe
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="filter-end">End</label>
+
+            <select id="filter-end"
+                    name="end"
+                    class="form-control"
+                    th:field="*{end}">
+                <option th:each="city : ${model.cities}"
+                        th:value="${city.name}"
+                        th:text="${city.name}">Wireframe
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="filter-date">Date</label>
+
+            <div class="form-group">
+                <input id="filter-date"
+                       type="text"
+                       class="form-control datepicker"
+                       readonly="readonly"
+                       th:field="*{date}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn btn-default">Find</button>
+            </div>
+        </div>
+    </form>
+
+
+    <div th:if="${not #lists.isEmpty(model.paths)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Points</th>
+                <th>Date</th>
+                <th sec:authorize="hasRole('ROLE_BEATNIK')">Actions</th>
+            </tr>
+            </thead>
+            <tr th:each="path, status : ${model.paths}">
+                <td>
+                    <div>
+                        <ul class="list-unstyled">
+                            <li th:each="segment : ${path.segments}">
+                                <div>
+                                    <h6 th:text="${segment.ride.owner.email}"></h6>
+                                    <div th:text="${segment.start.name} + ' &mdash; ' + ${segment.end.name}">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+                <td th:text="${path.segments[0].ride.date}">ride</td>
+
+                <td sec:authorize="hasRole('ROLE_BEATNIK')">
+                    <form action="#" th:action="@{/beatnik/requests/create}" method="post" role="form">
+                        <!--<input type="hidden" id="ride_id" name="ride_id" th:value="${ride.id}"/>-->
+
+                        <div class="form-group">
+                            <div>
+                                <button type="submit" class="btn-link">Create request</button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+<div th:replace="fragments/footer :: footer">&nbsp;</div>
+
+<script type="text/javascript" lang="javascript">
+    $(document).ready(function () {
+        $(".datepicker").datepicker();
+
+        $("#add-point-btn").click(addPoint);
+    });
+</script>
+
+</body>
+</html>
