@@ -1,4 +1,4 @@
-package org.fuc.services.searchpath;
+package org.fuc.core.model;
 
 import org.fuc.entities.City;
 import org.fuc.entities.Ride;

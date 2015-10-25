@@ -1,10 +1,9 @@
 package org.fuc.services;
 
-import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.core.Command;
 import org.fuc.core.QuerySingle;
-import org.fuc.entities.Account;
 import org.fuc.core.criterias.EmailCriteria;
+import org.fuc.entities.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

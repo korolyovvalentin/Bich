@@ -1,10 +1,12 @@
 package org.fuc.unit;
 
+import org.fuc.core.Criteria;
+import org.fuc.core.criterias.PathCriteria;
 import org.fuc.entities.City;
 import org.fuc.entities.Ride;
 import org.fuc.entities.RidePoint;
-import org.fuc.services.searchpath.Path;
-import org.fuc.services.searchpath.SearchPathService;
+import org.fuc.core.model.Path;
+import org.fuc.queries.path.AvailablePathsQuery;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +26,7 @@ public class SearchPathServiceTest {
     private Ride ride1;
     private Ride ride2;
 
-    private SearchPathService service;
+    private AvailablePathsQuery service;
 
     @Before
     public void setup(){
@@ -36,9 +38,9 @@ public class SearchPathServiceTest {
     public void shouldNotReturnAnyPathsIfNoEntriesExists() {
         ride1.getPoints().add(new RidePoint(ride1, 0, city1));
         ride1.getPoints().add(new RidePoint(ride1, 1, city2));
-        service = new SearchPathService(Arrays.asList(ride1));
+        service = new AvailablePathsQuery(Arrays.asList(ride1));
 
-        Collection<Path> result = service.search(city3, city4);
+        Collection<Path> result = service.query(new PathCriteria(city3, city4));
 
         Assert.assertEquals(0, result.size());
     }
@@ -47,9 +49,9 @@ public class SearchPathServiceTest {
     public void shouldNotReturnAnyPathsIfNoRidesContainsEndCity() {
         ride1.getPoints().add(new RidePoint(ride1, 0, city1));
         ride1.getPoints().add(new RidePoint(ride1, 1, city2));
-        service = new SearchPathService(Arrays.asList(ride1));
+        service = new AvailablePathsQuery(Arrays.asList(ride1));
 
-        Collection<Path> result = service.search(city1, city3);
+        Collection<Path> result = service.query(new PathCriteria(city1, city3));
 
         Assert.assertEquals(0, result.size());
     }
@@ -59,9 +61,9 @@ public class SearchPathServiceTest {
         ride1.getPoints().add(new RidePoint(ride1, 0, city1));
         ride1.getPoints().add(new RidePoint(ride1, 1, city2));
 
-        service = new SearchPathService(Arrays.asList(ride1));
+        service = new AvailablePathsQuery(Arrays.asList(ride1));
 
-        Collection<Path> result = service.search(city2, city1);
+        Collection<Path> result = service.query(new PathCriteria(city2, city4));
 
         Assert.assertEquals(0, result.size());
     }
@@ -77,9 +79,26 @@ public class SearchPathServiceTest {
         ride2.getPoints().add(new RidePoint(ride2, 1, city3));
         ride2.getPoints().add(new RidePoint(ride2, 2, city4));
 
-        service = new SearchPathService(Arrays.asList(ride1, ride2));
+        service = new AvailablePathsQuery(Arrays.asList(ride1, ride2));
 
-        Collection<Path> result = service.search(city1, city4);
+        Collection<Path> result = service.query(new PathCriteria(city1, city4));
+
+        Assert.assertEquals(2, result.size());
+    }
+
+    @Test
+    public void shouldReturnTwoPathsIfCriteriaIsEmpty(){
+        ride1.getPoints().add(new RidePoint(ride1, 0, city1));
+        ride1.getPoints().add(new RidePoint(ride1, 1, city2));
+        ride1.getPoints().add(new RidePoint(ride1, 2, city4));
+
+        ride2.getPoints().add(new RidePoint(ride2, 0, city1));
+        ride2.getPoints().add(new RidePoint(ride2, 1, city3));
+        ride2.getPoints().add(new RidePoint(ride2, 2, city4));
+
+        service = new AvailablePathsQuery(Arrays.asList(ride1, ride2));
+
+        Collection<Path> result = service.query(Criteria.empty());
 
         Assert.assertEquals(2, result.size());
     }
