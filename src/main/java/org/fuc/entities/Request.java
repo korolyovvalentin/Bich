@@ -33,6 +33,10 @@ public class Request {
     @JoinColumn(name = "OWNER_ID", nullable = false)
     private Account owner;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PATH_REQUEST_ID", nullable = false)
+    private PathRequest pathRequest;
+
     public Request() {
     }
 
@@ -72,5 +76,13 @@ public class Request {
 
     public void setOwner(Account owner) {
         this.owner = owner;
+    }
+
+    public PathRequest getPathRequest() {
+        return pathRequest;
+    }
+
+    public void setPathRequest(PathRequest pathRequest) {
+        this.pathRequest = pathRequest;
     }
 }

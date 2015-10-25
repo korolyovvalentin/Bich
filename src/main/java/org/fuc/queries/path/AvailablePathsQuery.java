@@ -2,7 +2,6 @@ package org.fuc.queries.path;
 
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
-import org.fuc.core.criterias.EmptyCriteria;
 import org.fuc.core.criterias.PathCriteria;
 import org.fuc.entities.City;
 import org.fuc.entities.Ride;
@@ -10,8 +9,8 @@ import org.fuc.entities.RidePoint;
 import org.fuc.core.model.Path;
 import org.fuc.core.model.PathSegment;
 import org.fuc.util.Cast;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.fuc.util.DateComparer;
+import org.fuc.util.Predicate;
 
 import java.util.*;
 
@@ -23,51 +22,85 @@ public class AvailablePathsQuery implements Query<Path> {
     }
 
     public Collection<Path> query(Criteria criteria) {
-        PathCriteria pathCriteria = Cast.as(PathCriteria.class, criteria);
+        PathCriteria pathCriteria = ((PathCriteria) criteria);
 
-        if (pathCriteria != null) {
-            City start = pathCriteria.getStart();
-            City end = pathCriteria.getEnd();
+        City start = pathCriteria.getStart();
+        City end = pathCriteria.getEnd();
 
-            Collection<Path> result = new LinkedList<>();
+        if (start == null && end == null)
+            return findAll();
+        if (start == null)
+            return findByEnd(end);
+        if (end == null)
+            return findByStart(start);
 
-            for (Ride ride : rides) {
-                if (containsCity(ride, start)) {
-                    Set<Ride> availableRides = new HashSet<>(rides);
-                    availableRides.remove(ride);
-                    result.addAll(
-                            getAcceptablePaths(
-                                    find(ride, start, end, availableRides, new Path(new ArrayList<PathSegment>())),
-                                    end
-                            ));
-                }
+        Collection<Path> result = new LinkedList<>();
+
+        for (Ride ride : rides) {
+            if (containsCity(ride, start)) {
+                Set<Ride> availableRides = new HashSet<>(rides);
+                availableRides.remove(ride);
+                result.addAll(
+                        getAcceptablePaths(
+                                find(ride, start, end, availableRides, new Path(new ArrayList<PathSegment>())),
+                                end
+                        ));
             }
-
-
-            return result;
         }
 
-        EmptyCriteria emptyCriteria = Cast.as(EmptyCriteria.class, criteria);
 
-        if (emptyCriteria != null) {
-            Collection<Path> result = new LinkedList<>();
+        return result;
+    }
 
-            for (Ride ride : rides) {
-                List<RidePoint> points = ride.getPoints();
-                result.add(
-                        new Path(Collections.singletonList(
+    private Collection<Path> findAll() {
+        return find(new Predicate<Ride>() {
+            @Override
+            public boolean isTrue(Ride o) {
+                return true;
+            }
+        });
+    }
+
+    private Collection<Path> findByStart(final City start) {
+        return find(new Predicate<Ride>() {
+            @Override
+            public boolean isTrue(Ride o) {
+                List<RidePoint> points = o.getPoints();
+                return Objects.equals(points.get(0).getCity(), start);
+            }
+        });
+    }
+
+    private Collection<Path> findByEnd(final City end) {
+        return find(new Predicate<Ride>() {
+            @Override
+            public boolean isTrue(Ride o) {
+                List<RidePoint> points = o.getPoints();
+                return Objects.equals(points.get(points.size() - 1).getCity(), end);
+            }
+        });
+    }
+
+    private Collection<Path> find(Predicate<Ride> predicate) {
+        Collection<Path> result = new LinkedList<>();
+
+        for (Ride ride : rides) {
+            List<RidePoint> points = ride.getPoints();
+
+            if (predicate.isTrue(ride)) {
+                result.add(new Path(
+                        Collections.singletonList(
                                 new PathSegment(
                                         ride,
                                         points.get(0).getCity(),
                                         points.get(points.size() - 1).getCity()
                                 )
-                        )));
+                        )
+                ));
             }
-
-            return result;
         }
 
-        throw new IllegalArgumentException("Unsupported criteria");
+        return result;
     }
 
     private Collection<Path> find(Ride ride,
@@ -106,7 +139,7 @@ public class AvailablePathsQuery implements Query<Path> {
         Collection<Ride> result = new LinkedList<>();
 
         for (Ride r : availableRides) {
-            if (haveIntersection(ride, r)) {
+            if (haveSameDate(ride, r) && haveIntersection(ride, r)) {
                 result.add(r);
             }
         }
@@ -135,6 +168,10 @@ public class AvailablePathsQuery implements Query<Path> {
         return false;
     }
 
+    private boolean haveSameDate(Ride first, Ride second) {
+        return DateComparer.compare(first.getDate(), second.getDate()) == 0;
+    }
+
     private City getIntersection(Ride first, Ride second) {
         for (RidePoint ridePoint : first.getPoints()) {
             if (containsCity(second, ridePoint.getCity())) {
@@ -157,10 +194,11 @@ public class AvailablePathsQuery implements Query<Path> {
 
     private boolean containsCity(Ride ride, City city) {
         for (RidePoint point : ride.getPoints()) {
-            if (Objects.equals(point.getCity(), city)) {
+            if (point.getCity().equals(city)) {
                 return true;
             }
         }
         return false;
     }
+
 }

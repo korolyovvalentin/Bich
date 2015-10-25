@@ -1,11 +1,10 @@
 package org.fuc.unit;
 
-import org.fuc.core.Criteria;
 import org.fuc.core.criterias.PathCriteria;
+import org.fuc.core.model.Path;
 import org.fuc.entities.City;
 import org.fuc.entities.Ride;
 import org.fuc.entities.RidePoint;
-import org.fuc.core.model.Path;
 import org.fuc.queries.path.AvailablePathsQuery;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +14,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 @RunWith(JUnit4.class)
 public class SearchPathServiceTest {
@@ -98,8 +98,58 @@ public class SearchPathServiceTest {
 
         service = new AvailablePathsQuery(Arrays.asList(ride1, ride2));
 
-        Collection<Path> result = service.query(Criteria.empty());
+        Collection<Path> result = service.query(new PathCriteria(null, null));
 
         Assert.assertEquals(2, result.size());
+    }
+
+
+    @Test
+    public void shouldReturnRideByEnd(){
+        ride1.getPoints().add(new RidePoint(ride1, 0, city1));
+        ride1.getPoints().add(new RidePoint(ride1, 1, city2));
+        ride1.getPoints().add(new RidePoint(ride1, 2, city4));
+
+        ride2.getPoints().add(new RidePoint(ride2, 0, city1));
+        ride2.getPoints().add(new RidePoint(ride2, 1, city3));
+
+        service = new AvailablePathsQuery(Arrays.asList(ride1, ride2));
+
+        Collection<Path> result = service.query(new PathCriteria(null, city4));
+
+        Assert.assertEquals(1, result.size());
+    }
+
+    @Test
+    public void shouldReturnRideByStart(){
+        ride1.getPoints().add(new RidePoint(ride1, 0, city1));
+        ride1.getPoints().add(new RidePoint(ride1, 1, city2));
+        ride1.getPoints().add(new RidePoint(ride1, 2, city4));
+
+        ride2.getPoints().add(new RidePoint(ride2, 0, city2));
+        ride2.getPoints().add(new RidePoint(ride2, 1, city3));
+
+        service = new AvailablePathsQuery(Arrays.asList(ride1, ride2));
+
+        Collection<Path> result = service.query(new PathCriteria(city2, null));
+
+        Assert.assertEquals(1, result.size());
+    }
+
+    @Test
+    public void shouldNotReturnIfRidesHasDifferentDate(){
+        ride1.getPoints().add(new RidePoint(ride1, 0, city1));
+        ride1.getPoints().add(new RidePoint(ride1, 1, city2));;
+        ride1.setDate(new Date(2001, 5, 5));
+
+        ride2.getPoints().add(new RidePoint(ride2, 0, city2));
+        ride2.getPoints().add(new RidePoint(ride2, 2, city4));
+        ride2.setDate(new Date(2000, 5, 5));
+
+        service = new AvailablePathsQuery(Arrays.asList(ride1, ride2));
+
+        Collection<Path> result = service.query(new PathCriteria(city1, city4));
+
+        Assert.assertEquals(0, result.size());
     }
 }

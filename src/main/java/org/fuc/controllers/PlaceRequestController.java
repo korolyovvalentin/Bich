@@ -73,7 +73,6 @@ public class PlaceRequestController {
     @RequestMapping(value = "/{placeId}/create", method = RequestMethod.GET)
     public ModelAndView create(@PathVariable Long placeId) {
         Place place = placeByIdQuery.query(new IdCriteria(placeId));
-        ;
         PlaceRequestVm vm = new PlaceRequestVm();
         vm.setPlace(place);
         return new ModelAndView("place_requests/create", "placeRequest", vm);

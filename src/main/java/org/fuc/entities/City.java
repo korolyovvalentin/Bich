@@ -22,7 +22,7 @@ public class City implements java.io.Serializable {
         this.name = name;
     }
 
-    public City(Long id, String name){
+    public City(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -49,5 +49,11 @@ public class City implements java.io.Serializable {
 
     public void setId(Long cityId) {
         this.id = cityId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        City c = (City) obj;
+        return this.id == c.id || this.name.equals(c.name);
     }
 }
