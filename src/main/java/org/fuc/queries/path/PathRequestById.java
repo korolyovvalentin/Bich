@@ -3,7 +3,6 @@ package org.fuc.queries.path;
 import org.fuc.core.Criteria;
 import org.fuc.core.QuerySingle;
 import org.fuc.core.criterias.IdCriteria;
-import org.fuc.entities.City;
 import org.fuc.entities.PathRequest;
 import org.springframework.stereotype.Repository;
 

@@ -34,7 +34,7 @@
             </thead>
             <tbody>
             <tr th:each="request, status : ${requests}">
-                <th>
+                <td>
                     <a data-toggle="collapse"
                        th:text="${request.ride.points[0].city.name} + ' &mdash; ' + ${request.ride.points[#lists.size(request.ride.points) - 1].city.name}"
                        th:href="|#collapse${status.index}|">
@@ -46,7 +46,7 @@
                             <li th:each="point : ${request.ride.points}" th:text="${point.city.name}"></li>
                         </ul>
                     </div>
-                </th>
+                </td>
                 <!--<td th:text="${request.ride.departure.name}"></td>-->
                 <!--<td th:text="${request.ride.arrival.name}"></td>-->
                 <td th:text="${request.ride.date}"></td>

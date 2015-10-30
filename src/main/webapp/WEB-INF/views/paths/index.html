@@ -109,7 +109,16 @@
                           th:action="@{/beatnik/paths/create}">
                         <div th:each="segment, rowStat : ${path.segments}">
                             <input type="hidden" name="ride" th:value="${segment.ride.id}"/>
-                            <!--<input type="hidden" th:field="${path.segments[__${rowStat.index}__].ride.id}"/>-->
+                        </div>
+
+                        <div>
+                            <input type="hidden" name="start" th:value="${path.segments[0].start.name}" />
+                        </div>
+
+                        <div>
+                            <input type="hidden"
+                                   name="end"
+                                   th:value="${path.segments[#lists.size(path.segments) - 1].end.name}" />
                         </div>
 
                         <div class="form-group">
@@ -119,22 +128,6 @@
                         </div>
                     </form>
                 </td>
-                <!--<td>-->
-                <!--<form action="#"-->
-                <!--method="post"-->
-                <!--role="form"-->
-                <!--th:action="@{/beatnik/paths/create}"-->
-                <!--th:object="${path}">-->
-
-                <!--<div th:each="segment, rowStat : ${path.segments}">-->
-                <!--<input type="hidden" th:field="${path.segments[__${rowStat.index}__].ride.id}"/>-->
-                <!--</div>-->
-
-                <!--<div class="form-group">-->
-                <!--<button type="submit" class="btn-link">Create request</button>-->
-                <!--</div>-->
-                <!--</form>-->
-                <!--</td>-->
             </tr>
         </table>
     </div>

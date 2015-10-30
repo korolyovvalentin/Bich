@@ -19,14 +19,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,8 +63,8 @@ public class PathController {
     @Qualifier("requestByIdQuery")
     private QuerySingle<Request> requestById;
     @Autowired
-    @Qualifier("requestsUpdatedQuery")
-    private Query<Request> requestsUpdated;
+    @Qualifier("updatedPathRequestsQuery")
+    private Query<PathRequest> updatedRequests;
     @Autowired
     @Qualifier("createRequestCommand")
     private Command<Request> createRequest;
@@ -105,15 +103,18 @@ public class PathController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
-    public ModelAndView create(@RequestParam(value = "ride") int[] ride, Model m, Principal principal) {
+    public ModelAndView create(@RequestParam(value = "ride") int[] rideIds,
+                               @RequestParam(value = "start") String start,
+                               @RequestParam(value = "end") String end,
+                               Principal principal) {
         Account beatnik = findAccountByEmail.query(new EmailCriteria(principal.getName()));
 
         List<Ride> rides = new LinkedList<>();
-        for (int aRide : ride) {
-            rides.add(rideByIdQuery.query(new IdCriteria((long) aRide)));
+        for (int rideId : rideIds) {
+            rides.add(rideByIdQuery.query(new IdCriteria((long) rideId)));
         }
 
-        createPathRequest.execute(new PathRequestCriteria(beatnik, rides));
+        createPathRequest.execute(new PathRequestCriteria(beatnik, rides, start, end));
 
         ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
         MessageHelper.addSuccessAttribute(model, "Request was successfully added");
@@ -123,13 +124,13 @@ public class PathController {
     @RequestMapping(value = "/updated", method = RequestMethod.GET)
     public ModelAndView processedRequests(Principal principal) {
         Account account = findAccountByEmail.query(new EmailCriteria(principal.getName()));
-        Collection<Request> requests = requestsUpdated.query(new AccountCriteria(account));
+        Collection<PathRequest> requests = updatedRequests.query(new AccountCriteria(account));
 
         Collection<RequestVm> requestVms = new LinkedList<>();
-        for (Request request : requests) {
+        for (PathRequest request : requests) {
             requestVms.add(mapper.map(request, RequestVm.class));
         }
-        return new ModelAndView("requests/updated", "requests", requestVms);
+        return new ModelAndView("requests/updated", "requests", requests);
     }
 
     @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)

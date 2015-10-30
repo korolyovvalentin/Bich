@@ -1,12 +1,13 @@
 package org.fuc.entities;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "path_request")
+@Table(name = "pathrequest")
 public class PathRequest {
     @Id
     @SequenceGenerator(name = "path_request_id_seq", sequenceName = "path_request_id_seq", allocationSize = 1)
@@ -14,6 +15,12 @@ public class PathRequest {
     private Long id;
 
     private String status;
+
+    private Date date;
+
+    private String start;
+
+    private String finish;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "path_request_id")
@@ -61,5 +68,29 @@ public class PathRequest {
 
     public void setRequests(Set<Request> requests) {
         this.requests = requests;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getFinish() {
+        return finish;
+    }
+
+    public void setFinish(String finish) {
+        this.finish = finish;
     }
 }

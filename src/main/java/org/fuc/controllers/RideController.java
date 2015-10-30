@@ -60,6 +60,10 @@ public class RideController {
     @Qualifier("updateRequestCommand")
     private Command<Request> updateRequest;
 
+    @Autowired
+    @Qualifier("updatePathRequestStatus")
+    private Command<IdCriteria> updateRequestStatus;
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView listRides(Principal principal) {
@@ -117,6 +121,7 @@ public class RideController {
         Request request = requestById.query(new IdCriteria(requestId));
         request.setStatus(RequestStatus.APPROVED);
         updateRequest.execute(request);
+        updateRequestStatus.execute(new IdCriteria(request.getPathRequest().getId()));
 
         addParticipantToRide.execute(new RideParticipantCriteria(request.getOwner(), request.getRide()));
         return new ModelAndView(new RedirectView("/driver/rides", false));
@@ -127,6 +132,7 @@ public class RideController {
         Request request = requestById.query(new IdCriteria(requestId));
         request.setStatus(RequestStatus.DECLINED);
         updateRequest.execute(request);
+        updateRequestStatus.execute(new IdCriteria(request.getPathRequest().getId()));
 
         return new ModelAndView(new RedirectView("/driver/rides", false));
     }

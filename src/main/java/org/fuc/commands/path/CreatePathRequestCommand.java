@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 
 @Transactional
@@ -27,14 +28,21 @@ public class CreatePathRequestCommand implements Command<PathRequestCriteria>{
 
     @Override
     public void execute(PathRequestCriteria criteria) {
+        List<Ride> rides = criteria.getRides();
         PathRequest pathRequest = new PathRequest(RequestStatus.NEW, criteria.getAccount());
         entityManager.persist(pathRequest);
 
-        for(Ride ride : criteria.getRides()){
+        for(Ride ride : rides){
             Request request = new Request(RequestStatus.NEW, ride, criteria.getAccount());
             request.setPathRequest(pathRequest);
             pathRequest.getRequests().add(request);
             createRequestCommand.execute(request);
         }
+
+        pathRequest.setDate(rides.get(0).getDate());
+        pathRequest.setStart(criteria.getStart());
+        pathRequest.setFinish(criteria.getEnd());
+
+        entityManager.merge(pathRequest);
     }
 }

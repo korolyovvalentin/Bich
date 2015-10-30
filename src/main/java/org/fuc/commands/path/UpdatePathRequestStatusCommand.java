@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Transactional
-@Repository("updateRequestStatus")
+@Repository("updatePathRequestStatus")
 public class UpdatePathRequestStatusCommand implements Command<IdCriteria> {
     @PersistenceContext
     private EntityManager entityManager;
