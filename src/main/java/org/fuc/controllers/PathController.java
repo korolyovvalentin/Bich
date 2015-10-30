@@ -28,6 +28,7 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/beatnik/paths")
@@ -55,6 +56,10 @@ public class PathController {
     @Autowired
     @Qualifier("ridesByFilterQuery")
     private Query<Ride> ridesByFilterQuery;
+
+    @Autowired
+    @Qualifier("createPathRequestCommand")
+    private Command<PathRequestCriteria> createPathRequest;
 
     @Autowired
     @Qualifier("requestByIdQuery")
@@ -99,10 +104,16 @@ public class PathController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ModelAndView create(@RequestParam("ride_id") Long rideId, Principal principal) {
-        Ride ride = rideByIdQuery.query(new IdCriteria(rideId));
+    @ResponseStatus(value = HttpStatus.OK)
+    public ModelAndView create(@RequestParam(value = "ride") int[] ride, Model m, Principal principal) {
         Account beatnik = findAccountByEmail.query(new EmailCriteria(principal.getName()));
-        createRequest.execute(new Request("", ride, beatnik));
+
+        List<Ride> rides = new LinkedList<>();
+        for (int aRide : ride) {
+            rides.add(rideByIdQuery.query(new IdCriteria((long) aRide)));
+        }
+
+        createPathRequest.execute(new PathRequestCriteria(beatnik, rides));
 
         ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
         MessageHelper.addSuccessAttribute(model, "Request was successfully added");

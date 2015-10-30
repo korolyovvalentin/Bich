@@ -36,4 +36,8 @@ public class Path {
     public List<PathSegment> getSegments() {
         return segments;
     }
+
+    public void setSegments(List<PathSegment> segments) {
+        this.segments = segments;
+    }
 }
