@@ -102,11 +102,14 @@ public class RideController {
     }
 
     @RequestMapping(value = " /{rideId}/requests", method = RequestMethod.GET)
-    public ModelAndView requests(@PathVariable Long rideId) {
+    public ModelAndView requests(@PathVariable Long rideId, Principal principal) {
         Ride ride = new Ride();
         ride.setId(rideId);
 
-        Collection<Request> requests = requestsNew.query(new RideCriteria(ride));
+        Collection<Request> requests = requestsNew.query(
+                new RideCriteria(
+                        ride,
+                        findAccountByEmail.query(new EmailCriteria(principal.getName()))));
         Collection<RequestVm> requestVms = new LinkedList<>();
         for (Request request : requests) {
             requestVms.add(mapper.map(request, RequestVm.class));

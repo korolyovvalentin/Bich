@@ -124,7 +124,7 @@ public class AvailablePathsQuery implements Query<Path> {
             City intersection = getIntersection(ride, r);
 
             if (hasCorrectOrder(ride, current, intersection)) {
-                Set<Ride> available = Collections.emptySet();
+                Set<Ride> available = new HashSet<>();
                 available.addAll(availableRides);
                 available.remove(r);
 

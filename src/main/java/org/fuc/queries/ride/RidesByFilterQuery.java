@@ -40,6 +40,6 @@ public class RidesByFilterQuery implements Query<Ride> {
                             new Date()));
         }
 
-        return entityManager.createQuery(builderCriteria).getResultList();
+         return entityManager.createQuery(builderCriteria).getResultList();
     }
 }

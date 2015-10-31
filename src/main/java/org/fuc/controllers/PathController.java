@@ -7,19 +7,23 @@ import org.fuc.core.Query;
 import org.fuc.core.QuerySingle;
 import org.fuc.core.criterias.*;
 import org.fuc.core.model.Path;
-import org.fuc.entities.*;
+import org.fuc.entities.Account;
+import org.fuc.entities.City;
+import org.fuc.entities.Ride;
 import org.fuc.infrastructure.MessageHelper;
 import org.fuc.queries.path.AvailablePathsQuery;
 import org.fuc.util.Cast;
 import org.fuc.viewmodels.PathsVm;
-import org.fuc.viewmodels.RequestVm;
 import org.fuc.viewmodels.RidesFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -58,19 +62,6 @@ public class PathController {
     @Autowired
     @Qualifier("createPathRequestCommand")
     private Command<PathRequestCriteria> createPathRequest;
-
-    @Autowired
-    @Qualifier("requestByIdQuery")
-    private QuerySingle<Request> requestById;
-    @Autowired
-    @Qualifier("updatedPathRequestsQuery")
-    private Query<PathRequest> updatedRequests;
-    @Autowired
-    @Qualifier("createRequestCommand")
-    private Command<Request> createRequest;
-    @Autowired
-    @Qualifier("updateRequestCommand")
-    private Command<Request> updateRequest;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -119,25 +110,5 @@ public class PathController {
         ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
         MessageHelper.addSuccessAttribute(model, "Request was successfully added");
         return model;
-    }
-
-    @RequestMapping(value = "/updated", method = RequestMethod.GET)
-    public ModelAndView processedRequests(Principal principal) {
-        Account account = findAccountByEmail.query(new EmailCriteria(principal.getName()));
-        Collection<PathRequest> requests = updatedRequests.query(new AccountCriteria(account));
-
-        Collection<RequestVm> requestVms = new LinkedList<>();
-        for (PathRequest request : requests) {
-            requestVms.add(mapper.map(request, RequestVm.class));
-        }
-        return new ModelAndView("requests/updated", "requests", requests);
-    }
-
-    @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
-    public ModelAndView markRequestAsOld(@RequestParam("request_id") Long requestId) {
-        Request request = requestById.query(new IdCriteria(requestId));
-        request.setStatus(RequestStatus.OLD);
-        updateRequest.execute(request);
-        return new ModelAndView(new RedirectView("/beatnik/requests/updated", false));
     }
 }

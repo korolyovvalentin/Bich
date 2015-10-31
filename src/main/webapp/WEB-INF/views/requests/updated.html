@@ -24,9 +24,9 @@
         <table class="table">
             <thead>
             <tr>
-                <th>Points</th>
-                <!--<th>Departure</th>-->
-                <!--<th>Arrival</th>-->
+                <!--<th>Points</th>-->
+                <th>Departure</th>
+                <th>Arrival</th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -34,22 +34,22 @@
             </thead>
             <tbody>
             <tr th:each="request, status : ${requests}">
-                <td>
-                    <a data-toggle="collapse"
-                       th:text="${request.ride.points[0].city.name} + ' &mdash; ' + ${request.ride.points[#lists.size(request.ride.points) - 1].city.name}"
-                       th:href="|#collapse${status.index}|">
-                        Link with href
-                    </a>
+                <!--<td>-->
+                    <!--<a data-toggle="collapse"-->
+                       <!--th:text="${request.ride.points[0].city.name} + ' &mdash; ' + ${request.ride.points[#lists.size(request.ride.points) - 1].city.name}"-->
+                       <!--th:href="|#collapse${status.index}|">-->
+                        <!--Link with href-->
+                    <!--</a>-->
 
-                    <div class="collapse" th:id="|collapse${status.index}|">
-                        <ul class="list-unstyled">
-                            <li th:each="point : ${request.ride.points}" th:text="${point.city.name}"></li>
-                        </ul>
-                    </div>
-                </td>
-                <!--<td th:text="${request.ride.departure.name}"></td>-->
-                <!--<td th:text="${request.ride.arrival.name}"></td>-->
-                <td th:text="${request.ride.date}"></td>
+                    <!--<div class="collapse" th:id="|collapse${status.index}|">-->
+                        <!--<ul class="list-unstyled">-->
+                            <!--<li th:each="point : ${request.ride.points}" th:text="${point.city.name}"></li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</td>-->
+                <td th:text="${request.start}"></td>
+                <td th:text="${request.finish}"></td>
+                <td th:text="${request.date}"></td>
                 <td th:text="${request.status}"></td>
                 <td>
                     <form action="#" th:action="@{/beatnik/requests/markAsOld}" method="post" role="form">

@@ -23,14 +23,15 @@ public class RequestsNewQuery implements Query<Request> {
 
     @Override
     public Collection<Request> query(Criteria criteria) {
-        RideCriteria placeCriteria = (RideCriteria)criteria;
+        RideCriteria rideCriteria = (RideCriteria)criteria;
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Request> builderCriteria = builder.createQuery(Request.class);
         Root<Request> root = builderCriteria.from(Request.class);
         builderCriteria.select(root);
-        builderCriteria.where(builder.equal(root.get("ride"), placeCriteria.getRide()));
+        builderCriteria.where(builder.equal(root.get("ride"), rideCriteria.getRide()));
         builderCriteria.where(builder.equal(root.get("status"), RequestStatus.NEW));
+        builderCriteria.where(builder.equal(root.get("ride").get("owner"), rideCriteria.getAccount()));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }
