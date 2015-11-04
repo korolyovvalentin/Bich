@@ -54,6 +54,6 @@ public class City implements java.io.Serializable {
     @Override
     public boolean equals(Object obj) {
         City c = (City) obj;
-        return this.id == c.id || this.name.equals(c.name);
+        return (this.id != null && this.id == c.id) || this.name.equals(c.name);
     }
 }

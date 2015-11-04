@@ -74,7 +74,6 @@ public class SearchPathServiceTest {
         ride1.getPoints().add(new RidePoint(ride1, 1, city2));
         ride1.getPoints().add(new RidePoint(ride1, 2, city4));
 
-
         ride2.getPoints().add(new RidePoint(ride2, 0, city1));
         ride2.getPoints().add(new RidePoint(ride2, 1, city3));
         ride2.getPoints().add(new RidePoint(ride2, 2, city4));

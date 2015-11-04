@@ -184,9 +184,9 @@ public class AvailablePathsQuery implements Query<Path> {
     private boolean hasCorrectOrder(Ride ride, City first, City second) {
         int firstIndex = 0, secondIndex = 0;
         for (RidePoint point : ride.getPoints()) {
-            if (Objects.equals(point.getCity(), first))
+            if (point.getCity().equals(first))
                 firstIndex = point.getOrderField();
-            if (Objects.equals(point.getCity(), second))
+            if (point.getCity().equals(second))
                 secondIndex = point.getOrderField();
         }
         return firstIndex < secondIndex;
