@@ -107,7 +107,7 @@ public class PathController {
 
         createPathRequest.execute(new PathRequestCriteria(beatnik, rides, start, end));
 
-        ModelAndView model = new ModelAndView(new RedirectView("/beatnik/requests", false));
+        ModelAndView model = new ModelAndView(new RedirectView("/beatnik/paths", false));
         MessageHelper.addSuccessAttribute(model, "Request was successfully added");
         return model;
     }
