@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Repository("cityByNameQuery")
 public class CityByNameQuery implements QuerySingle<City> {
@@ -19,9 +20,11 @@ public class CityByNameQuery implements QuerySingle<City> {
     public City query(Criteria criteria) {
         NameCriteria idCriteria = (NameCriteria) criteria;
 
-        return entityManager
+        List<City> result =  entityManager
                 .createNamedQuery(City.FIND_BY_NAME, City.class)
                 .setParameter("name", idCriteria.getName())
-                .getSingleResult();
+                .getResultList();
+
+        return result.isEmpty() ? null : result.get(0);
     }
 }

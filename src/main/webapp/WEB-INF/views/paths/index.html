@@ -37,9 +37,10 @@
                     name="start"
                     class="form-control"
                     th:field="*{start}">
+                <option value="-1">None</option>
                 <option th:each="city : ${model.cities}"
                         th:value="${city.name}"
-                        th:text="${city.name}">Wireframe
+                        th:text="${city.name}">
                 </option>
             </select>
         </div>
@@ -51,9 +52,10 @@
                     name="end"
                     class="form-control"
                     th:field="*{end}">
+                <option value="-1">None</option>
                 <option th:each="city : ${model.cities}"
                         th:value="${city.name}"
-                        th:text="${city.name}">Wireframe
+                        th:text="${city.name}">
                 </option>
             </select>
         </div>
@@ -67,6 +69,9 @@
                        class="form-control datepicker"
                        readonly="readonly"
                        th:field="*{date}"/>
+                <a id="reset-date" class="remove-button" href="#">
+                    '<img style="margin-top: 5px" src="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_highlight_remove_48px-32.png"/>
+                </a>
             </div>
         </div>
 
@@ -77,6 +82,11 @@
         </div>
     </form>
 
+    <div th:if="${#lists.isEmpty(model.paths)}">
+        <h4>
+            No rides found
+        </h4>
+    </div>
 
     <div th:if="${not #lists.isEmpty(model.paths)}">
         <table class="table">
@@ -137,9 +147,13 @@
 
 <script type="text/javascript" lang="javascript">
     $(document).ready(function () {
-        $(".datepicker").datepicker();
+        $('.datepicker').datepicker();
 
-        $("#add-point-btn").click(addPoint);
+        $('#add-point-btn').click(addPoint);
+
+        $('#reset-date').click(function(){
+            $('#filter-date').val('');
+        })
     });
 </script>
 

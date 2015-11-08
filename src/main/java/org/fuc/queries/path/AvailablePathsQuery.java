@@ -48,7 +48,6 @@ public class AvailablePathsQuery implements Query<Path> {
             }
         }
 
-
         return result;
     }
 

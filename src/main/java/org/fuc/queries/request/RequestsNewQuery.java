@@ -2,9 +2,7 @@ package org.fuc.queries.request;
 
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
-import org.fuc.core.criterias.PlaceCriteria;
 import org.fuc.core.criterias.RideCriteria;
-import org.fuc.entities.PlaceRequest;
 import org.fuc.entities.Request;
 import org.fuc.entities.RequestStatus;
 import org.springframework.stereotype.Repository;
@@ -23,15 +21,16 @@ public class RequestsNewQuery implements Query<Request> {
 
     @Override
     public Collection<Request> query(Criteria criteria) {
-        RideCriteria rideCriteria = (RideCriteria)criteria;
+        RideCriteria rideCriteria = (RideCriteria) criteria;
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Request> builderCriteria = builder.createQuery(Request.class);
         Root<Request> root = builderCriteria.from(Request.class);
-        builderCriteria.select(root);
-        builderCriteria.where(builder.equal(root.get("ride"), rideCriteria.getRide()));
-        builderCriteria.where(builder.equal(root.get("status"), RequestStatus.NEW));
-        builderCriteria.where(builder.equal(root.get("ride").get("owner"), rideCriteria.getAccount()));
+        builderCriteria
+//                .select(root)
+                .where(builder.equal(root.get("status"), RequestStatus.NEW))
+                .where(builder.equal(root.get("owner"), rideCriteria.getAccount()))
+                .where(builder.equal(root.get("ride"), rideCriteria.getRide()));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }
