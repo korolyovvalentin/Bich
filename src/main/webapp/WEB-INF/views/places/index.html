@@ -50,7 +50,12 @@
                     <a th:href="@{'/beatnik/place_requests/' + ${place.id} + '/create'}">Create Request</a>
                 </td>
                 <td sec:authorize="hasRole('ROLE_BUSINESS')">
-                    <a th:href="@{'/business/places/' + ${place.id} + '/requests'}">Watch New Requests</a>
+                    <div>
+                        <a th:href="@{'/business/places/' + ${place.id} + '/requests'}">Watch New Requests</a>
+                    </div>
+                    <div>
+                        <a th:href="@{'/business/places/' + ${place.id} + '/reviews'}">Watch Review</a>
+                    </div>
                 </td>
             </tr>
         </table>

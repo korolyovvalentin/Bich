@@ -1,6 +1,5 @@
 package org.fuc.controllers;
 
-import ma.glasnost.orika.MapperFacade;
 import org.fuc.core.Command;
 import org.fuc.core.Criteria;
 import org.fuc.core.Query;
@@ -36,9 +35,6 @@ import java.util.List;
 @RequestMapping("/beatnik/paths")
 @Secured("ROLE_BEATNIK")
 public class PathController {
-    @Autowired
-    private MapperFacade mapper;
-
     @Autowired
     @Qualifier("rideByIdQuery")
     private QuerySingle<Ride> rideByIdQuery;

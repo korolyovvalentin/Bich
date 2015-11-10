@@ -26,7 +26,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/business/places")
@@ -62,6 +64,10 @@ public class PlaceController {
     @Qualifier("updatePlaceRequestCommand")
     private Command<PlaceRequest> updatePlaceRequest;
 
+    @Autowired
+    @Qualifier("placeReviewsQuery")
+    private Query<PlaceRequest> oldPlaceRequestQuery;
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public ModelAndView index(Principal principal) {
@@ -72,6 +78,14 @@ public class PlaceController {
             rideVms.add(mapper.map(place, PlaceVm.class));
         }
         return new ModelAndView("places/index", "places", rideVms);
+    }
+
+    @RequestMapping(value = "/{id}/reviews", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public ModelAndView placeReviews(@PathVariable Long id) {
+        Place place = placeByIdQuery.query(new IdCriteria(id));
+        List<PlaceRequest> requests = new LinkedList<>(oldPlaceRequestQuery.query(new PlaceCriteria(place)));
+        return new ModelAndView("place_review/index", "requests", requests);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)

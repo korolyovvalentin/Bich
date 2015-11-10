@@ -102,11 +102,21 @@ public class PlaceRequestController {
         return new ModelAndView("place_requests/index", "requests", requestVms);
     }
 
-    @RequestMapping(value = "/markAsOld", method = RequestMethod.POST)
-    public ModelAndView declineRequest(@RequestParam("request_id") Long requestId) {
-        PlaceRequest request = placeRequestById.query(new IdCriteria(requestId));
-        request.setStatus(RequestStatus.OLD);
-        updatePlaceRequest.execute(request);
+    @RequestMapping(value = "/{id}/review", method = RequestMethod.GET)
+    public ModelAndView reviewPlace(@PathVariable Long id) {
+        PlaceRequest placeRequest = placeRequestById.query(new IdCriteria(id));
+        return new ModelAndView("place_review/create", "request", placeRequest);
+    }
+
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public ModelAndView declineRequest(@ModelAttribute PlaceRequest request) {
+        PlaceRequest r = placeRequestById.query(new IdCriteria(request.getId()));
+
+        r.setStatus(RequestStatus.OLD);
+        r.setComment(request.getComment());
+        r.setRating(request.getRating());
+
+        updatePlaceRequest.execute(r);
 
         return new ModelAndView(new RedirectView("/beatnik/place_requests/requests", false));
     }

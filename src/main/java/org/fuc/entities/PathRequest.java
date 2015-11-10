@@ -16,6 +16,10 @@ public class PathRequest {
 
     private String status;
 
+    private Integer rating;
+
+    private String comment;
+
     private Date date;
 
     private String start;
@@ -92,5 +96,21 @@ public class PathRequest {
 
     public void setFinish(String finish) {
         this.finish = finish;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
