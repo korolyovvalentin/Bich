@@ -60,10 +60,6 @@
                 </td>
                 <td sec:authorize="hasRole('ROLE_BEATNIK')">
                     <a th:href="@{'/beatnik/place_requests/' + ${request.id} + '/review'}">Review</a>
-                    <!--<form action="#" th:action="@{/beatnik/place_requests/markAsOld}" method="post" role="form">-->
-                        <!--<input type="hidden" name="request_id" th:value="${request.id}"/>-->
-                        <!--<button type="submit" class="btn-link">Mark as Old</button>-->
-                    <!--</form>-->
                 </td>
             </tr>
         </table>

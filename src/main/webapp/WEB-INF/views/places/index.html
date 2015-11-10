@@ -46,13 +46,18 @@
                 <td th:text="${place.type}">ride</td>
                 <td th:text="${place.city.name}">ride</td>
                 <td th:text="${place.description}">ride</td>
-                <td sec:authorize="hasRole('ROLE_BEATNIK')">
-                    <a th:href="@{'/beatnik/place_requests/' + ${place.id} + '/create'}">Create Request</a>
-                </td>
-                <td sec:authorize="hasRole('ROLE_BUSINESS')">
-                    <div>
+                <!--<td sec:authorize="hasRole('ROLE_BEATNIK')">-->
+                    <!--<a th:href="@{'/beatnik/place_requests/' + ${place.id} + '/create'}">Create Request</a>-->
+                <!--</td>-->
+                <td >
+                    <div sec:authorize="hasRole('ROLE_BUSINESS')">
                         <a th:href="@{'/business/places/' + ${place.id} + '/requests'}">Watch New Requests</a>
                     </div>
+
+                    <div sec:authorize="hasRole('ROLE_BEATNIK')">
+                        <a th:href="@{'/beatnik/place_requests/' + ${place.id} + '/create'}">Create Request</a>
+                    </div>
+
                     <div>
                         <a th:href="@{'/business/places/' + ${place.id} + '/reviews'}">Watch Review</a>
                     </div>
