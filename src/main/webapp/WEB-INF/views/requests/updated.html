@@ -34,31 +34,19 @@
             </thead>
             <tbody>
             <tr th:each="request, status : ${requests}">
-                <!--<td>-->
-                    <!--<a data-toggle="collapse"-->
-                       <!--th:text="${request.ride.points[0].city.name} + ' &mdash; ' + ${request.ride.points[#lists.size(request.ride.points) - 1].city.name}"-->
-                       <!--th:href="|#collapse${status.index}|">-->
-                        <!--Link with href-->
-                    <!--</a>-->
-
-                    <!--<div class="collapse" th:id="|collapse${status.index}|">-->
-                        <!--<ul class="list-unstyled">-->
-                            <!--<li th:each="point : ${request.ride.points}" th:text="${point.city.name}"></li>-->
-                        <!--</ul>-->
-                    <!--</div>-->
-                <!--</td>-->
                 <td th:text="${request.start}"></td>
                 <td th:text="${request.finish}"></td>
                 <td th:text="${request.date}"></td>
                 <td th:text="${request.status}"></td>
                 <td>
-                    <form action="#" th:action="@{/beatnik/requests/markAsOld}" method="post" role="form">
-                        <input type="hidden" name="request_id" th:value="${request.id}"/>
+                    <!--<form action="#" th:action="@{/beatnik/requests/markAsOld}" method="post" role="form">-->
+                        <!--<input type="hidden" name="request_id" th:value="${request.id}"/>-->
 
-                        <div>
-                            <button type="submit" class="btn-link">Mark as Old</button>
-                        </div>
-                    </form>
+                        <!--<div>-->
+                            <!--<button type="submit" class="btn-link">Mark as Old</button>-->
+                        <!--</div>-->
+                    <!--</form>-->
+                    <a th:href="@{'/beatnik/requests/' + ${request.id} + '/review'}">Review</a>
                 </td>
             </tr>
             </tbody>

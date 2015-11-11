@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -99,5 +96,24 @@ public class RequestController {
         request.setStatus(RequestStatus.OLD);
         updatePathRequest.execute(request);
         return new ModelAndView(new RedirectView("/beatnik/requests/updated", false));
+    }
+
+    @RequestMapping(value = "/{id}/review", method = RequestMethod.GET)
+    public ModelAndView review(@PathVariable Long id) {
+        PathRequest request = pathRequestById.query(new IdCriteria(id));
+        return new ModelAndView("ride_review/create", "request", request);
+    }
+
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public ModelAndView createReview(@ModelAttribute PathRequest request) {
+        PathRequest r = pathRequestById.query(new IdCriteria(request.getId()));
+
+        r.setStatus(RequestStatus.OLD);
+        r.setComment(request.getComment());
+        r.setRating(request.getRating());
+
+        updatePathRequest.execute(r);
+
+        return new ModelAndView(new RedirectView("/beatnik/place_requests/requests", false));
     }
 }

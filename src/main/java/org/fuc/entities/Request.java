@@ -23,7 +23,11 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "request_id_seq")
     private Long id;
 
+    private Integer rating;
+
     private String status;
+
+    private String comment;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "RIDE_ID", nullable = false)
@@ -84,5 +88,21 @@ public class Request {
 
     public void setPathRequest(PathRequest pathRequest) {
         this.pathRequest = pathRequest;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
