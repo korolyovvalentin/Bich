@@ -29,11 +29,8 @@ public class RequestsNewQuery implements Query<Request> {
         builderCriteria.select(root);
 
         builderCriteria.where(builder.and(
-                builder.equal(root.get("owner"), rideCriteria.getAccount()),
-                builder.and(
-                        builder.equal(root.get("ride"), rideCriteria.getRide()),
-                        builder.equal(root.get("status"), RequestStatus.NEW)
-                )
+                builder.equal(root.get("ride"), rideCriteria.getRide()),
+                builder.equal(root.get("status"), RequestStatus.NEW)
         ));
 
 //        builderCriteria.where(builder.equal(root.get("owner"), rideCriteria.getAccount()));

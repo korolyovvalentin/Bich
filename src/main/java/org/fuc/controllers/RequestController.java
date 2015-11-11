@@ -114,6 +114,6 @@ public class RequestController {
 
         updatePathRequest.execute(r);
 
-        return new ModelAndView(new RedirectView("/beatnik/place_requests/requests", false));
+        return new ModelAndView(new RedirectView("/beatnik/requests/updated", false));
     }
 }

@@ -46,7 +46,23 @@
                             <!--<button type="submit" class="btn-link">Mark as Old</button>-->
                         <!--</div>-->
                     <!--</form>-->
-                    <a th:href="@{'/beatnik/requests/' + ${request.id} + '/review'}">Review</a>
+                    <!--<a th:href="@{'/beatnik/requests/' + ${request.id} + '/review'}">Review</a>-->
+
+                    <div th:if="${request.status eq 'Approved'}">
+                        <a th:href="@{'/beatnik/requests/' + ${request.id} + '/review'}">Review</a>
+                    </div>
+                    <div th:if="${request.status eq 'Declined'}">
+                        <form action="#"
+                              method="post"
+                              role="form"
+                              th:action="@{/beatnik/requests/markAsOld}">
+                            <input type="hidden" name="request_id" th:value="${request.id}"/>
+
+                            <div>
+                                <button type="submit" class="btn-link">Mark as Old</button>
+                            </div>
+                        </form>
+                    </div>
                 </td>
             </tr>
             </tbody>
