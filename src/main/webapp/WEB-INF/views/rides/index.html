@@ -66,23 +66,51 @@
                 <td th:text="${ride.date}">ride</td>
                 <td th:text="${ride.maxParticipants}">ride</td>
 
-                <td sec:authorize="hasRole('ROLE_DRIVER')" th:if="${ride.requestsCount} le 0">
-                    <a th:href="@{'/driver/rides/' + ${ride.id} + '/requests'}">
-                        Watch new requests
-                    </a>
-                </td>
-                <td sec:authorize="hasRole('ROLE_DRIVER')" th:if="${ride.requestsCount} gt 0">No Requests</td>
-                <td sec:authorize="hasRole('ROLE_BEATNIK')">
-                    <form action="#" th:action="@{/beatnik/requests/create}" method="post" role="form">
-                        <input type="hidden" id="ride_id" name="ride_id" th:value="${ride.id}"/>
-
-                        <div class="form-group">
-                            <div>
-                                <button type="submit" class="btn-link">Create request</button>
-                            </div>
+                <td>
+                    <div sec:authorize="hasRole('ROLE_DRIVER')">
+                        <div th:if="${ride.requestsCount} le 0">
+                            <a th:href="@{'/driver/rides/' + ${ride.id} + '/requests'}">
+                                Watch new requests
+                            </a>
                         </div>
-                    </form>
+                        <div th:if="${ride.requestsCount} gt 0">
+                            No Requests
+                        </div>
+                        <div>
+                            <a th:href="@{'/driver/rides/' + ${ride.id} + '/reviews'}">Watch Review</a>
+                        </div>
+                    </div>
+
+                    <div sec:authorize="hasRole('ROLE_BEATNIK')">
+                        <form action="#" th:action="@{/beatnik/requests/create}" method="post" role="form">
+                            <input type="hidden" id="ride_id" name="ride_id" th:value="${ride.id}"/>
+
+                            <div class="form-group">
+                                <div>
+                                    <button type="submit" class="btn-link">Create request</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </td>
+
+                <!--<td sec:authorize="hasRole('ROLE_DRIVER')" th:if="${ride.requestsCount} le 0">-->
+                    <!--<a th:href="@{'/driver/rides/' + ${ride.id} + '/requests'}">-->
+                        <!--Watch new requests-->
+                    <!--</a>-->
+                <!--</td>-->
+                <!--<td sec:authorize="hasRole('ROLE_DRIVER')" th:if="${ride.requestsCount} gt 0">No Requests</td>-->
+                <!--<td sec:authorize="hasRole('ROLE_BEATNIK')">-->
+                    <!--<form action="#" th:action="@{/beatnik/requests/create}" method="post" role="form">-->
+                        <!--<input type="hidden" id="ride_id" name="ride_id" th:value="${ride.id}"/>-->
+
+                        <!--<div class="form-group">-->
+                            <!--<div>-->
+                                <!--<button type="submit" class="btn-link">Create request</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</form>-->
+                <!--</td>-->
             </tr>
         </table>
     </div>

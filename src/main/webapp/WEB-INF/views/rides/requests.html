@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Rides</title>
+    <title>Requests</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen"
           th:href="@{/resources/css/bootstrap.min.css}"/>
@@ -12,7 +12,7 @@
 <body>
 <div th:replace="fragments/header :: header">&nbsp;</div>
 <div class="container">
-    <h1 class="page-header">Rides</h1>
+    <h1 class="page-header">Requests</h1>
 
     <div th:if="${#lists.isEmpty(requests)}">
         <h4>

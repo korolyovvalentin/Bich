@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/driver/rides")
@@ -43,6 +44,10 @@ public class RideController {
     @Autowired
     @Qualifier("ridesByDriverQuery")
     private Query<Ride> ridesByOwnerQuery;
+
+    @Autowired
+    @Qualifier("rideByIdQuery")
+    private QuerySingle<Ride> rideById;
     @Autowired
     @Qualifier("createRideCommand")
     private Command<RidePointsCriteria> createRide;
@@ -59,6 +64,10 @@ public class RideController {
     @Autowired
     @Qualifier("updateRequestCommand")
     private Command<Request> updateRequest;
+
+    @Autowired
+    @Qualifier("rideReviewsQuery")
+    private Query<Request> rideReviews;
 
     @Autowired
     @Qualifier("updatePathRequestStatus")
@@ -117,6 +126,17 @@ public class RideController {
         ModelAndView model = new ModelAndView("rides/requests");
         model.addObject("requests", requestVms);
         return model;
+    }
+
+    @RequestMapping(value = "/{id}/reviews", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public ModelAndView placeReviews(@PathVariable Long id, Principal principal) {
+        Ride ride = rideById.query(new IdCriteria(id));
+        Account account = findAccountByEmail.query(new EmailCriteria(principal.getName()));
+
+        List<Request> requests = new LinkedList<>(rideReviews.query(new RideCriteria(ride, account)));
+
+        return new ModelAndView("ride_review/index", "requests", requests);
     }
 
     @RequestMapping(value = "/approveRequest", method = RequestMethod.POST)

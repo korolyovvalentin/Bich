@@ -27,6 +27,7 @@ public class UpdatePathRequestCommand implements Command<PathRequest> {
         for (Request request : pathRequest.getRequests()) {
             request.setComment(pathRequest.getComment());
             request.setRating(pathRequest.getRating());
+            request.setStatus(pathRequest.getStatus());
 
             updateRequest.execute(request);
         }
