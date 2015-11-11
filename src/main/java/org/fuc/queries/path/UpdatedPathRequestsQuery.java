@@ -28,11 +28,20 @@ public class UpdatedPathRequestsQuery implements Query<PathRequest> {
         CriteriaQuery<PathRequest> builderCriteria = builder.createQuery(PathRequest.class);
         Root<PathRequest> root = builderCriteria.from(PathRequest.class);
         builderCriteria.select(root);
-        builderCriteria.where(builder.equal(root.get("owner"), accountCriteria.getAccount()));
-        builderCriteria.where(builder.or(
-                builder.equal(root.get("status"), RequestStatus.APPROVED),
-                builder.equal(root.get("status"), RequestStatus.DECLINED)
+
+        builderCriteria.where(builder.and(
+                builder.equal(root.get("owner"), accountCriteria.getAccount()),
+                builder.or(
+                        builder.equal(root.get("status"), RequestStatus.APPROVED),
+                        builder.equal(root.get("status"), RequestStatus.DECLINED)
+                )
         ));
+
+//        builderCriteria.where(builder.equal(root.get("owner"), accountCriteria.getAccount()));
+//        builderCriteria.where(builder.or(
+//                builder.equal(root.get("status"), RequestStatus.APPROVED),
+//                builder.equal(root.get("status"), RequestStatus.DECLINED)
+//        ));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }

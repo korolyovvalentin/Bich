@@ -28,12 +28,20 @@ public class RequestsNewQuery implements Query<Request> {
         Root<Request> root = builderCriteria.from(Request.class);
         builderCriteria.select(root);
 
-        builderCriteria.where(builder.equal(root.get("owner"), rideCriteria.getAccount()));
-        builderCriteria.where(builder.equal(root.get("ride"), rideCriteria.getRide()));
-        builderCriteria.where(builder.or(
-                builder.equal(root.get("status"), RequestStatus.NEW),
-                builder.equal(root.get("status"), RequestStatus.NEW)
+        builderCriteria.where(builder.and(
+                builder.equal(root.get("owner"), rideCriteria.getAccount()),
+                builder.and(
+                        builder.equal(root.get("ride"), rideCriteria.getRide()),
+                        builder.equal(root.get("status"), RequestStatus.NEW)
+                )
         ));
+
+//        builderCriteria.where(builder.equal(root.get("owner"), rideCriteria.getAccount()));
+//        builderCriteria.where(builder.equal(root.get("ride"), rideCriteria.getRide()));
+//        builderCriteria.where(builder.or(
+//                builder.equal(root.get("status"), RequestStatus.NEW),
+//                builder.equal(root.get("status"), RequestStatus.NEW)
+//        ));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }

@@ -27,11 +27,19 @@ public class PlaceRequestsUpdatedQuery implements Query<PlaceRequest> {
         CriteriaQuery<PlaceRequest> builderCriteria = builder.createQuery(PlaceRequest.class);
         Root<PlaceRequest> root = builderCriteria.from(PlaceRequest.class);
         builderCriteria.select(root);
-        builderCriteria.where(builder.equal(root.get("owner"), placeCriteria.getAccount()));
-        builderCriteria.where(builder.or(
-                builder.equal(root.get("status"), RequestStatus.APPROVED),
-                builder.equal(root.get("status"), RequestStatus.DECLINED)
+
+        builderCriteria.where(builder.and(
+                builder.equal(root.get("owner"), placeCriteria.getAccount()),
+                builder.or(
+                        builder.equal(root.get("status"), RequestStatus.APPROVED),
+                        builder.equal(root.get("status"), RequestStatus.DECLINED)
+                )
         ));
+//        builderCriteria.where(builder.equal(root.get("owner"), placeCriteria.getAccount()));
+//        builderCriteria.where(builder.or(
+//                builder.equal(root.get("status"), RequestStatus.APPROVED),
+//                builder.equal(root.get("status"), RequestStatus.DECLINED)
+//        ));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }

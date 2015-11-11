@@ -27,8 +27,13 @@ public class PlaceRequestsNewQuery implements Query<PlaceRequest> {
         CriteriaQuery<PlaceRequest> builderCriteria = builder.createQuery(PlaceRequest.class);
         Root<PlaceRequest> root = builderCriteria.from(PlaceRequest.class);
         builderCriteria.select(root);
-        builderCriteria.where(builder.equal(root.get("place"), placeCriteria.getPlace()));
-        builderCriteria.where(builder.equal(root.get("status"), RequestStatus.NEW));
+
+        builderCriteria.where(builder.and(
+                builder.equal(root.get("place"), placeCriteria.getPlace()),
+                builder.equal(root.get("status"), RequestStatus.NEW)
+        ));
+//        builderCriteria.where(builder.equal(root.get("place"), placeCriteria.getPlace()));
+//        builderCriteria.where(builder.equal(root.get("status"), RequestStatus.NEW));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }

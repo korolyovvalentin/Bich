@@ -28,11 +28,20 @@ public class RequestsUpdatedQuery implements Query<Request> {
         CriteriaQuery<Request> builderCriteria = builder.createQuery(Request.class);
         Root<Request> root = builderCriteria.from(Request.class);
         builderCriteria.select(root);
-        builderCriteria.where(builder.equal(root.get("owner"), accountCriteria.getAccount()));
-        builderCriteria.where(builder.or(
-                builder.equal(root.get("status"), RequestStatus.APPROVED),
-                builder.equal(root.get("status"), RequestStatus.DECLINED)
+
+        builderCriteria.where(builder.and(
+                builder.equal(root.get("owner"), accountCriteria.getAccount()),
+                builder.or(
+                        builder.equal(root.get("status"), RequestStatus.APPROVED),
+                        builder.equal(root.get("status"), RequestStatus.DECLINED)
+                )
         ));
+
+//        builderCriteria.where(builder.equal(root.get("owner"), accountCriteria.getAccount()));
+//        builderCriteria.where(builder.or(
+//                builder.equal(root.get("status"), RequestStatus.APPROVED),
+//                builder.equal(root.get("status"), RequestStatus.DECLINED)
+//        ));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }
