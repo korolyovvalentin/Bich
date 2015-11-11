@@ -29,6 +29,7 @@ public class RideReviewsQuery implements Query<Request> {
         builderCriteria.select(root);
 
         builderCriteria.where(builder.equal(root.get("ride"), rideCriteria.getRide()));
+        builderCriteria.where(builder.isNotNull(root.get("comment")));
         builderCriteria.where(builder.or(
                 builder.equal(root.get("status"), RequestStatus.OLD),
                 builder.equal(root.get("status"), RequestStatus.OLD)

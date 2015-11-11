@@ -28,11 +28,22 @@ public class PlaceReviewsQuery implements Query<PlaceRequest> {
         Root<PlaceRequest> root = builderCriteria.from(PlaceRequest.class);
         builderCriteria.select(root);
 
-        builderCriteria.where(builder.equal(root.get("place"), placeCriteria.getPlace()));
-        builderCriteria.where(builder.or(
-                builder.equal(root.get("status"), RequestStatus.OLD),
-                builder.equal(root.get("status"), RequestStatus.OLD)
-        ));
+        builderCriteria.where(
+                builder.and(
+                        builder.equal(root.get("place"), placeCriteria.getPlace()),
+                        builder.and(
+                                builder.isNotNull(root.get("comment")),
+                                builder.equal(root.get("status"), RequestStatus.OLD)
+                        )
+                )
+        );
+//
+//        builderCriteria.where(builder.equal(root.get("place"), placeCriteria.getPlace()));
+//        builderCriteria.where(builder.isNotNull(root.get("comment")));
+//        builderCriteria.where(builder.or(
+//                builder.equal(root.get("status"), RequestStatus.OLD),
+//                builder.equal(root.get("status"), RequestStatus.OLD)
+//        ));
 
         return entityManager.createQuery(builderCriteria).getResultList();
     }

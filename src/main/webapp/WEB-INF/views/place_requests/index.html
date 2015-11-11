@@ -40,6 +40,7 @@
                 <th>From</th>
                 <th>To</th>
                 <th sec:authorize="hasRole('ROLE_BUSINESS')">Person</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -58,8 +59,23 @@
                         <button type="submit" class="btn-link">Decline</button>
                     </form>
                 </td>
+                <td th:text="${request.status}">ride</td>
                 <td sec:authorize="hasRole('ROLE_BEATNIK')">
-                    <a th:href="@{'/beatnik/place_requests/' + ${request.id} + '/review'}">Review</a>
+                    <div th:if="${request.status eq 'Approved'}">
+                        <a th:href="@{'/beatnik/place_requests/' + ${request.id} + '/review'}">Review</a>
+                    </div>
+                    <div th:if="${request.status eq 'Declined'}">
+                        <form action="#"
+                              method="post"
+                              role="form"
+                              th:action="@{/beatnik/place_requests/markAsOld}">
+                            <input type="hidden" name="id" th:value="${request.id}"/>
+
+                            <div>
+                                <button type="submit" class="btn-link">Mark as Old</button>
+                            </div>
+                        </form>
+                    </div>
                 </td>
             </tr>
         </table>
