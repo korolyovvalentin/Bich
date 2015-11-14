@@ -6,7 +6,6 @@ import org.fuc.entities.City;
 import org.fuc.entities.Ride;
 import org.fuc.entities.RidePoint;
 import org.fuc.queries.path.AvailablePathsQuery;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +14,11 @@ import org.junit.runners.JUnit4;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JUnit4.class)
 public class SearchPathServiceTest {
@@ -42,7 +46,7 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(city3, city4));
 
-        Assert.assertEquals(0, result.size());
+        assertThat(result, is(empty()));
     }
 
     @Test
@@ -53,7 +57,7 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(city1, city3));
 
-        Assert.assertEquals(0, result.size());
+        assertThat(result, is(empty()));
     }
 
     @Test
@@ -65,7 +69,7 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(city2, city4));
 
-        Assert.assertEquals(0, result.size());
+        assertThat(result, is(empty()));
     }
 
     @Test
@@ -82,7 +86,7 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(city1, city4));
 
-        Assert.assertEquals(2, result.size());
+        assertThat(result, hasSize(2));
     }
 
     @Test
@@ -99,7 +103,7 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(null, null));
 
-        Assert.assertEquals(2, result.size());
+        assertThat(result, hasSize(2));
     }
 
 
@@ -116,7 +120,7 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(null, city4));
 
-        Assert.assertEquals(1, result.size());
+        assertThat(result, hasSize(1));
     }
 
     @Test
@@ -132,7 +136,7 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(city2, null));
 
-        Assert.assertEquals(1, result.size());
+        assertThat(result, hasSize(1));
     }
 
     @Test
@@ -149,6 +153,6 @@ public class SearchPathServiceTest {
 
         Collection<Path> result = service.query(new PathCriteria(city1, city4));
 
-        Assert.assertEquals(0, result.size());
+        assertThat(result, is(empty()));
     }
 }
