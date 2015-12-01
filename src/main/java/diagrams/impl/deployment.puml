@@ -1,0 +1,26 @@
+@startuml
+
+package deployment {
+
+    node "Client OS" <<device>> {
+        node Browser <<application>> {
+        }
+    }
+
+    node Server <<device>> {
+        left to right direction
+
+        node "Glassfish 3.1.2" <<application server>>{
+            node BICH.war <<application>>  {
+            }
+        }
+
+        node "Oracle" <<database>> {
+        }
+    }
+
+    BICH.war --> Oracle : JDBC
+    Browser --> BICH.war : HTTP
+}
+
+@enduml
