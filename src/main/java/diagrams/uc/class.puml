@@ -1,0 +1,38 @@
+@startuml
+
+title Диаграмма классов анализа
+
+class City
+class Place
+class Ride {
+    Date date
+    City start
+    City end
+}
+class Trip
+
+abstract class Request
+
+class TripRequest
+class RideRequest
+class PlaceRequest
+
+Ride --> City
+Ride "1" o-- "0..*" RideRequest
+Place "1" o-- "0..*" PlaceRequest
+Trip "1" o-- "0..*" TripRequest
+
+TripRequest --|> Request
+RideRequest --|> Request
+PlaceRequest --|> Request
+Request --> RequestStatus
+
+enum RequestStatus {
+    NEW
+    PENDING
+    APPROVED
+    DECLINED
+    OLD
+}
+
+@enduml

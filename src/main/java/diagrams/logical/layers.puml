@@ -1,0 +1,33 @@
+@startuml
+
+title Package Diagram
+
+folder DataAccess {
+}
+
+folder BusinessLogic {
+    folder BusinessObjects {
+        artifact Ride
+        artifact Place
+        artifact Request
+    }
+    folder Commands {
+        artifact CreatePlace
+        artifact CreateRide
+        artifact CreateRequest
+        artifact UpdateRequest
+    }
+    folder Queries {
+        artifact FindRides
+        artifact GetUpdatedRequests
+    }
+
+}
+
+folder PresentationLogic {
+}
+
+DataAccess --> BusinessLogic
+PresentationLogic --> BusinessLogic
+
+@enduml

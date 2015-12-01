@@ -1,0 +1,18 @@
+@startuml
+
+left to right direction
+skinparam packageStyle rect
+
+actor :Битник: as B
+actor :Предприниматель: as BM
+actor :Водитель: as D
+
+rectangle BICH {
+    B -- (Создание заявки на место)
+    B -- (Поиск Путешествия)
+    B -- (Создание заявки на Путешествие)
+    D -- (Создание Поездки)
+    BM -- (Создание Места)
+}
+
+@enduml
