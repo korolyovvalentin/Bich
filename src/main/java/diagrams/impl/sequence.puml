@@ -1,0 +1,24 @@
+@startuml
+
+title Path request workflow
+
+participant pathController as p
+participant createPathRequestCommand as cp
+participant createRequestCommand as cr
+
+activate p
+p -> cp : execute()
+    activate cp
+
+    loop for each ride in path
+        activate cr
+            cp -> cr : execute()
+            cr --> cp
+        deactivate cr
+    end
+
+    cp --> p
+    deactivate cp
+deactivate p
+
+@enduml

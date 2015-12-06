@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>org.fuc.entities.City</OriginalElement>
+  <nodes>
+    <node x="649.6246154554663" y="232.0">org.fuc.entities.Ride</node>
+    <node x="562.0192460317458" y="947.0">org.fuc.controllers.PathController</node>
+    <node x="824.1442460317458" y="343.0">org.fuc.entities.Account</node>
+    <node x="1337.9996154554665" y="947.0">org.fuc.controllers.SignupController</node>
+    <node x="704.763901169752" y="111.0">org.fuc.entities.Request</node>
+    <node x="8.686224709097132" y="947.0">org.fuc.controllers.RideController</node>
+    <node x="715.6972345030854" y="0.0">org.fuc.entities.PathRequest</node>
+    <node x="336.4775395801987" y="0.0">org.fuc.entities.City</node>
+    <node x="917.3469389948114" y="545.0">org.fuc.entities.Place</node>
+    <node x="346.24574851862087" y="947.0">org.fuc.controllers.CityController</node>
+    <node x="322.4552558257341" y="545.0">org.fuc.core.Criteria</node>
+    <node x="317.5802558257341" y="636.0">org.fuc.core.criterias</node>
+    <node x="777.1525395801987" y="636.0">org.fuc.core.Command</node>
+    <node x="161.6862247090972" y="947.0">org.fuc.controllers.AccountController</node>
+    <node x="1156.9996154554665" y="947.0">org.fuc.controllers.RequestController</node>
+    <node x="738.1163219070133" y="947.0">org.fuc.controllers.PlaceRequestController</node>
+    <node x="984.4996154554663" y="464.0">org.fuc.entities.PlaceRequest</node>
+    <node x="994.9996154554663" y="947.0">org.fuc.controllers.PlaceController</node>
+    <node x="567.7775395801987" y="111.0">org.fuc.entities.RidePoint</node>
+    <node x="493.38025582573414" y="636.0">org.fuc.core.QuerySingle</node>
+    <node x="682.1525395801987" y="636.0">org.fuc.core.Query</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.fuc.controllers.PathController" target="org.fuc.core.Query">
+      <point x="42.5" y="-15.5" />
+      <point x="672.5192460317458" y="897.0" />
+      <point x="713.4025395801987" y="897.0" />
+      <point x="-6.25" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.entities.Account">
+      <point x="0.0" y="-15.5" />
+      <point x="1237.4996154554665" y="404.0" />
+      <point x="900.6442460317458" y="404.0" />
+      <point x="31.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceRequestController" target="org.fuc.core.Command">
+      <point x="0.0" y="-15.5" />
+      <point x="837.6163219070133" y="927.0" />
+      <point x="828.6525395801987" y="927.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.entities.PlaceRequest">
+      <point x="26.625" y="-15.5" />
+      <point x="1092.6246154554663" y="927.0" />
+      <point x="1102.905012383204" y="927.0" />
+      <point x="1102.905012383204" y="525.0" />
+      <point x="1095.6246154554663" y="525.0" />
+      <point x="47.625" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceRequestController" target="org.fuc.core.criterias">
+      <point x="-85.28571428571433" y="-15.5" />
+      <point x="752.3306076212991" y="797.0" />
+      <point x="425.9135891590675" y="797.0" />
+      <point x="33.33333333333337" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.core.criterias">
+      <point x="-62.125" y="-15.5" />
+      <point x="1003.8746154554663" y="767.0" />
+      <point x="442.5802558257342" y="767.0" />
+      <point x="50.00000000000006" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Account" target="org.fuc.entities.Ride">
+      <point x="-36.0" y="-15.5" />
+      <point x="833.1442460317458" y="323.0" />
+      <point x="686.9023932332441" y="323.0" />
+      <point x="6.777777777777828" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.entities.Account">
+      <point x="44.375" y="-15.5" />
+      <point x="1110.3746154554663" y="917.0" />
+      <point x="1134.155012383204" y="917.0" />
+      <point x="1134.155012383204" y="414.0" />
+      <point x="891.6442460317458" y="414.0" />
+      <point x="22.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.core.Criteria" target="org.fuc.core.criterias">
+      <point x="20.75" y="15.5" />
+      <point x="384.7052558257341" y="616.0" />
+      <point x="383.2052558257341" y="616.0" />
+      <point x="-9.375" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Request" target="org.fuc.entities.PathRequest">
+      <point x="-29.66666666666663" y="-15.5" />
+      <point x="719.5972345030855" y="91.0" />
+      <point x="727.7972345030854" y="91.0" />
+      <point x="-48.39999999999998" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Place" target="org.fuc.entities.City">
+      <point x="-8.75" y="-15.5" />
+      <point x="943.5969389948114" y="525.0" />
+      <point x="955.2219389948114" y="525.0" />
+      <point x="955.2219389948114" y="71.0" />
+      <point x="384.810872913532" y="71.0" />
+      <point x="19.333333333333314" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.core.Query">
+      <point x="48.363636363636374" y="-15.5" />
+      <point x="123.5498610727335" y="877.0" />
+      <point x="688.4025395801987" y="877.0" />
+      <point x="-31.25" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.core.Command">
+      <point x="-8.875" y="-15.5" />
+      <point x="1057.1246154554663" y="737.0" />
+      <point x="843.3668252944844" y="737.0" />
+      <point x="14.71428571428578" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.entities.Request">
+      <point x="-36.27272727272725" y="-15.5" />
+      <point x="38.91349743636988" y="927.0" />
+      <point x="40.5" y="927.0" />
+      <point x="40.5" y="182.0" />
+      <point x="711.1210440268949" y="182.0" />
+      <point x="-38.14285714285711" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceRequestController" target="org.fuc.core.QuerySingle">
+      <point x="-56.85714285714289" y="-15.5" />
+      <point x="780.7591790498705" y="787.0" />
+      <point x="568.5945415400198" y="787.0" />
+      <point x="16.714285714285666" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.CityController" target="org.fuc.core.Query">
+      <point x="26.0" y="-15.5" />
+      <point x="437.24574851862087" y="887.0" />
+      <point x="700.9025395801987" y="887.0" />
+      <point x="-18.75" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.PlaceRequest" target="org.fuc.entities.Place">
+      <point x="-15.875" y="15.5" />
+      <point x="1032.1246154554663" y="525.0" />
+      <point x="978.5969389948114" y="525.0" />
+      <point x="26.25" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.CityController" target="org.fuc.core.QuerySingle">
+      <point x="0.0" y="-15.5" />
+      <point x="411.24574851862087" y="867.0" />
+      <point x="535.1659701114484" y="867.0" />
+      <point x="-16.71428571428578" y="15.5" />
+    </edge>
+    <edge source="org.fuc.core.criterias" target="org.fuc.entities.City">
+      <point x="-65.625" y="-15.5" />
+      <point x="326.9552558257341" y="616.0" />
+      <point x="265.07638888888874" y="616.0" />
+      <point x="265.07638888888874" y="81.0" />
+      <point x="359.03309513575425" y="81.0" />
+      <point x="-6.444444444444457" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Place" target="org.fuc.entities.PlaceRequest">
+      <point x="8.75" y="-15.5" />
+      <point x="961.0969389948114" y="515.0" />
+      <point x="1000.3746154554663" y="515.0" />
+      <point x="-47.625" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.AccountController" target="org.fuc.core.QuerySingle">
+      <point x="54.0" y="-15.5" />
+      <point x="296.6862247090972" y="857.0" />
+      <point x="518.4516843971627" y="857.0" />
+      <point x="-33.428571428571445" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceRequestController" target="org.fuc.entities.Account">
+      <point x="28.428571428571445" y="-15.5" />
+      <point x="866.0448933355849" y="907.0" />
+      <point x="890.6525395801987" y="907.0" />
+      <point x="890.6525395801987" y="444.0" />
+      <point x="864.6442460317458" y="444.0" />
+      <point x="-4.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Place" target="org.fuc.entities.Account">
+      <point x="-26.25" y="-15.5" />
+      <point x="926.0969389948114" y="525.0" />
+      <point x="904.7775395801987" y="525.0" />
+      <point x="904.7775395801987" y="434.0" />
+      <point x="873.6442460317458" y="434.0" />
+      <point x="4.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Ride" target="org.fuc.entities.RidePoint">
+      <point x="-24.399999999999977" y="-15.5" />
+      <point x="655.7246154554664" y="172.0" />
+      <point x="592.0275395801987" y="172.0" />
+      <point x="-24.25" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.SignupController" target="org.fuc.entities.Account">
+      <point x="37.75" y="-15.5" />
+      <point x="1451.2496154554665" y="394.0" />
+      <point x="909.6442460317458" y="394.0" />
+      <point x="40.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.entities.Ride">
+      <point x="-12.090909090909122" y="-15.5" />
+      <point x="62.5" y="293.0" />
+      <point x="659.791282122133" y="293.0" />
+      <point x="-20.33333333333337" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.entities.Place">
+      <point x="8.875" y="-15.5" />
+      <point x="1074.8746154554663" y="616.0" />
+      <point x="975.6802723281446" y="616.0" />
+      <point x="23.33333333333337" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.entities.City">
+      <point x="62.125" y="-15.5" />
+      <point x="1128.1246154554663" y="927.0" />
+      <point x="1145.155012383204" y="927.0" />
+      <point x="1145.155012383204" y="61.0" />
+      <point x="391.2553173579765" y="61.0" />
+      <point x="25.77777777777777" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Ride" target="org.fuc.entities.Request">
+      <point x="0.0" y="-15.5" />
+      <point x="680.1246154554663" y="192.0" />
+      <point x="723.8353297411807" y="192.0" />
+      <point x="-25.428571428571445" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PathController" target="org.fuc.entities.Ride">
+      <point x="8.5" y="-15.5" />
+      <point x="638.5192460317458" y="857.0" />
+      <point x="658.7731129685912" y="857.0" />
+      <point x="658.7731129685912" y="323.0" />
+      <point x="680.1246154554663" y="323.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Request" target="org.fuc.entities.Account">
+      <point x="12.71428571428578" y="15.5" />
+      <point x="761.9781868840378" y="212.0" />
+      <point x="891.9775793650791" y="212.0" />
+      <point x="891.9775793650791" y="323.0" />
+      <point x="887.1442460317458" y="323.0" />
+      <point x="18.0" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.core.criterias" target="org.fuc.core.Criteria">
+      <point x="-28.125" y="-15.5" />
+      <point x="364.4552558257341" y="596.0" />
+      <point x="343.2052558257341" y="596.0" />
+      <point x="-20.75" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PathController" target="org.fuc.core.QuerySingle">
+      <point x="-8.5" y="-15.5" />
+      <point x="621.5192460317458" y="807.0" />
+      <point x="551.8802558257341" y="807.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.SignupController" target="org.fuc.core.Command">
+      <point x="-37.75" y="-15.5" />
+      <point x="1375.7496154554665" y="687.0" />
+      <point x="872.7953967230558" y="687.0" />
+      <point x="44.14285714285711" y="15.5" />
+    </edge>
+    <edge source="org.fuc.core.criterias" target="org.fuc.entities.Place">
+      <point x="65.625" y="-15.5" />
+      <point x="458.2052558257341" y="616.0" />
+      <point x="929.0136056614779" y="616.0" />
+      <point x="-23.33333333333337" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.entities.Account">
+      <point x="0.0" y="-15.5" />
+      <point x="75.18622470909713" y="927.0" />
+      <point x="73.5" y="927.0" />
+      <point x="73.5" y="414.0" />
+      <point x="828.6442460317458" y="414.0" />
+      <point x="-40.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.core.QuerySingle">
+      <point x="-44.375" y="-15.5" />
+      <point x="1021.6246154554663" y="757.0" />
+      <point x="585.3088272543056" y="757.0" />
+      <point x="33.428571428571445" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.core.criterias">
+      <point x="12.090909090909093" y="-15.5" />
+      <point x="87.27713380000625" y="817.0" />
+      <point x="325.91358915906744" y="817.0" />
+      <point x="-66.66666666666669" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceRequestController" target="org.fuc.entities.PlaceRequest">
+      <point x="85.28571428571433" y="-15.5" />
+      <point x="922.9020361927278" y="927.0" />
+      <point x="1040.5275395801987" y="927.0" />
+      <point x="1040.5275395801987" y="525.0" />
+      <point x="1063.8746154554663" y="525.0" />
+      <point x="15.875" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Ride" target="org.fuc.entities.Account">
+      <point x="13.555555555555543" y="15.5" />
+      <point x="693.6801710110219" y="313.0" />
+      <point x="851.1442460317458" y="313.0" />
+      <point x="-18.0" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.core.Command">
+      <point x="60.45454545454547" y="-15.5" />
+      <point x="135.64077016364263" y="907.0" />
+      <point x="784.5096824373416" y="907.0" />
+      <point x="-44.14285714285711" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.entities.Ride">
+      <point x="17.888888888888914" y="-15.5" />
+      <point x="1255.3885043443552" y="897.0" />
+      <point x="1292.470533603512" y="897.0" />
+      <point x="1292.470533603512" y="293.0" />
+      <point x="707.2357265665773" y="293.0" />
+      <point x="27.111111111111086" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.AccountController" target="org.fuc.entities.Account">
+      <point x="-54.0" y="-15.5" />
+      <point x="188.6862247090972" y="807.0" />
+      <point x="166.06509164594252" y="807.0" />
+      <point x="166.06509164594252" y="424.0" />
+      <point x="837.6442460317458" y="424.0" />
+      <point x="-31.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.core.QuerySingle">
+      <point x="36.27272727272728" y="-15.5" />
+      <point x="111.45895198182438" y="847.0" />
+      <point x="501.737398682877" y="847.0" />
+      <point x="-50.14285714285717" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.CityController" target="org.fuc.core.criterias">
+      <point x="-26.0" y="-15.5" />
+      <point x="385.24574851862087" y="837.0" />
+      <point x="375.91358915906744" y="837.0" />
+      <point x="-16.666666666666686" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.CityController" target="org.fuc.entities.City">
+      <point x="-52.0" y="-15.5" />
+      <point x="359.24574851862087" y="807.0" />
+      <point x="258.6319444444444" y="807.0" />
+      <point x="258.6319444444444" y="71.0" />
+      <point x="352.5886506913098" y="71.0" />
+      <point x="-12.888888888888914" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.CityController" target="org.fuc.core.Command">
+      <point x="52.0" y="-15.5" />
+      <point x="463.24574851862087" y="917.0" />
+      <point x="799.2239681516273" y="917.0" />
+      <point x="-29.428571428571445" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.PlaceRequest" target="org.fuc.entities.Account">
+      <point x="0.0" y="-15.5" />
+      <point x="1047.9996154554663" y="424.0" />
+      <point x="882.6442460317458" y="424.0" />
+      <point x="13.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceController" target="org.fuc.core.Query">
+      <point x="-26.625" y="-15.5" />
+      <point x="1039.3746154554663" y="747.0" />
+      <point x="738.4025395801987" y="747.0" />
+      <point x="18.75" y="15.5" />
+    </edge>
+    <edge source="org.fuc.core.criterias" target="org.fuc.entities.Account">
+      <point x="46.875" y="-15.5" />
+      <point x="439.4552558257341" y="616.0" />
+      <point x="437.9552558257341" y="616.0" />
+      <point x="437.9552558257341" y="434.0" />
+      <point x="846.6442460317458" y="434.0" />
+      <point x="-22.5" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RideController" target="org.fuc.entities.City">
+      <point x="-60.454545454545496" y="-15.5" />
+      <point x="14.731679254551636" y="927.0" />
+      <point x="18.5" y="927.0" />
+      <point x="18.5" y="51.0" />
+      <point x="339.69976180242094" y="51.0" />
+      <point x="-25.77777777777777" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PathController" target="org.fuc.core.Command">
+      <point x="59.5" y="-15.5" />
+      <point x="689.5192460317458" y="927.0" />
+      <point x="813.9382538659131" y="927.0" />
+      <point x="-14.714285714285666" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.entities.PathRequest">
+      <point x="71.55555555555566" y="-15.5" />
+      <point x="1309.0551710110221" y="927.0" />
+      <point x="1325.470533603512" y="927.0" />
+      <point x="1325.470533603512" y="51.0" />
+      <point x="824.5972345030854" y="51.0" />
+      <point x="48.39999999999998" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.PathRequest" target="org.fuc.entities.Request">
+      <point x="-24.200000000000045" y="15.5" />
+      <point x="751.9972345030853" y="91.0" />
+      <point x="749.263901169752" y="91.0" />
+      <point x="0.0" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.core.criterias">
+      <point x="-71.55555555555543" y="-15.5" />
+      <point x="1165.9440598999108" y="727.0" />
+      <point x="459.2469224924008" y="727.0" />
+      <point x="66.66666666666669" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.core.Command">
+      <point x="-17.888888888888914" y="-15.5" />
+      <point x="1219.6107265665773" y="697.0" />
+      <point x="858.0811110087702" y="697.0" />
+      <point x="29.428571428571445" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.RidePoint" target="org.fuc.entities.City">
+      <point x="0.0" y="-15.5" />
+      <point x="616.2775395801987" y="81.0" />
+      <point x="378.3664284690876" y="81.0" />
+      <point x="12.888888888888914" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PathController" target="org.fuc.entities.City">
+      <point x="-25.5" y="-15.5" />
+      <point x="604.5192460317458" y="817.0" />
+      <point x="478.0802558257341" y="817.0" />
+      <point x="478.0802558257341" y="91.0" />
+      <point x="371.92198402464317" y="91.0" />
+      <point x="6.444444444444457" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.RidePoint" target="org.fuc.entities.Ride">
+      <point x="24.25" y="15.5" />
+      <point x="640.5275395801987" y="162.0" />
+      <point x="667.9246154554662" y="162.0" />
+      <point x="-12.200000000000045" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PathController" target="org.fuc.core.criterias">
+      <point x="-59.5" y="-15.5" />
+      <point x="570.5192460317458" y="837.0" />
+      <point x="392.5802558257341" y="837.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.core.QuerySingle">
+      <point x="-53.666666666666515" y="-15.5" />
+      <point x="1183.8329487888" y="717.0" />
+      <point x="602.0231129685912" y="717.0" />
+      <point x="50.14285714285711" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.Request" target="org.fuc.entities.Ride">
+      <point x="0.0" y="15.5" />
+      <point x="749.263901169752" y="212.0" />
+      <point x="704.5246154554663" y="212.0" />
+      <point x="24.399999999999977" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceRequestController" target="org.fuc.entities.Place">
+      <point x="56.85714285714289" y="-15.5" />
+      <point x="894.4734647641562" y="917.0" />
+      <point x="952.3469389948114" y="917.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="org.fuc.core.criterias" target="org.fuc.entities.Ride">
+      <point x="28.125" y="-15.5" />
+      <point x="420.7052558257341" y="616.0" />
+      <point x="426.9552558257341" y="616.0" />
+      <point x="426.9552558257341" y="313.0" />
+      <point x="673.3468376776884" y="313.0" />
+      <point x="-6.777777777777828" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.core.Query">
+      <point x="-35.77777777777783" y="-15.5" />
+      <point x="1201.7218376776887" y="707.0" />
+      <point x="750.9025395801987" y="707.0" />
+      <point x="31.25" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.RequestController" target="org.fuc.entities.Request">
+      <point x="53.66666666666674" y="-15.5" />
+      <point x="1291.166282122133" y="917.0" />
+      <point x="1314.470533603512" y="917.0" />
+      <point x="1314.470533603512" y="192.0" />
+      <point x="787.4067583126091" y="192.0" />
+      <point x="38.14285714285711" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PlaceRequestController" target="org.fuc.core.Query">
+      <point x="-28.428571428571445" y="-15.5" />
+      <point x="809.187750478442" y="777.0" />
+      <point x="725.9025395801987" y="777.0" />
+      <point x="6.25" y="15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.AccountController" target="org.fuc.core.criterias">
+      <point x="0.0" y="-15.5" />
+      <point x="242.6862247090972" y="837.0" />
+      <point x="359.2469224924008" y="837.0" />
+      <point x="-33.333333333333314" y="15.5" />
+    </edge>
+    <edge source="org.fuc.entities.PathRequest" target="org.fuc.entities.Account">
+      <point x="24.200000000000045" y="15.5" />
+      <point x="800.3972345030854" y="91.0" />
+      <point x="918.6204365079362" y="91.0" />
+      <point x="918.6204365079362" y="323.0" />
+      <point x="905.1442460317458" y="323.0" />
+      <point x="36.0" y="-15.5" />
+    </edge>
+    <edge source="org.fuc.controllers.PathController" target="org.fuc.entities.Account">
+      <point x="25.5" y="-15.5" />
+      <point x="655.5192460317458" y="867.0" />
+      <point x="671.6525395801987" y="867.0" />
+      <point x="671.6525395801987" y="444.0" />
+      <point x="855.6442460317458" y="444.0" />
+      <point x="-13.5" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.6000000000000001" x="778.4999999999999" y="492.6666666666666" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,0 +1,41 @@
+@startuml
+
+package entities {
+    class City
+    class Place {
+        City city
+        String name
+    }
+    class PlaceRequest{
+        Place place
+    }
+    enum RequestStatus
+    class Ride
+    class RideRequest
+
+    RideRequest --> Ride
+    PlaceRequest --> Place
+    RideRequest --> RequestStatus
+    PlaceRequest --> RequestStatus
+    Place --> City
+}
+
+package core {
+
+    abstract class Criteria
+    interface Query<T> {
+        Collection<T> query(Criteria)
+    }
+
+    interface QuerySingle<T> {
+        T query(Criteria)
+    }
+
+    interface Command<T> {
+        void execute(T)
+    }
+}
+
+core --> entities
+
+@enduml

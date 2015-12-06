@@ -1,0 +1,34 @@
+@startuml
+
+actor Beatnik
+participant BICH
+actor Businessman
+
+title Place request lifecycle
+
+activate Beatnik
+Beatnik ->BICH: createRequest()
+activate BICH
+BICH --> Beatnik
+deactivate Beatnik
+
+BICH -> Businessman : newRequest()
+activate Businessman
+Businessman --> BICH : setStatus()
+deactivate Businessman
+deactivate BICH
+
+BICH --> Beatnik : statusUpdated()
+
+alt approved
+    activate Beatnik
+    Beatnik -> BICH: review()
+    activate BICH
+    BICH --> Beatnik
+    deactivate Beatnik
+    BICH --> Businessman : newReview()
+    deactivate BICH
+end
+
+Beatnik -> BICH : markAsOld()
+@enduml

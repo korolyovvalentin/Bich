@@ -1,0 +1,21 @@
+@startuml
+
+title Authorization mechanism
+
+scale 350 width
+[*] --> Anonymous : HTTP Request
+Anonymous --> AttemptAuthenticate : Anonymous Not Allowed
+Anonymous --> [*] : Anonymous Allowed
+
+AttemptAuthenticate --> NotAuthenticated
+AttemptAuthenticate --> Authenticated
+
+Authenticated --> Authorized
+Authenticated --> NotAuthorized
+
+
+Authorized --> [*] : HTTP 200
+NotAuthenticated --> [*] : HTTP 401
+NotAuthorized --> [*] : HTTP 401
+
+@enduml

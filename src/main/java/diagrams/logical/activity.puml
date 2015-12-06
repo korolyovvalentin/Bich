@@ -1,0 +1,16 @@
+@startuml
+|Beatnik|
+start
+    :createPlaceRequest;
+    :placeRequest\nprocceed to BM;]
+|#AntiqueWhite|Businessman|
+    :makeDecision;
+    if(approved) then
+        |Beatnik|
+            :review();
+            :reviewed;]
+    else
+        |Beatnik|
+            :reviewed;]
+stop
+@enduml

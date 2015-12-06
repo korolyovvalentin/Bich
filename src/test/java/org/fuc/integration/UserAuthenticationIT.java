@@ -1,6 +1,5 @@
 package org.fuc.integration;
 
-import org.fuc.core.criterias.AccountCriteria;
 import org.fuc.config.WebSecurityConfigurationAware;
 import org.fuc.core.Command;
 import org.fuc.entities.Account;

@@ -1,0 +1,24 @@
+@startuml
+
+title Signup request lifecycle
+
+(*)  --> "Route requires SignupController"
+--> === B1 ===
+=== B1 === --> Resolve Command<Account>
+=== B1 === --> Resolve UserService
+
+"Resolve Command<Account>" --> === B2 ===
+"Resolve UserService" --> === B2 ===
+
+--> Create Controller
+
+if GET then
+    --> Redirect to page
+    --> (*)
+else
+    --> Create new user
+Endif
+
+
+-->(*)
+@enduml

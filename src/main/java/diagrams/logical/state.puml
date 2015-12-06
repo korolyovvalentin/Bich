@@ -1,0 +1,25 @@
+@startuml
+
+title Trip request state diagram
+
+scale 350 width
+[*] --> Pending : createRequest()
+
+state Pending
+
+state Declined
+
+state Approved
+
+state Old
+
+state PartiallyApproved
+
+Pending --> PartiallyApproved : setStatus(Approved)
+Pending --> Declined : setStatus(Declined)
+PartiallyApproved --> Approved : allRequestsApproved()
+Approved --> Old : review()
+Declined --> Old : markAsOld()
+
+Old --> [*]
+@enduml

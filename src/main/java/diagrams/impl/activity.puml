@@ -1,0 +1,21 @@
+@startuml
+
+title Authorization mechanism
+
+(*)  --> "Authenticate request\n[check cookies]"
+
+if "Authenticated?" then
+    -->[false] "HTTP 401"
+    --> (*)
+else
+    -->[true] "Route request\n[Spring attribute]"
+    if "Authorized?" then
+        -->[false] "HTTP 403"
+        --> (*)
+    else
+        -->[true] "Process request"
+Endif
+
+"Process request" --> (*)
+
+@enduml
